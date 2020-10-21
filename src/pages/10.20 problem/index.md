@@ -1,5 +1,5 @@
 ---
-title: 问题点
+title: 1020随笔
 date: '2020-10-20'
 spoiler: zookeeper,uuid,question
 ---
