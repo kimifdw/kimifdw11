@@ -49,7 +49,7 @@
     "start": "npm run develop",
     "build": "rm -rf public && rm -rf .cache && gatsby build",
     "now-build": "gatsby build",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public -r https://5a9f18c43e76fbf5b22d99ed02c7c2875b998d7c@github.com/kimifdw/kimifdw.github.io.git",
+    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
     "dry": "yarn build && cp now.json public/ && cd public && now"
   },
   "husky": {
