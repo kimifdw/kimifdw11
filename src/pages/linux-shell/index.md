@@ -12,7 +12,7 @@ spoiler: linux 指令集
 1. `pstree -p pid`：某个进程的线程情况
 
 ### vmstat 
-> 对操作系统的虚拟内存、进程、CPU活动进行监控
+> 对操作系统整体的虚拟内存、进程、CPU活动进行监控
 
 1. `vmstat <时间间隔> <采集次数>`
 ![image](./vmstat-1.png)
@@ -39,3 +39,21 @@ spoiler: linux 指令集
         1. sy。系统调用消耗的CPU时间百分比
         1. id。CPU处在空间状态的时间百分比
         1. wa。等待IO的CPU时间
+1. ### pidstat
+> 用来监控全部或指定进程的cpu、内存、线程、设备IO等系统资源的占用情况
+
+1. `pidstat -w <时间间隔>`
+![image](./pstat-w.png)
+1. 参数说明
+    1. cswch/s。每秒主动任务上下文切换数量。
+    1. nvcswch/s。每秒被动任务上下文切换数量。
+1. `pidstat -tt -p <pid>`
+![image](./pidstat-tt-p.png)
+1. 参数表示
+    1. TGID。主线程
+    1. TID。线程id
+    1. %usr。进程在用户空间占用CPU的百分比
+    1. %system。进程在内核空间占用CPU的百分比
+    1. %guest。进程在虚拟机占用CPU的百分比
+    1. CPU。处理进程的CPU编号
+    
