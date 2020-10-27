@@ -43,6 +43,7 @@ spoiler: reactor模型
     - Read, 即读事件, 对应于SelectionKey.OP_READ, 表示 buffer 可读.
     - Write, 即写事件, 对应于SelectionKey.OP_WRITE, 表示 buffer 可写.
 1. `Selector`的基本使用流程
+![image](./nio-server-sequence.png)
     1. 通过`Selector.open()`打开一个`Selector`.
     1. 将`Channel`注册到`Selector`中, 并设置需要监听的事件(interest set)
     1. 不断重复:
