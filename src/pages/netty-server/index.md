@@ -1,6 +1,6 @@
 ---
 title: netty server
-date: '2020-10-28'
+date: '2020-10-29'
 spoiler: netty channel, 源码学习
 ---
 ## channel源码
@@ -28,3 +28,10 @@ spoiler: netty channel, 源码学习
 1. `EventExecutor`。事件执行器，负责处理事件
 1. `EventExecutorGroup`。维护了一个EventExecutor链表，继承了ScheduledExecutorService，execute方法通过next方法选择一个EventExecutor，并调用EventLoop#execute处理事件
 1. `EventloopGroup`。负责调度Eventloop
+1. `NioEventloop`。
+    - 启动流程如下图：
+    ![image](./NioEventLoop-start.png)
+    - 实例化流程图如下：
+    ![image](./NioEventLoop-sequence.png)
+    - 与`Channel`的关联图如下：
+    ![image](./NioEventLoop-Channel.png)
