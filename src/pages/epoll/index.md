@@ -29,7 +29,7 @@ spoiler: epoll
     1. `epitem`。和每个用户态监控IO的fd对应
     1. `eventpoll`。用户态创建的管理所有被监控fd的结构
     1. 流程图如下：
-    ![image](./epoll底层.png)
+    ![image](./epoll-low.png)
 - 惊群问题。
     1. 现象。当多个进程/线程调用`epoll_wait`时会阻塞等待，当内核触发可读写事件，**所有进程/线程都会进行相应**，但**实际**只有一个进程/线程真实处理这些事件。
     1. 解决方案。
@@ -43,7 +43,7 @@ spoiler: epoll
     1. `ET模式的线程饥饿问题`。
         - 现象。在大数量情况下可能造成个别socket得不到处理的情况
         - 解决方式。为每个已经准备好的描述符维护一个队列，如下图：
-        ![image](./ET饥饿模式.png)
+        ![image](./ET-hungry-model.png)
     1. `EPOLLONESHOT设置`。保证一个socket连接在任一时刻只被一个线程处理。
 
 ### selector和epoll对比
