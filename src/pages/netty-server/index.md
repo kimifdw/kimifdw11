@@ -24,3 +24,7 @@ spoiler: netty channel, 源码学习
 ![image](./ChannelOutboundHandler-api.png)
 
 ## Eventloop
+- 处理注册在channel上的所有IO操作，事件循环器
+1. `EventExecutor`。事件执行器，负责处理事件
+1. `EventExecutorGroup`。维护了一个EventExecutor链表，继承了ScheduledExecutorService，execute方法通过next方法选择一个EventExecutor，并调用EventLoop#execute处理事件
+1. `EventloopGroup`。负责调度Eventloop
