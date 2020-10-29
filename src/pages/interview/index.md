@@ -12,3 +12,8 @@ spoiler: linux
 - **Q1** Why do we really need multiple netty boss threads?
 - **A1** multiple boss threads are useful if we share NioEventLoopGroup between different server bootstraps
 [stackoverflow](https://stackoverflow.com/questions/34275138/why-do-we-really-need-multiple-netty-boss-threads)
+
+## java
+- **Q1** Java nio在Linux系统下的epoll空轮询问题, select轮询事件返回数量为0，NIO照样不断的从select本应该阻塞的`Selector.select()/Selector.select(timeout)`中`wake up`出来，导致**CPU 100%**问题
+- **A1** 升级到高版本的jdk或者使用netty来实现
+[java bug](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6670302)
