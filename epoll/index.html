@@ -108,7 +108,40 @@
 <li><code class="language-text">epitem</code>。和每个用户态监控IO的fd对应</li>
 <li><code class="language-text">eventpoll</code>。用户态创建的管理所有被监控fd的结构</li>
 <li>流程图如下：
-<img src="./epoll%E5%BA%95%E5%B1%82.png" alt="image"></li>
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/99a60576e1737ffc47fc8bfbfe012c60/31198/epoll-low.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 47.972972972972975%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAYAAAC0VX7mAAAACXBIWXMAAAsSAAALEgHS3X78AAAB0ElEQVQoz11SXW/bMAzM//89Q5+Xhw3otmbd1rVJkDrfWZw4qWRLlmTLvh3VpCtGgJBEUeTxToO+7xFCQNu26LqIqlYozRkxRjRNgObe1Jp3HWpneD7BeZvOEpdcyROTWgN5uNlucDqfUboas91vTFcj6FJB6RMm3M82D/A+YF+sMd6MsMkzuNph8ecJU55zdfxXEBeLgvSCygWHSAQ9XdcW1js4Z1FZjYMqULGxWNMGeOb6tkHDXLG3gi3HvQbfW8tGsesxW//E/eMQk/kdLJt2jAuiKzJHMKlgcTziRC+USih5nRKEz054lWSu2eoXbkdD/Jh9Z+OI0HhMl/d4fP6KbT5nY6SpBlmWYfw0Rs6inYjjffLIfWwaBGMQeNamwgtXwzi7wBiFu4ePGH7+gGw7Jhik5oOj0tifqeyLIrLubQS8YoW1FnVJlTmS3PrgqXKg4h4FhcsrDWVLNPHK4eXxtVB34VHU11pDbi1RinexRc94oXIs9hOs91OqbxDfgRj078gtiiOWq2X6k4YFakHH1XDV5NhzbLHt4Rm3327w6csN9urA5l16k75N/59aVxeE8m2CJYd1jca5xG0XGpT8d4vdCvPdGrpSiRZxme4vBUcDG0wtBbEAAAAASUVORK5CYII='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/99a60576e1737ffc47fc8bfbfe012c60/fcda8/epoll-low.png"
+        srcset="/static/99a60576e1737ffc47fc8bfbfe012c60/12f09/epoll-low.png 148w,
+/static/99a60576e1737ffc47fc8bfbfe012c60/e4a3f/epoll-low.png 295w,
+/static/99a60576e1737ffc47fc8bfbfe012c60/fcda8/epoll-low.png 590w,
+/static/99a60576e1737ffc47fc8bfbfe012c60/31198/epoll-low.png 694w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
 </ol>
 </li>
 <li>
@@ -136,7 +169,40 @@
 <ul>
 <li>现象。在大数量情况下可能造成个别socket得不到处理的情况</li>
 <li>解决方式。为每个已经准备好的描述符维护一个队列，如下图：
-<img src="./ET%E9%A5%A5%E9%A5%BF%E6%A8%A1%E5%BC%8F.png" alt="image"></li>
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/f37225ca07fd725134e365357c60c0b8/2c288/ET-hungry-model.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 31.08108108108108%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAAuElEQVQY042Qyw6DIBBF+f+P6qrrujWN2uiiaeIoIsNjALGDXbYmPbs7r3tB7L+IMYaDlNJ+jvgu5Zznee66ru97RGT57zIPppiWRQJMALCu67ZtZ/uCG/FgK6RA3pPjtJ4Ca64TEed3LHMuEwefc4J7Wmu2QkN+vqtnVb+qBeF6a7SxiHoEiNZcHmMNiIts2nYYBikl7ws+Y4xBrdkxRQpknbf8X2iKf/H0PhAZH1yI/IrpQCnFKd7nJl0ncw6IigAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/f37225ca07fd725134e365357c60c0b8/fcda8/ET-hungry-model.png"
+        srcset="/static/f37225ca07fd725134e365357c60c0b8/12f09/ET-hungry-model.png 148w,
+/static/f37225ca07fd725134e365357c60c0b8/e4a3f/ET-hungry-model.png 295w,
+/static/f37225ca07fd725134e365357c60c0b8/fcda8/ET-hungry-model.png 590w,
+/static/f37225ca07fd725134e365357c60c0b8/2c288/ET-hungry-model.png 684w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
 </ul>
 </li>
 <li><code class="language-text">EPOLLONESHOT设置</code>。保证一个socket连接在任一时刻只被一个线程处理。</li>
