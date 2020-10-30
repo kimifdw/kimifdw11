@@ -25,6 +25,17 @@ spoiler: reactor模型
 1. 支持每个reactor包含多个selectors，简单流程介绍如下：向一个Selector中注册了Channel后，由selector自动来判断查询这些channel是否有已就绪的IO事件
 1. 文件转移。自动化从文件到网络或网络到文件的拷贝
 1. 内存文件映射。利用`buffers`来处理文件，`channel`总是从`Buffer`中读取数据或写入数据
+1. `Buffer`。数据是通道读入缓冲区，从缓冲区写入到通道中的。
+    1. 流程。写入数据到buffer——>调用flip()方法【读写切换】——>从buffer中读取数据——>数据清理clear()/compact()
+    1. 工作原理。
+    ![image](./buffer-mode.png)
+        1. `capacity`。缓冲区的固定大小。
+        1. `position`。
+            - 写操作。当前位置，初始化为0，最大为capacity-1
+            - 读操作。读取特定位置读，写模式切换到读模式，position重置为0
+        1. `limit`。
+            - 写操作。最多能往buffer里写多少数据
+            - 读操作。最多能读到多少数据，能读到position的数据
 1. `Direct buffers`。
     1. 支持零拷贝；
     1. 在开启或结束时有开销，所分配的内存不在JVM堆上；
