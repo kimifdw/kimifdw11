@@ -36,3 +36,13 @@ spoiler: netty channel, 源码学习
     - 与`Channel`的关联图如下：
     ![image](./NioEventLoop-Channel.png)
 ## ByteBuf
+1. 创建buffer使用Unpooled
+1. `discardable bytes`。无效空间，可丢弃字节的区域
+1. `readable bytes`。内容空间，可读字节的区域，由readerIndex和writerIndex指针控制
+1. `writable bytes`。空闲空间，可写入字节的区域，由writerIndex指针和capacity容量控制
+1. 索引顺序存储。
+![image](./Sequential-Access-Indexing.png)
+1. Discardable bytes。回收未使用区域如下图所示：
+![image](./discardReadBytes-flow.png)
+1. 清除缓存索引。
+![image](./clearing-index.png)
