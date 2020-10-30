@@ -69,7 +69,7 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">java nio selector</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-26<!-- --> • ☕️ 3 min read</p></header><div><h1 id="reactor模型"><a href="#reactor%E6%A8%A1%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>reactor模型</h1>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">java nio selector</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-26<!-- --> • ☕️ 4 min read</p></header><div><h1 id="reactor模型"><a href="#reactor%E6%A8%A1%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>reactor模型</h1>
 <h2 id="单线程reactor模型"><a href="#%E5%8D%95%E7%BA%BF%E7%A8%8Breactor%E6%A8%A1%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>单线程reactor模型</h2>
 <p>
   <a
@@ -194,6 +194,65 @@
 <li>支持每个reactor包含多个selectors，简单流程介绍如下：向一个Selector中注册了Channel后，由selector自动来判断查询这些channel是否有已就绪的IO事件</li>
 <li>文件转移。自动化从文件到网络或网络到文件的拷贝</li>
 <li>内存文件映射。利用<code class="language-text">buffers</code>来处理文件，<code class="language-text">channel</code>总是从<code class="language-text">Buffer</code>中读取数据或写入数据</li>
+<li>
+<p><code class="language-text">Buffer</code>。数据是通道读入缓冲区，从缓冲区写入到通道中的。</p>
+<ol>
+<li>流程。写入数据到buffer——>调用flip()方法【读写切换】——>从buffer中读取数据——>数据清理clear()/compact()</li>
+<li>
+<p>工作原理。
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/7e2690d1ce27bb69075e82223c9733cf/065e2/buffer-mode.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 577px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 64.86486486486486%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAAC40lEQVQozy3S609ScRgHcP+KXrXeO8vmnM3NWy1tubZqttqKnE2X0yFGmpcwEmV5QUvxAip5Q+UIcpGr4AE5cpOrgKCiltqsTacooiKXc7SjO799f2+e7/N598RdXj8EvjgPReEYEo3AkTAcPo8hMIJVCIJO0AW0gmMXsegFgjWXcegPR898v+2QSeFZM9vd82aHEloQeTcMofAxcoFs/10xmMH1Tbd1UWdxaEw21eovWyQWwrBnE5RYKRpvp8rVpnS2Qh6+ZV0POgHrqmh7182DyCJDk8xGk1paNC5gwaeZdY7Z18UYtq9NT0AEgYmEBtARta4F79al1u2AXKPrO6YeQSFTgGeDlcMzBNBh8mzF1C6zbmkMwwsr3EGwgKMrn5gvG9EUKu1zjo2IwqYHHf0r2/qRuSKeicjREcbnS2dskM0Xklm06kUWhnVL7Dbek17p214prkPwTGhUGL0hvkEtt9C9m3N08XOmDMeQvWHIXomMs8blM75BNWOlYxi093/sSPrKym4GcinD6eNqIeg4ZYPyaUOze0PVzMuijjyijuY0jj4YAyUa5ylbLREbWzCstDDqhpJbJnOagOyGsdQh5ZTCespSSKa0jQ6fom4oBZ1/4zykjmcMKgUSy1GfnD+lpWJYpu8mdiaSWfe/DGTV9CT3TgMCY6BLKOAoKbZleUXX3esqk9SXyhTzBAZ/l5ALqCgYFmu7SpoSqumZVZ0ZxPakH1zOBHREA/hsab1lSYZvvVPTjVbpFR33OnlcAPLTAACtMDypoOUW3XiJj8dVJuSV3CIPdPdIfLVMJgOo0ttFefibuIrb7z4nFtTG1/8cZMr/kPpZfdxqDM/qOPkfUkpJ2WX1OeWNOZ9aX9R+z8c3PBaqGIvL0OvyxKLqtOK69GJSGoH6tJKGe0/O5kjbMYwg8GkogObk7CrBE3/w5OA4uA+jtwzHDgO7R8E9f2DvMLB3cPjv4HBn379zHr46z//oQCoceNyLGgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/7e2690d1ce27bb69075e82223c9733cf/065e2/buffer-mode.png"
+        srcset="/static/7e2690d1ce27bb69075e82223c9733cf/12f09/buffer-mode.png 148w,
+/static/7e2690d1ce27bb69075e82223c9733cf/e4a3f/buffer-mode.png 295w,
+/static/7e2690d1ce27bb69075e82223c9733cf/065e2/buffer-mode.png 577w"
+        sizes="(max-width: 577px) 100vw, 577px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<ol>
+<li><code class="language-text">capacity</code>。缓冲区的固定大小。</li>
+<li>
+<p><code class="language-text">position</code>。</p>
+<ul>
+<li>写操作。当前位置，初始化为0，最大为capacity-1</li>
+<li>读操作。读取特定位置读，写模式切换到读模式，position重置为0</li>
+</ul>
+</li>
+<li>
+<p><code class="language-text">limit</code>。</p>
+<ul>
+<li>写操作。最多能往buffer里写多少数据</li>
+<li>读操作。最多能读到多少数据，能读到position的数据</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
 <li>
 <p><code class="language-text">Direct buffers</code>。</p>
 <ol>
