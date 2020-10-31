@@ -4,7 +4,7 @@ date: '2020-10-31'
 spoiler: linux 指令集
 ---
 ## 用户权限相关
-1. `sudo gpasswd -a <你的用户名> docker`。将用户加入到某个组内，**需重启对应的服务**
+1. `sudo gpasswd -a <你的用户名> docker`。将用户加入到某个组内，**需重启对应的服务**。需退出当前连接的用户【远程连接】
 
 ## TCP相关
 1. `/proc/sys/net/ipv4/tcp_wmem`。发送缓冲区，三个值分别代表最小值，默认值，最大值
