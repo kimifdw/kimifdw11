@@ -6,7 +6,7 @@ spoiler: netty channel, 源码学习
 ## channel源码
 - 简介到网络套接字或IO操作的组件，如读、写、连接和绑定。类图如下：
 ![image](./channel-4.1.53.png)
-1. `Unsafe`。数据传输
+1. `Unsafe`。用于数据传输
 1. `AbstractNioChannel`。NIO的基本操作
 1. 通过`pipeline`来进行事件操作和流转。
 
@@ -36,7 +36,8 @@ spoiler: netty channel, 源码学习
     - 与`Channel`的关联图如下：
     ![image](./NioEventLoop-Channel.png)
 ## ByteBuf
-1. 创建buffer使用Unpooled
+### ByteBuf简介
+1. 创建buffer使用Unpooled或Pooled。
 1. `discardable bytes`。无效空间，可丢弃字节的区域
 1. `readable bytes`。内容空间，可读字节的区域，由readerIndex和writerIndex指针控制
 1. `writable bytes`。空闲空间，可写入字节的区域，由writerIndex指针和capacity容量控制
@@ -46,3 +47,70 @@ spoiler: netty channel, 源码学习
 ![image](./discardReadBytes-flow.png)
 1. 清除缓存索引。
 ![image](./clearing-index.png)
+
+### 命中逻辑及内存回收
+1. 内存规格
+![image](./memory-region-cache.png)
+1. 内存分配流程
+    1. PoolThreadCache。线程独有的内存仓库
+    1. PoolArean。几个线程共享的内存仓库
+    1. 全局变量指向的内存仓库，为所有线程共用
+    ![image](./memory.png)
+1. 堆外内存回收
+```java
+abstract class PooledByteBuf<T> extends AbstractReferenceCountedByteBuf {
+
+  @Override
+    protected final void deallocate() {
+        if (handle >= 0) {
+            final long handle = this.handle;
+            // 当前的ByteBuf不再指向任何一块内存
+            this.handle = -1;
+            memory = null;
+            // 将ByteBuf的内存释放
+            chunk.arena.free(chunk, tmpNioBuf, handle, maxLength, cache);
+            tmpNioBuf = null;
+            chunk = null;
+            // 将对象放入的对象回收站，循环利用
+            recycle();
+        }
+    }
+}
+```
+1. ByteBuf释放内存
+```java
+void free(PoolChunk<T> chunk, ByteBuffer nioBuffer, long handle, int normCapacity, PoolThreadCache cache) {
+        if (chunk.unpooled) {
+            int size = chunk.chunkSize();
+            destroyChunk(chunk);
+            activeBytesHuge.add(-size);
+            deallocationsHuge.increment();
+        } else {
+            SizeClass sizeClass = sizeClass(handle);
+            if (cache != null && cache.add(this, chunk, nioBuffer, handle, normCapacity, sizeClass)) {
+                // cached so not free it.
+                return;
+            }
+
+            freeChunk(chunk, handle, normCapacity, sizeClass, nioBuffer, false);
+        }
+    }
+```
+1. 对象放入回收站，循环利用
+```java
+public abstract class Recycler<T> {
+@Override
+        public void recycle(Object object) {
+            if (object != value) {
+                throw new IllegalArgumentException("object does not belong to handle");
+            }
+
+            Stack<?> stack = this.stack;
+            if (lastRecycledId != recycleId || stack == null) {
+                throw new IllegalStateException("recycled already");
+            }
+
+            stack.push(this);
+        }
+}
+```
