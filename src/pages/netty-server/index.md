@@ -55,6 +55,8 @@ spoiler: netty channel, 源码学习
     1. PoolThreadCache。线程独有的内存仓库
     1. PoolArean。几个线程共享的内存仓库
     1. 全局变量指向的内存仓库，为所有线程共用
+    1. PoolChunck。向OS申请的最小内存，默认为16M
+    1. Page。PoolChunk所能管理的最小内存，PageSize默认为8k
     ![image](./memory.png)
 1. 堆外内存回收
 ```java
