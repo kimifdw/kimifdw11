@@ -1,6 +1,6 @@
 ---
 title: linux指令集
-date: '2020-10-31'
+date: '2020-11-04'
 spoiler: linux 指令集
 ---
 ## 用户权限相关
@@ -9,6 +9,10 @@ spoiler: linux 指令集
 ## TCP相关
 1. `/proc/sys/net/ipv4/tcp_wmem`。发送缓冲区，三个值分别代表最小值，默认值，最大值
 1. `/proc/sys/net/ipv4/tcp_rmem`。接收缓冲区，三个值分别代表最小值，默认值，最大值
+1. `ip addr show ens33 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'`。查看ip addr的地址
+
+## 查看防火墙
+1. `sudo ufw app list`。查看防火墙允许的应用列表
 
 ## 内存分析
 ### pstree
