@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style id="typography.js">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,optgroup,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}html{font:100%/1.75 'Merriweather','Georgia',serif;box-sizing:border-box;overflow-y:scroll;}*{box-sizing:inherit;}*:before{box-sizing:inherit;}*:after{box-sizing:inherit;}body{color:hsla(0,0%,0%,0.9);font-family:'Merriweather','Georgia',serif;font-weight:400;word-wrap:break-word;font-kerning:normal;-moz-font-feature-settings:"kern", "liga", "clig", "calt";-ms-font-feature-settings:"kern", "liga", "clig", "calt";-webkit-font-feature-settings:"kern", "liga", "clig", "calt";font-feature-settings:"kern", "liga", "clig", "calt";}img{max-width:100%;margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}h1{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:Montserrat,sans-serif;font-weight:900;text-rendering:optimizeLegibility;font-size:2.5rem;line-height:1.1;}h2{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1.73286rem;line-height:1.1;}h3{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1.4427rem;line-height:1.1;}h4{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:1rem;line-height:1.1;letter-spacing:0.140625em;text-transform:uppercase;}h5{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:0.83255rem;line-height:1.1;}h6{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;color:inherit;font-family:'Merriweather','Georgia',serif;font-weight:900;text-rendering:optimizeLegibility;font-size:0.75966rem;line-height:1.1;font-style:italic;}hgroup{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}ul{margin-left:1.75rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;list-style-position:outside;list-style-image:none;list-style:disc;}ol{margin-left:1.75rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;list-style-position:outside;list-style-image:none;}dl{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}dd{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}p{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}figure{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}pre{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:0.85rem;line-height:1.75rem;}table{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:1rem;line-height:1.75rem;border-collapse:collapse;width:100%;}fieldset{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}blockquote{margin-left:-1.75rem;margin-right:1.75rem;margin-top:0;padding-bottom:0;padding-left:1.42188rem;padding-right:0;padding-top:0;margin-bottom:1.75rem;font-size:1.20112rem;line-height:1.75rem;color:inherit;font-style:italic;border-left:0.32813rem solid hsla(0,0%,0%,0.9);border-left-color:inherit;opacity:0.8;}form{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}noscript{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}iframe{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}hr{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:calc(1.75rem - 1px);background:var(--hr);border:none;height:1px;}address{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.75rem;}b{font-weight:700;}strong{font-weight:700;}dt{font-weight:700;}th{font-weight:700;}li{margin-bottom:calc(1.75rem / 2);}ol li{padding-left:0;}ul li{padding-left:0;}li > ol{margin-left:1.75rem;margin-bottom:calc(1.75rem / 2);margin-top:calc(1.75rem / 2);}li > ul{margin-left:1.75rem;margin-bottom:calc(1.75rem / 2);margin-top:calc(1.75rem / 2);}blockquote *:last-child{margin-bottom:0;}li *:last-child{margin-bottom:0;}p *:last-child{margin-bottom:0;}li > p{margin-bottom:calc(1.75rem / 2);}code{font-size:0.85rem;line-height:1.75rem;}kbd{font-size:0.85rem;line-height:1.75rem;}samp{font-size:0.85rem;line-height:1.75rem;}abbr{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}acronym{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}abbr[title]{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;text-decoration:none;}thead{text-align:left;}td,th{text-align:left;border-bottom:1px solid hsla(0,0%,0%,0.12);font-feature-settings:"tnum";-moz-font-feature-settings:"tnum";-ms-font-feature-settings:"tnum";-webkit-font-feature-settings:"tnum";padding-left:1.16667rem;padding-right:1.16667rem;padding-top:0.875rem;padding-bottom:calc(0.875rem - 1px);}th:first-child,td:first-child{padding-left:0;}th:last-child,td:last-child{padding-right:0;}blockquote > :last-child{margin-bottom:0;}blockquote cite{font-size:1rem;line-height:1.75rem;color:hsla(0,0%,0%,0.9);font-weight:400;}blockquote cite:before{content:"— ";}ul,ol{margin-left:0;}@media only screen and (max-width:480px){ul,ol{margin-left:1.75rem;}blockquote{margin-left:-1.3125rem;margin-right:0;padding-left:0.98438rem;}}h1,h2,h3,h4,h5,h6{margin-top:3.5rem;}a{box-shadow:0 1px 0 0 currentColor;color:var(--textLink);text-decoration:none;}a:hover,a:active{box-shadow:none;}mark,ins{background:#007acc;color:white;padding:0.10938rem 0.21875rem;text-decoration:none;}a.gatsby-resp-image-link{box-shadow:none;}a.anchor{box-shadow:none;}a.anchor svg[aria-hidden="true"]{stroke:var(--textLink);}p code{font-size:1rem;}h1 code, h2 code, h3 code, h4 code, h5 code, h6 code{font-size:inherit;}li code{font-size:1rem;}blockquote.translation{font-size:1em;}</style><style data-href="/styles.0bd8abd1783da6cbd5cd.css">@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:400;src:url(/static/merriweather-400-i-l-9a3ea56a5f449980432ace5972181ef6.woff2) format("woff2");unicode-range:U+00??,U+0131,U+0152-0153,U+02bb-02bc,U+02c6,U+02da,U+02dc,U+2000-206f,U+2074,U+20ac,U+2122,U+2191,U+2193,U+2212,U+2215,U+feff,U+fffd}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:700;src:url(/static/merriweather-700-l-e24e02bb044cb07539a3a6bd12348d14.woff2) format("woff2");unicode-range:U+00??,U+0131,U+0152-0153,U+02bb-02bc,U+02c6,U+02da,U+02dc,U+2000-206f,U+2074,U+20ac,U+2122,U+2191,U+2193,U+2212,U+2215,U+feff,U+fffd}@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:700;src:url(/static/merriweather-700-i-l-ad085ede31afcc5585ff34869b1cd029.woff2) format("woff2");unicode-range:U+00??,U+0131,U+0152-0153,U+02bb-02bc,U+02c6,U+02da,U+02dc,U+2000-206f,U+2074,U+20ac,U+2122,U+2191,U+2193,U+2212,U+2215,U+feff,U+fffd}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:400;src:url(/static/merriweather-400-l-8796b7875d52e9cb9b280211e8d3f82d.woff2) format("woff2");unicode-range:U+00??,U+0131,U+0152-0153,U+02bb-02bc,U+02c6,U+02da,U+02dc,U+2000-206f,U+2074,U+20ac,U+2122,U+2191,U+2193,U+2212,U+2215,U+feff,U+fffd}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:900;src:url(/static/montserrat-900-l-5751237264c0468be0d48ad1cea75b90.woff2) format("woff2");unicode-range:U+00??,U+0131,U+0152-0153,U+02bb-02bc,U+02c6,U+02da,U+02dc,U+2000-206f,U+2074,U+20ac,U+2122,U+2191,U+2193,U+2212,U+2215,U+feff,U+fffd}.react-toggle{touch-action:pan-x;display:inline-block;position:relative;cursor:pointer;background-color:transparent;border:0;padding:0;-webkit-touch-callout:none;-webkit-user-select:none;-ms-user-select:none;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:transparent}.react-toggle-screenreader-only{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.react-toggle-track{width:50px;height:24px;padding:0;border-radius:30px;background-color:#0f1114;transition:all .2s ease}.react-toggle-track-check{position:absolute;width:17px;height:17px;left:5px;top:0;bottom:0;margin-top:auto;margin-bottom:auto;line-height:0;opacity:0;transition:opacity .25s ease}.react-toggle--checked .react-toggle-track-check,.react-toggle-track-x{opacity:1;transition:opacity .25s ease}.react-toggle-track-x{position:absolute;width:17px;height:17px;right:5px;top:0;bottom:0;margin-top:auto;margin-bottom:auto;line-height:0}.react-toggle--checked .react-toggle-track-x{opacity:0}.react-toggle-thumb{position:absolute;top:1px;left:1px;width:22px;height:22px;border-radius:50%;background-color:#fafafa;box-sizing:border-box;transition:all .5s cubic-bezier(.23,1,.32,1) 0ms;transform:translateX(0)}.react-toggle--checked .react-toggle-thumb{transform:translateX(26px);border-color:#19ab27}.react-toggle--focus .react-toggle-thumb{box-shadow:0 0 2px 3px var(--orange)}.react-toggle:active .react-toggle-thumb{box-shadow:0 0 5px 5px var(--orange)}body{--orange:#fe601c;background-color:var(--bg)}body.light{--bg:#fff;--header:var(--orange);--textNormal:#222;--textTitle:#222;--textLink:#e92d0d;--hr:rgba(0,0,0,0.2);--inlineCode-bg:rgba(255,229,100,0.2);--inlineCode-text:#1a1a1a}body.dark{-webkit-font-smoothing:antialiased;--bg:#282c35;--header:#fff;--textNormal:hsla(0,0%,100%,0.88);--textTitle:#fff;--textLink:var(--orange);--hr:hsla(0,0%,100%,0.2);--inlineCode-bg:#373c49;--inlineCode-text:#e6e6e6}body:lang(ar) article,body:lang(fa) article{direction:rtl}body:lang(ar) .language-text,body:lang(ar) article .translations,body:lang(ar) article pre,body:lang(fa) .language-text,body:lang(fa) article .translations,body:lang(fa) article pre{direction:ltr}body:lang(ar) .language-text,body:lang(fa) .language-text{display:inline-block}body:lang(ar) blockquote,body:lang(fa) blockquote{border-left:unset;border-right:.32813rem solid rgba(0,0,0,.9);padding-right:1.42188rem;padding-left:unset;margin-left:.75rem;margin-right:-1.75rem}body:lang(fa) article,body:lang(fa) header>h1{font-family:Vazir}body:lang(ar) article,body:lang(ar) header>h1{font-family:Cairo,sans-serif}body:lang(ko) article,body:lang(ko) header{word-break:keep-all}code[class*=language-],pre[class*=language-]{color:#fff;background:none;font-family:Consolas,Menlo,Monaco,source-code-pro,Courier New,monospace;font-feature-settings:normal;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;margin-bottom:0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{overflow:auto;padding:1.3125rem}pre[class*=language-]::selection{background:#27292a}pre[class*=language-]::selection,pre[class*=language-] ::selection{text-shadow:none;background:hsla(0,0%,100%,.15)}:not(pre)>code[class*=language-]{border-radius:.3em;background:var(--inlineCode-bg);color:var(--inlineCode-text);padding:.15em .2em .05em;white-space:normal}.token.attr-name{color:#addb67;font-style:italic}.token.comment{color:#809393}.token.string,.token.url{color:#addb67}.token.variable{color:#d6deeb}.token.number{color:#f78c6c}.token.builtin,.token.char,.token.constant,.token.function{color:#82aaff}.token.punctuation{color:#c792ea}.token.doctype,.token.selector{color:#c792ea;font-style:"italic"}.token.class-name{color:#ffcb8b}.token.keyword,.token.operator,.token.tag{color:#ffa7c4}.token.boolean{color:#ff5874}.token.property{color:#80cbc4}.token.namespace{color:#b2ccd6}pre[data-line]{padding:1em 0 1em 3em;position:relative}.gatsby-highlight-code-line{background-color:#022a4b;display:block;padding-right:1em;padding-left:1.25em;border-left:.25em solid #ffa7c4}.gatsby-highlight,.gatsby-highlight-code-line{margin-right:-1.3125rem;margin-left:-1.3125rem}.gatsby-highlight{margin-bottom:1.75rem;border-radius:10px;background:#011627;-webkit-overflow-scrolling:touch;overflow:auto}@media (max-width:672px){.gatsby-highlight{border-radius:0}}.gatsby-highlight pre[class*=language-]{float:left;min-width:100%}</style><meta name="generator" content="Gatsby 2.24.83"/><style type="text/css">
+    .anchor {
+      float: left;
+      padding-right: 4px;
+      margin-left: -20px;
+    }
+    h1 .anchor svg,
+    h2 .anchor svg,
+    h3 .anchor svg,
+    h4 .anchor svg,
+    h5 .anchor svg,
+    h6 .anchor svg {
+      visibility: hidden;
+    }
+    h1:hover .anchor svg,
+    h2:hover .anchor svg,
+    h3:hover .anchor svg,
+    h4:hover .anchor svg,
+    h5:hover .anchor svg,
+    h6:hover .anchor svg,
+    h1 .anchor:focus svg,
+    h2 .anchor:focus svg,
+    h3 .anchor:focus svg,
+    h4 .anchor:focus svg,
+    h5 .anchor:focus svg,
+    h6 .anchor:focus svg {
+      visibility: visible;
+    }
+  </style><script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      var hash = window.decodeURI(location.hash.replace('#', ''))
+      if (hash !== '') {
+        var element = document.getElementById(hash)
+        if (element) {
+          var offset = element.offsetTop
+          // Wait for the browser to finish rendering before scrolling.
+          setTimeout((function() {
+            window.scrollTo(0, offset - 0)
+          }), 0)
+        }
+      }
+    })
+  </script><link rel="preconnect" href="https://www.google-analytics.com"/><link rel="dns-prefetch" href="https://www.google-analytics.com"/><link rel="icon" href="/favicon-32x32.png?v=92dcab1797689d6d87ef20dd22c47be6" type="image/png"/><link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png?v=92dcab1797689d6d87ef20dd22c47be6"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png?v=92dcab1797689d6d87ef20dd22c47be6"/><title data-react-helmet="true">netty内存原理 — FDW-blog</title><meta data-react-helmet="true" name="theme-color" content="#282c35"/><meta data-react-helmet="true" name="description" content="netty memory, 源码学习"/><meta data-react-helmet="true" property="og:url" content="https://kimifdw.github.io/netty-memory/"/><meta data-react-helmet="true" property="og:title" content="netty内存原理"/><meta data-react-helmet="true" property="og:description" content="netty memory, 源码学习"/><meta data-react-helmet="true" name="twitter:card" content="summary"/><meta data-react-helmet="true" name="twitter:creator" content="@kimifdw"/><meta data-react-helmet="true" name="twitter:title" content="netty内存原理"/><meta data-react-helmet="true" name="twitter:description" content="netty memory, 源码学习"/><link as="script" rel="preload" href="/webpack-runtime-c03831699c162a87dc05.js"/><link as="script" rel="preload" href="/framework-9f754d8b33503a24e84f.js"/><link as="script" rel="preload" href="/app-a43e16c690735530e50f.js"/><link as="script" rel="preload" href="/styles-e9d24b1846c7d6eb9685.js"/><link as="script" rel="preload" href="/commons-a61e524f37fdba0d1d8f.js"/><link as="script" rel="preload" href="/b42287b7de2077c8bbdf81b8173430c75bb9d1ba-15e706e384a6a6b62cfa.js"/><link as="script" rel="preload" href="/component---src-templates-blog-post-js-ad1f4b69906105a37af7.js"/><link as="fetch" rel="preload" href="/page-data\netty-memory\page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/336482444.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data\app-data.json" crossorigin="anonymous"/></head><body class="light"><script>
+              (function() {
+                window.__onThemeChange = function() {};
+                function setTheme(newTheme) {
+                  window.__theme = newTheme;
+                  preferredTheme = newTheme;
+                  document.body.className = newTheme;
+                  window.__onThemeChange(newTheme);
+                }
+
+                var preferredTheme;
+                try {
+                  preferredTheme = localStorage.getItem('theme');
+                } catch (err) { }
+
+                window.__setPreferredTheme = function(newTheme) {
+                  setTheme(newTheme);
+                  try {
+                    localStorage.setItem('theme', newTheme);
+                  } catch (err) {}
+                }
+
+                var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                darkQuery.addListener(function(e) {
+                  window.__setPreferredTheme(e.matches ? 'dark' : 'light')
+                });
+
+                setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
+              })();
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">netty内存原理</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-11-5<!-- --> • ☕️ 7 min read</p></header><div><h1 id="内存原理"><a href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存原理</h1>
+<h2 id="创建堆缓冲区"><a href="#%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>创建堆缓冲区</h2>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ByteBuf</span> <span class="token function">buffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> ALLOC<span class="token punctuation">.</span><span class="token function">heapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// AbstractByteBufAllocator：实现</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">ByteBuf</span> <span class="token function">heapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>initialCapacity <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> maxCapacity <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> emptyBuf<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">// 验证参数合法性，最大的堆缓冲区容量是int最大值字节</span>
+        <span class="token function">validate</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre></div>
+<h2 id="基于内存池创建堆缓冲区"><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E6%B1%A0%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基于内存池创建堆缓冲区</h2>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token comment">// PooledByteBufAllocator</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token class-name">ByteBuf</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 从本地缓存内存中取</span>
+        <span class="token class-name">PoolThreadCache</span> cache <span class="token operator">=</span> threadCache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 获取堆内区域</span>
+        <span class="token class-name">PoolArena</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span> heapArena <span class="token operator">=</span> cache<span class="token punctuation">.</span>heapArena<span class="token punctuation">;</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">ByteBuf</span> buf<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>heapArena <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 从堆区域中分配缓冲区</span>
+            buf <span class="token operator">=</span> heapArena<span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 直接分配内存</span>
+            buf <span class="token operator">=</span> <span class="token class-name">PlatformDependent</span><span class="token punctuation">.</span><span class="token function">hasUnsafe</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">?</span>
+                    <span class="token keyword">new</span> <span class="token class-name">UnpooledUnsafeHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span> <span class="token operator">:</span>
+                    <span class="token keyword">new</span> <span class="token class-name">UnpooledHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">// 检测是否有内存泄漏</span>
+        <span class="token keyword">return</span> <span class="token function">toLeakAwareBuffer</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// PoolArena</span>
+    <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 创建基于内存池的byteBuf</span>
+        <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf <span class="token operator">=</span> <span class="token function">newByteBuf</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 分配内存</span>
+        <span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> buf<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 按申请的内存大小进行内存分配</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">final</span> <span class="token keyword">int</span> sizeIdx <span class="token operator">=</span> <span class="token function">size2SizeIdx</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;=</span> smallMaxSizeIdx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">tcacheAllocateSmall</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;</span> nSizes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">tcacheAllocateNormal</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> normCapacity <span class="token operator">=</span> directMemoryCacheAlignment <span class="token operator">></span> <span class="token number">0</span>
+                    <span class="token operator">?</span> <span class="token function">normalizeSize</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span> <span class="token operator">:</span> reqCapacity<span class="token punctuation">;</span>
+            <span class="token comment">// Huge allocations are never served via the cache so just call allocateHuge</span>
+            <span class="token function">allocateHuge</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> normCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre></div>
+<h2 id="分配的内存类型"><a href="#%E5%88%86%E9%85%8D%E7%9A%84%E5%86%85%E5%AD%98%E7%B1%BB%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分配的内存类型</h2>
+<ol>
+<li>直接内存</li>
+<li>
+<p>堆内存</p>
+<h2 id="基于内存池分配堆内存"><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E6%B1%A0%E5%88%86%E9%85%8D%E5%A0%86%E5%86%85%E5%AD%98" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基于内存池分配堆内存</h2>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token comment">// PoolArena</span>
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token class-name">PooledByteBuf</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span> <span class="token function">newByteBuf</span><span class="token punctuation">(</span><span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> HAS_UNSAFE <span class="token operator">?</span> <span class="token class-name">PooledUnsafeHeapByteBuf</span><span class="token punctuation">.</span><span class="token function">newUnsafeInstance</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span>
+            <span class="token operator">:</span> <span class="token class-name">PooledHeapByteBuf</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">static</span> <span class="token class-name">PooledHeapByteBuf</span> <span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 从对象回收器中回收一个对象</span>
+    <span class="token class-name">PooledHeapByteBuf</span> buf <span class="token operator">=</span> RECYCLER<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    buf<span class="token punctuation">.</span><span class="token function">reuse</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> buf<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/**
+ * Method must be called before reuse this {@link PooledByteBufAllocator}
+ */</span>
+<span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">reuse</span><span class="token punctuation">(</span><span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">maxCapacity</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 设置引用计数为1</span>
+    <span class="token function">resetRefCnt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 设置读写索引</span>
+    <span class="token function">setIndex0</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">discardMarks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<h2 id="内存分配总结"><a href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E6%80%BB%E7%BB%93" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存分配总结</h2>
+</li>
+<li>从本地线程缓冲池中找到<code class="language-text">poolThreadCache</code>，再从<code class="language-text">poolThreadCache</code>中找到<code class="language-text">heapArena</code>，如果有<strong>存在</strong><code class="language-text">headArena</code>就是开始分配内存</li>
+<li>分配内存的时候先从<code class="language-text">对象回收器RECYCLER</code>中回收一个对象<code class="language-text">PooledByteBuf</code>。对象回收器类似一个对象池的作用，在进行分配内存，对象可以循环利用，提供内存分配效率和JVM gc效率，这个对象回收器是基于引用计数方式实现的。</li>
+<li>分配内存</li>
+<li>
+<p>0 copy</p>
+<ol>
+<li>
+<p>主要指用户态和内核态之间来回copy数据</p>
+<h2 id="poolthreadcache"><a href="#poolthreadcache" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>PoolThreadCache</h2>
+</li>
+</ol>
+</li>
+<li>原理。给每个线程预先分配一块内存，在每个对象需要进行对象创建分配内存的时候先从本地线程缓存中获取内存，获取不到在从堆中申请内存，在一定程度上减少操作同一块内存时的锁争用</li>
+<li>
+<p>结构图</p>
+<ol>
+<li>数据结构：平衡二叉树</li>
+</ol>
+</li>
+<li>
+<p>组成</p>
+<ol>
+<li><code class="language-text">PoolChunk</code>。负责内存的分配逻辑，最小单位是一个page,<strong>8k</strong>,由2048个subpage组成</li>
+<li>
+<p><code class="language-text">PoolSubPage</code>。一个内存页大小默认是<strong>8k</strong>
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/ad0395327fc1a253bbe3039924d4056d/2c288/PoolThreadCache.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 43.24324324324324%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAAsSAAALEgHS3X78AAABuElEQVQoz02Q32/SUBTH+28ucZMlDBJhMtoOLbUdrtK1t8QCgWVpFVgJP1roKFJou9a5H9kGW9zQR19NfNTEB589xWySfHLyzffe7znnXqw1njeGd4cf/qON7mtHs2rTrzaDinbcGNxqw3ttePfIofW553399fsPhks2XfayJXcZqjgh0RGBzIxkZWWHLrrLMCWPEO3jy29YMm8Rkp0WRwCOQhbCTu7q8Vdaih+AxsFZgkT2M27Q976E4fAYjYhFbOuhBZjQlJBGUB/14qa9XRhD2HDn2EqmFaE7T7N6Ij9cozprVDvKGPGcGaE6qy/aCc6K0Hok23nysh3Lmet0d5VqxXN9GBmG12lw9fjrXlqwYju9KGskOBOIMjqQ4q0Ya2ww3SjTTXD9DRbMbpIzN2GyM8feHFzJ9VmhNqNLJ8XGrVyfCuo1W/kEply/yVXPBeVKrk3f1m/YyilSp5J6jd5NYSPDCd882S54BHK3xAlZ8HHkAmnByUg+Kbq46JCSRyIP6nN+vLt/xlVPdspBKg8fNsd4xd9TA0BY1H+ISrCnBIISCuEB/sDfb1+8Ny/LzY+qfvH9x8+/YARBXdCdXMsAAAAASUVORK5CYII='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/ad0395327fc1a253bbe3039924d4056d/fcda8/PoolThreadCache.png"
+        srcset="/static/ad0395327fc1a253bbe3039924d4056d/12f09/PoolThreadCache.png 148w,
+/static/ad0395327fc1a253bbe3039924d4056d/e4a3f/PoolThreadCache.png 295w,
+/static/ad0395327fc1a253bbe3039924d4056d/fcda8/PoolThreadCache.png 590w,
+/static/ad0395327fc1a253bbe3039924d4056d/2c288/PoolThreadCache.png 684w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<h2 id="recycler对象池"><a href="#recycler%E5%AF%B9%E8%B1%A1%E6%B1%A0" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Recycler对象池</h2>
+<blockquote>
+<p>基于netty的<code class="language-text">stack</code>实现，采用了栈和队列实现。stack用来支持同一个线程内的对象使用和回收，把当前回收的线程和要回收对象对应的stack绑定到一个weakOrderQueue存储在当前要回收对象所在的stack中，之所以这样设计在并发情况下<strong>一个线程绑定一个队列减少多个线程之间的锁争用提供应用的并发度</strong></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<p>
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/0f616d878949fe93748c3b32cb4ad882/9cb4e/Recycler.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 431px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 77.70270270270271%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAACRklEQVQoz22S+1MSURSA+Vf7oZqyyUAtHIiH8VhAi5ci1pDMYNaALCyPZVcyRx5Z1MRopFgjEPJYNFgRBpfXtnApl8edu7t3ztzvfPeePRyaprvdLvMmSTKdTjUpip40uv0xEuSAT71B5YrlzBlBXFSvqdYwRnc6PYx52p2hBAN4w/NVZMA0ll2BFsUjSSbC3kZdN86yaaKQm2w22EJTC1sSvf+OyO7A4j34H80c5CCZ/3yQiR1mEr+KVLM9CtvcMf6ST2LE55/7/Hs/gBngPzOlKRk8u+jhqRGuyp0jKv/LNIBXNsM8CJaZAjzI6cC+AfMA/l16vIRIDH6R3ifUefPj8Ibni9iAKlZxkdaPhY8A3O7X6SRzLl0OqF4G5au43IRPMGute/elTqkxcFtgf+uLN6huuUpVqlS90Ykf52cgl8yESo3eJxokXxyDrfAnkc6vNOMCrRcLHYE7gx2n2QupEZMtY0xqyLxdLJGjsMEW5qkQsRGdVriQ94eDO/ePnTwl7j518DXIIwXMVbgKpTGzxbE/p0akRnRW5Q6AavfLzSxS2QvNq6BqLQitbWvXPxTOx8ymzeicxis2MNV2e3YSbPNJirgltE9DyAO5696CM0eUR2Hzu8gMBIt0Pq7S6dtNsM1/KnUrvL++FbXYo2+QWLXWGP/PIZ7aLdT7Hyphz853APe6GcyhXr+JcMDitfPj/AvPsxWUv+gORo7ZMOPotUuHBpOda2CmqGaFvCIva8xstdo3TpaHaZraVY2sXDapJoj8BU7tPyJWLzh8AAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/0f616d878949fe93748c3b32cb4ad882/9cb4e/Recycler.png"
+        srcset="/static/0f616d878949fe93748c3b32cb4ad882/12f09/Recycler.png 148w,
+/static/0f616d878949fe93748c3b32cb4ad882/e4a3f/Recycler.png 295w,
+/static/0f616d878949fe93748c3b32cb4ad882/9cb4e/Recycler.png 431w"
+        sizes="(max-width: 431px) 100vw, 431px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token comment">// 队列</span>
+    <span class="token keyword">static</span> <span class="token class-name">WeakOrderQueue</span> <span class="token function">newQueue</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">,</span> <span class="token class-name">Thread</span> thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// We allocated a Link so reserve the space</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Head</span><span class="token punctuation">.</span><span class="token function">reserveSpaceForLink</span><span class="token punctuation">(</span>stack<span class="token punctuation">.</span>availableSharedCapacity<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">final</span> <span class="token class-name">WeakOrderQueue</span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WeakOrderQueue</span><span class="token punctuation">(</span>stack<span class="token punctuation">,</span> thread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// Done outside of the constructor to ensure WeakOrderQueue.this does not escape the constructor and so</span>
+        <span class="token comment">// may be accessed while its still constructed.</span>
+        <span class="token comment">// headQueue对象是用来维护在多线程情况下并发回收的时候标识其他线程和当前要回收对象所在stack的映射关系.</span>
+        stack<span class="token punctuation">.</span><span class="token function">setHead</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> queue<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre></div>
+<h3 id="处理回收defaulthandler"><a href="#%E5%A4%84%E7%90%86%E5%9B%9E%E6%94%B6defaulthandler" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>处理回收DefaultHandler</h3>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">DefaultHandle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">implements</span> <span class="token class-name">Handle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">{</span>
+        <span class="token comment">// 标记对象回收的id</span>
+        <span class="token keyword">int</span> lastRecycledId<span class="token punctuation">;</span>
+        <span class="token comment">// 标记当前要回收的对象id</span>
+        <span class="token keyword">int</span> recycleId<span class="token punctuation">;</span>
+        <span class="token comment">// 标记对象是否回收</span>
+        <span class="token keyword">boolean</span> hasBeenRecycled<span class="token punctuation">;</span>
+
+        <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">;</span>
+        <span class="token comment">// 具体回收对象</span>
+        <span class="token class-name">Object</span> value<span class="token punctuation">;</span>
+
+        <span class="token class-name">DefaultHandle</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token operator">=</span> stack<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// 具体回收业务处理</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">recycle</span><span class="token punctuation">(</span><span class="token class-name">Object</span> object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>object <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"object does not belong to handle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">;</span>
+            <span class="token comment">// 如果ID不一致，则表示已经回收</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>lastRecycledId <span class="token operator">!=</span> recycleId <span class="token operator">||</span> stack <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"recycled already"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            
+            stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">void</span> <span class="token function">push</span><span class="token punctuation">(</span><span class="token class-name">DefaultHandle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> item<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Thread</span> currentThread <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 当前线程回收对象</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>threadRef<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> currentThread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// The current Thread is the thread that belongs to the Stack, we can try to push the object now.</span>
+            <span class="token comment">// 当前线程是属于堆栈的线程，尝试推对象</span>
+            <span class="token function">pushNow</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment">// The current Thread is not the one that belongs to the Stack</span>
+            <span class="token comment">// (or the Thread that belonged to the Stack was collected already), we need to signal that the push</span>
+            <span class="token comment">// happens later.</span>
+            <span class="token comment">// 当前线程不属于堆栈的对象，在后面发出push发生的信号</span>
+            <span class="token function">pushLater</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> currentThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre></div>
+<h2 id="命中逻辑及内存回收"><a href="#%E5%91%BD%E4%B8%AD%E9%80%BB%E8%BE%91%E5%8F%8A%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>命中逻辑及内存回收</h2>
+<ol>
+<li>内存规格
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/9bcd0afda5b0274c5a2d7098287e3851/f8067/memory-region-cache.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 50%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAAsSAAALEgHS3X78AAABpElEQVQozz1QiY7jIBTr/3/aarSjdlptM02aO+GGEAKEI13oHpJlGbB5Tz4dR4jR/0VwxyuuU8+rIrEcO/H8XrpaJoxtFmP333wc8RRjCNGF6DOCi68jxWhxE03JyoI9fuHbmZd30T3Tj6KtfHB/nGlqDjut/mFL7J2NwQe/B+8ywpvdnoT3+/72JGcOG07VOFhKDEYbggaCHcFtnnTm2SGo52mDcz6C2SJoIdAYqaG3izil210rIYUymzfb1DZf58+FIKtWScnl/Dm1tVXS+V0Lfr9dn49Cr4tdF0PJKQ20aumHjjESjR6rx+XjBxkGtymJwPXnR1fczSL8bjSjxeX8fb1owdwqc9gSzDGcwIgxxAQ2zxLN06O4c86q8rt9Vm1djWOvzdZ1TV0+hrap6opMgxM8h9XCh7FPYWs2hACE8yqXtEjShCBKMSXIaMUZTU+UIkKwxGjn7KQhCLuFBK9qfb1ehJG6rUMMMwIAAyYYZhhRbHbDOANpRzgDgnIpaW2n5Nq1Fs4mtZpqB7nhLOCcdEK6T6yn0by17Nq170RT+039Bu9BLSvnJ6VYAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/9bcd0afda5b0274c5a2d7098287e3851/fcda8/memory-region-cache.png"
+        srcset="/static/9bcd0afda5b0274c5a2d7098287e3851/12f09/memory-region-cache.png 148w,
+/static/9bcd0afda5b0274c5a2d7098287e3851/e4a3f/memory-region-cache.png 295w,
+/static/9bcd0afda5b0274c5a2d7098287e3851/fcda8/memory-region-cache.png 590w,
+/static/9bcd0afda5b0274c5a2d7098287e3851/f8067/memory-region-cache.png 726w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
+<li>
+<p>内存分配流程</p>
+<ol>
+<li>PoolThreadCache。线程独有的内存仓库</li>
+<li>PoolArean。几个线程共享的内存仓库</li>
+<li>全局变量指向的内存仓库，为所有线程共用</li>
+<li>PoolChunck。向OS申请的最小内存，默认为16M</li>
+<li>Page。PoolChunk所能管理的最小内存，PageSize默认为8k
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/3c31326cfc5834d5bbefe33e4b9f5d57/5bb8b/memory.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 65.54054054054055%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAAClElEQVQoz03RbU/aUBQAYP/hPm7Jti/7DdsndcuyLEbRxZdZBcUpDnmxFKG8sxZKqdCWlksLgg4d24gycYwhbYHRdgXj2MnJyc3NfXLuuXdK13VFlntyv6/8GfSGRhqLnjyQJUnTNF3VjAP929+XBfZKYBslvp5Ld68bxqauaVNGPb84RxNuH273Jxxo0uXHD3y4E1ROuoOBoo3wzXkdW7BhJhu2sI8+X65lxZFVx7ha/Wz1za97pt/DMxDyEkJmIO8bulToaFozy7XwdKP5O4IL8UQpEhNgH3dRa44bj3H57NSL+QNEMJDwGxkmAqFEsFAU+6rarlTbQvmyc+vkwCEvwEDcZZiTRmOCxdNTM5y2IIw9mN8P5Le9rBWhQaGoqUNV1we63mx3SPCVEr5ni3Wu0mi2lTHWx53L5T1vcvMw+RGlbOixBSGtHoIHQk9Wvp3dZNLlDJbLH4tciufJQhXUet2+Po4RLhaLW27MjKTtwcweSlk8pNmVzIvCVfXa/GQeejq3+Whp59nb9YfQxuPllQfTIJQfP5g6woIgGHjDQ9r81AcftQmnzC6c4TipJXHxYxAlhUhWDOMgCkqRXAUlWl+uJzMDANbtkRUnbvWSFg+x5sRW7XGGzl12WssotojGtoPJJRwzHQZipZM7Nrk2x/PQQWzNRViR9BacWnUm1g4+ZTL0T6kTCvP+KBsPcyjDhfwMqNTufniCaZp5t4OabDHIgRnMtBdd3AmlKKr+49cCmplHqI0QvRVmljyZOUfSGmRH/h8uFAQ7SjnCLBxl3VHGGWGN4WkAKlft10fkrIeYdhOvjpIvdqlZHw7F8/p9TN3PoP6Xw1HVRtGV1a48lBT1VlblvtZsSa12t9dT7sb+C9/5e9ccst8rAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/3c31326cfc5834d5bbefe33e4b9f5d57/fcda8/memory.png"
+        srcset="/static/3c31326cfc5834d5bbefe33e4b9f5d57/12f09/memory.png 148w,
+/static/3c31326cfc5834d5bbefe33e4b9f5d57/e4a3f/memory.png 295w,
+/static/3c31326cfc5834d5bbefe33e4b9f5d57/fcda8/memory.png 590w,
+/static/3c31326cfc5834d5bbefe33e4b9f5d57/5bb8b/memory.png 749w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
+</ol>
+</li>
+<li>
+<p>堆外内存回收</p>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractReferenceCountedByteBuf</span> <span class="token punctuation">{</span></code></pre></div>
+</li>
+</ol>
+<p>  @Override
+protected final void deallocate() {
+if (handle >= 0) {
+final long handle = this.handle;
+// 当前的ByteBuf不再指向任何一块内存
+this.handle = -1;
+memory = null;
+// 将ByteBuf的内存释放
+chunk.arena.free(chunk, tmpNioBuf, handle, maxLength, cache);
+tmpNioBuf = null;
+chunk = null;
+// 将对象放入的对象回收站，循环利用
+recycle();
+}
+}
+}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">1. ByteBuf释放内存
+```java
+void free(PoolChunk&lt;T&gt; chunk, ByteBuffer nioBuffer, long handle, int normCapacity, PoolThreadCache cache) {
+        if (chunk.unpooled) {
+            int size = chunk.chunkSize();
+            destroyChunk(chunk);
+            activeBytesHuge.add(-size);
+            deallocationsHuge.increment();
+        } else {
+            SizeClass sizeClass = sizeClass(handle);
+            if (cache != null &amp;&amp; cache.add(this, chunk, nioBuffer, handle, normCapacity, sizeClass)) {
+                // cached so not free it.
+                return;
+            }
+
+            freeChunk(chunk, handle, normCapacity, sizeClass, nioBuffer, false);
+        }
+    }</code></pre></div></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/linux-shell/">← <!-- -->linux指令集</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+  
+  
+  if(true) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  }
+  if (typeof ga === "function") {
+    ga('create', 'UA-103814842-1', 'auto', {});
+      
+      
+      
+      
+      
+      }</script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/netty-memory/";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-0610ffb5df8325885ce5.js"],"app":["/app-a43e16c690735530e50f.js"],"component---src-pages-404-js":["/component---src-pages-404-js-92a9039488494d561edf.js"],"component---src-templates-blog-index-js":["/component---src-templates-blog-index-js-fa5d9ea3f4b6e27743a8.js"],"component---src-templates-blog-post-js":["/component---src-templates-blog-post-js-ad1f4b69906105a37af7.js"]};/*]]>*/</script><script src="/polyfill-0610ffb5df8325885ce5.js" nomodule=""></script><script src="/component---src-templates-blog-post-js-ad1f4b69906105a37af7.js" async=""></script><script src="/b42287b7de2077c8bbdf81b8173430c75bb9d1ba-15e706e384a6a6b62cfa.js" async=""></script><script src="/commons-a61e524f37fdba0d1d8f.js" async=""></script><script src="/styles-e9d24b1846c7d6eb9685.js" async=""></script><script src="/app-a43e16c690735530e50f.js" async=""></script><script src="/framework-9f754d8b33503a24e84f.js" async=""></script><script src="/webpack-runtime-c03831699c162a87dc05.js" async=""></script></body></html>

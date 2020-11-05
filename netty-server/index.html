@@ -69,7 +69,7 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">netty server</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-31<!-- --> • ☕️ 4 min read</p></header><div><h2 id="channel源码"><a href="#channel%E6%BA%90%E7%A0%81" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>channel源码</h2>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">netty server</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-31<!-- --> • ☕️ 3 min read</p></header><div><h2 id="channel源码"><a href="#channel%E6%BA%90%E7%A0%81" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>channel源码</h2>
 <ul>
 <li>简介到网络套接字或IO操作的组件，如读、写、连接和绑定。类图如下：
 
@@ -463,147 +463,7 @@
   
   </a>
     </li>
-</ul>
-<h3 id="命中逻辑及内存回收"><a href="#%E5%91%BD%E4%B8%AD%E9%80%BB%E8%BE%91%E5%8F%8A%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>命中逻辑及内存回收</h3>
-<ol>
-<li>内存规格
-
-  <a
-    class="gatsby-resp-image-link"
-    href="/static/9bcd0afda5b0274c5a2d7098287e3851/f8067/memory-region-cache.png"
-    style="display: block"
-    target="_blank"
-    rel="noopener"
-  >
-  
-  <span
-    class="gatsby-resp-image-wrapper"
-    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
-  >
-    <span
-      class="gatsby-resp-image-background-image"
-      style="padding-bottom: 50%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAKCAIAAAA7N+mxAAAACXBIWXMAAAsSAAALEgHS3X78AAABpElEQVQozz1QiY7jIBTr/3/aarSjdlptM02aO+GGEAKEI13oHpJlGbB5Tz4dR4jR/0VwxyuuU8+rIrEcO/H8XrpaJoxtFmP333wc8RRjCNGF6DOCi68jxWhxE03JyoI9fuHbmZd30T3Tj6KtfHB/nGlqDjut/mFL7J2NwQe/B+8ywpvdnoT3+/72JGcOG07VOFhKDEYbggaCHcFtnnTm2SGo52mDcz6C2SJoIdAYqaG3izil210rIYUymzfb1DZf58+FIKtWScnl/Dm1tVXS+V0Lfr9dn49Cr4tdF0PJKQ20aumHjjESjR6rx+XjBxkGtymJwPXnR1fczSL8bjSjxeX8fb1owdwqc9gSzDGcwIgxxAQ2zxLN06O4c86q8rt9Vm1djWOvzdZ1TV0+hrap6opMgxM8h9XCh7FPYWs2hACE8yqXtEjShCBKMSXIaMUZTU+UIkKwxGjn7KQhCLuFBK9qfb1ehJG6rUMMMwIAAyYYZhhRbHbDOANpRzgDgnIpaW2n5Nq1Fs4mtZpqB7nhLOCcdEK6T6yn0by17Nq170RT+039Bu9BLSvnJ6VYAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
-    >
-      <img
-        class="gatsby-resp-image-image"
-        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
-        alt="image"
-        title=""
-        src="/static/9bcd0afda5b0274c5a2d7098287e3851/fcda8/memory-region-cache.png"
-        srcset="/static/9bcd0afda5b0274c5a2d7098287e3851/12f09/memory-region-cache.png 148w,
-/static/9bcd0afda5b0274c5a2d7098287e3851/e4a3f/memory-region-cache.png 295w,
-/static/9bcd0afda5b0274c5a2d7098287e3851/fcda8/memory-region-cache.png 590w,
-/static/9bcd0afda5b0274c5a2d7098287e3851/f8067/memory-region-cache.png 726w"
-        sizes="(max-width: 590px) 100vw, 590px"
-      />
-    </span>
-  </span>
-  
-  </a>
-    </li>
-<li>
-<p>内存分配流程</p>
-<ol>
-<li>PoolThreadCache。线程独有的内存仓库</li>
-<li>PoolArean。几个线程共享的内存仓库</li>
-<li>全局变量指向的内存仓库，为所有线程共用</li>
-<li>PoolChunck。向OS申请的最小内存，默认为16M</li>
-<li>Page。PoolChunk所能管理的最小内存，PageSize默认为8k
-
-  <a
-    class="gatsby-resp-image-link"
-    href="/static/3c31326cfc5834d5bbefe33e4b9f5d57/5bb8b/memory.png"
-    style="display: block"
-    target="_blank"
-    rel="noopener"
-  >
-  
-  <span
-    class="gatsby-resp-image-wrapper"
-    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
-  >
-    <span
-      class="gatsby-resp-image-background-image"
-      style="padding-bottom: 65.54054054054055%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAAClElEQVQoz03RbU/aUBQAYP/hPm7Jti/7DdsndcuyLEbRxZdZBcUpDnmxFKG8sxZKqdCWlksLgg4d24gycYwhbYHRdgXj2MnJyc3NfXLuuXdK13VFlntyv6/8GfSGRhqLnjyQJUnTNF3VjAP929+XBfZKYBslvp5Ld68bxqauaVNGPb84RxNuH273Jxxo0uXHD3y4E1ROuoOBoo3wzXkdW7BhJhu2sI8+X65lxZFVx7ha/Wz1za97pt/DMxDyEkJmIO8bulToaFozy7XwdKP5O4IL8UQpEhNgH3dRa44bj3H57NSL+QNEMJDwGxkmAqFEsFAU+6rarlTbQvmyc+vkwCEvwEDcZZiTRmOCxdNTM5y2IIw9mN8P5Le9rBWhQaGoqUNV1we63mx3SPCVEr5ni3Wu0mi2lTHWx53L5T1vcvMw+RGlbOixBSGtHoIHQk9Wvp3dZNLlDJbLH4tciufJQhXUet2+Po4RLhaLW27MjKTtwcweSlk8pNmVzIvCVfXa/GQeejq3+Whp59nb9YfQxuPllQfTIJQfP5g6woIgGHjDQ9r81AcftQmnzC6c4TipJXHxYxAlhUhWDOMgCkqRXAUlWl+uJzMDANbtkRUnbvWSFg+x5sRW7XGGzl12WssotojGtoPJJRwzHQZipZM7Nrk2x/PQQWzNRViR9BacWnUm1g4+ZTL0T6kTCvP+KBsPcyjDhfwMqNTufniCaZp5t4OabDHIgRnMtBdd3AmlKKr+49cCmplHqI0QvRVmljyZOUfSGmRH/h8uFAQ7SjnCLBxl3VHGGWGN4WkAKlft10fkrIeYdhOvjpIvdqlZHw7F8/p9TN3PoP6Xw1HVRtGV1a48lBT1VlblvtZsSa12t9dT7sb+C9/5e9ccst8rAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
-    >
-      <img
-        class="gatsby-resp-image-image"
-        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
-        alt="image"
-        title=""
-        src="/static/3c31326cfc5834d5bbefe33e4b9f5d57/fcda8/memory.png"
-        srcset="/static/3c31326cfc5834d5bbefe33e4b9f5d57/12f09/memory.png 148w,
-/static/3c31326cfc5834d5bbefe33e4b9f5d57/e4a3f/memory.png 295w,
-/static/3c31326cfc5834d5bbefe33e4b9f5d57/fcda8/memory.png 590w,
-/static/3c31326cfc5834d5bbefe33e4b9f5d57/5bb8b/memory.png 749w"
-        sizes="(max-width: 590px) 100vw, 590px"
-      />
-    </span>
-  </span>
-  
-  </a>
-    </li>
-</ol>
-</li>
-<li>
-<p>堆外内存回收</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractReferenceCountedByteBuf</span> <span class="token punctuation">{</span></code></pre></div>
-</li>
-</ol>
-<p>  @Override
-protected final void deallocate() {
-if (handle >= 0) {
-final long handle = this.handle;
-// 当前的ByteBuf不再指向任何一块内存
-this.handle = -1;
-memory = null;
-// 将ByteBuf的内存释放
-chunk.arena.free(chunk, tmpNioBuf, handle, maxLength, cache);
-tmpNioBuf = null;
-chunk = null;
-// 将对象放入的对象回收站，循环利用
-recycle();
-}
-}
-}</p>
-<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">1. ByteBuf释放内存
-```java
-void free(PoolChunk&lt;T&gt; chunk, ByteBuffer nioBuffer, long handle, int normCapacity, PoolThreadCache cache) {
-        if (chunk.unpooled) {
-            int size = chunk.chunkSize();
-            destroyChunk(chunk);
-            activeBytesHuge.add(-size);
-            deallocationsHuge.increment();
-        } else {
-            SizeClass sizeClass = sizeClass(handle);
-            if (cache != null &amp;&amp; cache.add(this, chunk, nioBuffer, handle, normCapacity, sizeClass)) {
-                // cached so not free it.
-                return;
-            }
-
-            freeChunk(chunk, handle, normCapacity, sizeClass, nioBuffer, false);
-        }
-    }</code></pre></div>
-<ol>
-<li>
-<p>对象放入回收站，循环利用</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Recycler</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">{</span>
-<span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">recycle</span><span class="token punctuation">(</span><span class="token class-name">Object</span> object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>object <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"object does not belong to handle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>lastRecycledId <span class="token operator">!=</span> recycleId <span class="token operator">||</span> stack <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"recycled already"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre></div>
-</li>
-</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/interview/">← <!-- -->面试题收集</a></li><li><a rel="next" href="/spring-boot/">spring boot部分源码解读<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+</ul></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/interview/">← <!-- -->面试题收集</a></li><li><a rel="next" href="/spring-boot/">spring boot部分源码解读<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
   if(true) {
