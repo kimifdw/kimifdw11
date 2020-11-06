@@ -69,70 +69,77 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">netty内存原理</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-11-5<!-- --> • ☕️ 7 min read</p></header><div><h1 id="内存原理"><a href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存原理</h1>
-<h2 id="创建堆缓冲区"><a href="#%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>创建堆缓冲区</h2>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ByteBuf</span> <span class="token function">buffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> ALLOC<span class="token punctuation">.</span><span class="token function">heapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">// AbstractByteBufAllocator：实现</span>
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token class-name">ByteBuf</span> <span class="token function">heapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>initialCapacity <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> maxCapacity <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> emptyBuf<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment">// 验证参数合法性，最大的堆缓冲区容量是int最大值字节</span>
-        <span class="token function">validate</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre></div>
-<h2 id="基于内存池创建堆缓冲区"><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E6%B1%A0%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基于内存池创建堆缓冲区</h2>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token comment">// PooledByteBufAllocator</span>
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token class-name">ByteBuf</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 从本地缓存内存中取</span>
-        <span class="token class-name">PoolThreadCache</span> cache <span class="token operator">=</span> threadCache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 获取堆内区域</span>
-        <span class="token class-name">PoolArena</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span> heapArena <span class="token operator">=</span> cache<span class="token punctuation">.</span>heapArena<span class="token punctuation">;</span>
-
-        <span class="token keyword">final</span> <span class="token class-name">ByteBuf</span> buf<span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>heapArena <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment">// 从堆区域中分配缓冲区</span>
-            buf <span class="token operator">=</span> heapArena<span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token comment">// 直接分配内存</span>
-            buf <span class="token operator">=</span> <span class="token class-name">PlatformDependent</span><span class="token punctuation">.</span><span class="token function">hasUnsafe</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">?</span>
-                    <span class="token keyword">new</span> <span class="token class-name">UnpooledUnsafeHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span> <span class="token operator">:</span>
-                    <span class="token keyword">new</span> <span class="token class-name">UnpooledHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment">// 检测是否有内存泄漏</span>
-        <span class="token keyword">return</span> <span class="token function">toLeakAwareBuffer</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token comment">// PoolArena</span>
-    <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// 创建基于内存池的byteBuf</span>
-        <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf <span class="token operator">=</span> <span class="token function">newByteBuf</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 分配内存</span>
-        <span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> buf<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment">// 按申请的内存大小进行内存分配</span>
-    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">final</span> <span class="token keyword">int</span> sizeIdx <span class="token operator">=</span> <span class="token function">size2SizeIdx</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;=</span> smallMaxSizeIdx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token function">tcacheAllocateSmall</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;</span> nSizes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token function">tcacheAllocateNormal</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">int</span> normCapacity <span class="token operator">=</span> directMemoryCacheAlignment <span class="token operator">></span> <span class="token number">0</span>
-                    <span class="token operator">?</span> <span class="token function">normalizeSize</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span> <span class="token operator">:</span> reqCapacity<span class="token punctuation">;</span>
-            <span class="token comment">// Huge allocations are never served via the cache so just call allocateHuge</span>
-            <span class="token function">allocateHuge</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> normCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span></code></pre></div>
-<h2 id="分配的内存类型"><a href="#%E5%88%86%E9%85%8D%E7%9A%84%E5%86%85%E5%AD%98%E7%B1%BB%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分配的内存类型</h2>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">netty内存原理</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-11-6<!-- --> • ☕️ 7 min read</p></header><div><h1 id="内存原理"><a href="#%E5%86%85%E5%AD%98%E5%8E%9F%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存原理</h1>
+<blockquote>
+<p>参考Jemalloc的技术特性</p>
+</blockquote>
 <ol>
+<li><code class="language-text">Arena</code>。将其分成许多个小块来分而治之。</li>
+<li>
+<p><code class="language-text">Thread cache</code>。给各自的线程thread cache领域。</p>
+<h2 id="创建堆缓冲区"><a href="#%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>创建堆缓冲区</h2>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ByteBuf</span> <span class="token function">buffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> ALLOC<span class="token punctuation">.</span><span class="token function">heapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// AbstractByteBufAllocator：实现</span>
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token class-name">ByteBuf</span> <span class="token function">heapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>initialCapacity <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> maxCapacity <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> emptyBuf<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 验证参数合法性，最大的堆缓冲区容量是int最大值字节</span>
+    <span class="token function">validate</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<h2 id="基于内存池创建堆缓冲区"><a href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E6%B1%A0%E5%88%9B%E5%BB%BA%E5%A0%86%E7%BC%93%E5%86%B2%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>基于内存池创建堆缓冲区</h2>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token comment">// PooledByteBufAllocator</span>
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token class-name">ByteBuf</span> <span class="token function">newHeapBuffer</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 从本地缓存内存中取</span>
+    <span class="token class-name">PoolThreadCache</span> cache <span class="token operator">=</span> threadCache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 获取堆内区域</span>
+    <span class="token class-name">PoolArena</span><span class="token operator">&lt;</span><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span> heapArena <span class="token operator">=</span> cache<span class="token punctuation">.</span>heapArena<span class="token punctuation">;</span>
+
+    <span class="token keyword">final</span> <span class="token class-name">ByteBuf</span> buf<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>heapArena <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 从堆区域中分配缓冲区</span>
+        buf <span class="token operator">=</span> heapArena<span class="token punctuation">.</span><span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 直接分配内存</span>
+        buf <span class="token operator">=</span> <span class="token class-name">PlatformDependent</span><span class="token punctuation">.</span><span class="token function">hasUnsafe</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">?</span>
+                <span class="token keyword">new</span> <span class="token class-name">UnpooledUnsafeHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span> <span class="token operator">:</span>
+                <span class="token keyword">new</span> <span class="token class-name">UnpooledHeapByteBuf</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> initialCapacity<span class="token punctuation">,</span> maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment">// 检测是否有内存泄漏</span>
+    <span class="token keyword">return</span> <span class="token function">toLeakAwareBuffer</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// PoolArena</span>
+<span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">,</span> <span class="token keyword">int</span> maxCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 创建基于内存池的byteBuf</span>
+    <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf <span class="token operator">=</span> <span class="token function">newByteBuf</span><span class="token punctuation">(</span>maxCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// 分配内存</span>
+    <span class="token function">allocate</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> buf<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 按申请的内存大小进行内存分配</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token class-name">PoolThreadCache</span> cache<span class="token punctuation">,</span> <span class="token class-name">PooledByteBuf</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> buf<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">int</span> reqCapacity<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> <span class="token keyword">int</span> sizeIdx <span class="token operator">=</span> <span class="token function">size2SizeIdx</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;=</span> smallMaxSizeIdx<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">tcacheAllocateSmall</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>sizeIdx <span class="token operator">&lt;</span> nSizes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">tcacheAllocateNormal</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> reqCapacity<span class="token punctuation">,</span> sizeIdx<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> normCapacity <span class="token operator">=</span> directMemoryCacheAlignment <span class="token operator">></span> <span class="token number">0</span>
+                <span class="token operator">?</span> <span class="token function">normalizeSize</span><span class="token punctuation">(</span>reqCapacity<span class="token punctuation">)</span> <span class="token operator">:</span> reqCapacity<span class="token punctuation">;</span>
+        <span class="token comment">// Huge allocations are never served via the cache so just call allocateHuge</span>
+        <span class="token function">allocateHuge</span><span class="token punctuation">(</span>buf<span class="token punctuation">,</span> normCapacity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></div>
+<h2 id="分配的内存类型"><a href="#%E5%88%86%E9%85%8D%E7%9A%84%E5%86%85%E5%AD%98%E7%B1%BB%E5%9E%8B" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分配的内存类型</h2>
+</li>
 <li>直接内存</li>
 <li>
 <p>堆内存</p>
@@ -186,7 +193,8 @@
 <li>
 <p>组成</p>
 <ol>
-<li><code class="language-text">PoolChunk</code>。负责内存的分配逻辑，最小单位是一个page,<strong>8k</strong>,由2048个subpage组成</li>
+<li><code class="language-text">PoolChunk</code>。负责内存的分配逻辑，最小单位是一个page,<strong>8k</strong>,由2048个subpage组成，向OS申请的最小内存，使用完全二叉树来对组织内部的内存。</li>
+<li><code class="language-text">PoolChunkList</code>。管理<code class="language-text">PoolChunk</code>的链表。</li>
 <li>
 <p><code class="language-text">PoolSubPage</code>。一个内存页大小默认是<strong>8k</strong>
 
@@ -225,13 +233,8 @@
     </p>
 <h2 id="recycler对象池"><a href="#recycler%E5%AF%B9%E8%B1%A1%E6%B1%A0" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Recycler对象池</h2>
 <blockquote>
-<p>基于netty的<code class="language-text">stack</code>实现，采用了栈和队列实现。stack用来支持同一个线程内的对象使用和回收，把当前回收的线程和要回收对象对应的stack绑定到一个weakOrderQueue存储在当前要回收对象所在的stack中，之所以这样设计在并发情况下<strong>一个线程绑定一个队列减少多个线程之间的锁争用提供应用的并发度</strong></p>
-</blockquote>
-</li>
-</ol>
-</li>
-</ol>
-<p>
+<p>基于netty的<code class="language-text">stack</code>实现，采用了栈和队列实现。stack用来支持同一个线程内的对象使用和回收，把当前回收的线程和要回收对象对应的stack绑定到一个weakOrderQueue存储在当前要回收对象所在的stack中，之所以这样设计在并发情况下<strong>一个线程绑定一个队列减少多个线程之间的锁争用提供应用的并发度</strong>
+
   <a
     class="gatsby-resp-image-link"
     href="/static/0f616d878949fe93748c3b32cb4ad882/9cb4e/Recycler.png"
@@ -264,69 +267,74 @@
   
   </a>
     </p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token comment">// 队列</span>
-    <span class="token keyword">static</span> <span class="token class-name">WeakOrderQueue</span> <span class="token function">newQueue</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">,</span> <span class="token class-name">Thread</span> thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment">// We allocated a Link so reserve the space</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Head</span><span class="token punctuation">.</span><span class="token function">reserveSpaceForLink</span><span class="token punctuation">(</span>stack<span class="token punctuation">.</span>availableSharedCapacity<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">final</span> <span class="token class-name">WeakOrderQueue</span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WeakOrderQueue</span><span class="token punctuation">(</span>stack<span class="token punctuation">,</span> thread<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// Done outside of the constructor to ensure WeakOrderQueue.this does not escape the constructor and so</span>
-        <span class="token comment">// may be accessed while its still constructed.</span>
-        <span class="token comment">// headQueue对象是用来维护在多线程情况下并发回收的时候标识其他线程和当前要回收对象所在stack的映射关系.</span>
-        stack<span class="token punctuation">.</span><span class="token function">setHead</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</blockquote>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token comment">// 队列</span>
+<span class="token keyword">static</span> <span class="token class-name">WeakOrderQueue</span> <span class="token function">newQueue</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">,</span> <span class="token class-name">Thread</span> thread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment">// We allocated a Link so reserve the space</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Head</span><span class="token punctuation">.</span><span class="token function">reserveSpaceForLink</span><span class="token punctuation">(</span>stack<span class="token punctuation">.</span>availableSharedCapacity<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">final</span> <span class="token class-name">WeakOrderQueue</span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WeakOrderQueue</span><span class="token punctuation">(</span>stack<span class="token punctuation">,</span> thread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// Done outside of the constructor to ensure WeakOrderQueue.this does not escape the constructor and so</span>
+<span class="token comment">// may be accessed while its still constructed.</span>
+<span class="token comment">// headQueue对象是用来维护在多线程情况下并发回收的时候标识其他线程和当前要回收对象所在stack的映射关系.</span>
+stack<span class="token punctuation">.</span><span class="token function">setHead</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        <span class="token keyword">return</span> queue<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre></div>
+<span class="token keyword">return</span> queue<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
 <h3 id="处理回收defaulthandler"><a href="#%E5%A4%84%E7%90%86%E5%9B%9E%E6%94%B6defaulthandler" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>处理回收DefaultHandler</h3>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">DefaultHandle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">implements</span> <span class="token class-name">Handle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">{</span>
-        <span class="token comment">// 标记对象回收的id</span>
-        <span class="token keyword">int</span> lastRecycledId<span class="token punctuation">;</span>
-        <span class="token comment">// 标记当前要回收的对象id</span>
-        <span class="token keyword">int</span> recycleId<span class="token punctuation">;</span>
-        <span class="token comment">// 标记对象是否回收</span>
-        <span class="token keyword">boolean</span> hasBeenRecycled<span class="token punctuation">;</span>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">DefaultHandle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">implements</span> <span class="token class-name">Handle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token punctuation">{</span>
+<span class="token comment">// 标记对象回收的id</span>
+<span class="token keyword">int</span> lastRecycledId<span class="token punctuation">;</span>
+<span class="token comment">// 标记当前要回收的对象id</span>
+<span class="token keyword">int</span> recycleId<span class="token punctuation">;</span>
+<span class="token comment">// 标记对象是否回收</span>
+<span class="token keyword">boolean</span> hasBeenRecycled<span class="token punctuation">;</span>
 
-        <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">;</span>
-        <span class="token comment">// 具体回收对象</span>
-        <span class="token class-name">Object</span> value<span class="token punctuation">;</span>
+<span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">;</span>
+<span class="token comment">// 具体回收对象</span>
+<span class="token class-name">Object</span> value<span class="token punctuation">;</span>
 
-        <span class="token class-name">DefaultHandle</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token operator">=</span> stack<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
+<span class="token class-name">DefaultHandle</span><span class="token punctuation">(</span><span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>stack <span class="token operator">=</span> stack<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
-        <span class="token comment">// 具体回收业务处理</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">recycle</span><span class="token punctuation">(</span><span class="token class-name">Object</span> object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>object <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"object does not belong to handle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-
-            <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">;</span>
-            <span class="token comment">// 如果ID不一致，则表示已经回收</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>lastRecycledId <span class="token operator">!=</span> recycleId <span class="token operator">||</span> stack <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"recycled already"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            
-            stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
+<span class="token comment">// 具体回收业务处理</span>
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">recycle</span><span class="token punctuation">(</span><span class="token class-name">Object</span> object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>object <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"object does not belong to handle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 
-    <span class="token keyword">void</span> <span class="token function">push</span><span class="token punctuation">(</span><span class="token class-name">DefaultHandle</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> item<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token class-name">Thread</span> currentThread <span class="token operator">=</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 当前线程回收对象</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>threadRef<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> currentThread<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment">// The current Thread is the thread that belongs to the Stack, we can try to push the object now.</span>
-            <span class="token comment">// 当前线程是属于堆栈的线程，尝试推对象</span>
-            <span class="token function">pushNow</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token comment">// The current Thread is not the one that belongs to the Stack</span>
-            <span class="token comment">// (or the Thread that belonged to the Stack was collected already), we need to signal that the push</span>
-            <span class="token comment">// happens later.</span>
-            <span class="token comment">// 当前线程不属于堆栈的对象，在后面发出push发生的信号</span>
-            <span class="token function">pushLater</span><span class="token punctuation">(</span>item<span class="token punctuation">,</span> currentThread<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span></code></pre></div>
+    <span class="token class-name">Stack</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> stack <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>stack<span class="token punctuation">;</span>
+    <span class="token comment">// 如果ID不一致，则表示已经回收</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>lastRecycledId <span class="token operator">!=</span> recycleId <span class="token operator">||</span> stack <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"recycled already"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    stack<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre></div>
+</li>
+</ol>
+<p>void push(DefaultHandle&#x3C;?> item) {
+Thread currentThread = Thread.currentThread();
+// 当前线程回收对象
+if (threadRef.get() == currentThread) {
+// The current Thread is the thread that belongs to the Stack, we can try to push the object now.
+// 当前线程是属于堆栈的线程，尝试推对象
+pushNow(item);
+} else {
+// The current Thread is not the one that belongs to the Stack
+// (or the Thread that belonged to the Stack was collected already), we need to signal that the push
+// happens later.
+// 当前线程不属于堆栈的对象，在后面发出push发生的信号
+pushLater(item, currentThread);
+}
+}</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text"></code></pre></div>
+</li>
+</ol>
 <h2 id="命中逻辑及内存回收"><a href="#%E5%91%BD%E4%B8%AD%E9%80%BB%E8%BE%91%E5%8F%8A%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>命中逻辑及内存回收</h2>
 <ol>
 <li>内存规格
