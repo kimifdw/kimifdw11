@@ -1,9 +1,13 @@
 ---
 title: netty内存原理
-date: '2020-11-05'
+date: '2020-11-06'
 spoiler: netty memory, 源码学习
 ---
 # 内存原理
+> 参考Jemalloc的技术特性
+
+1. `Arena`。将其分成许多个小块来分而治之。
+1. `Thread cache`。给各自的线程thread cache领域。
 ## 创建堆缓冲区
 ```java
     public static ByteBuf buffer(int initialCapacity) {
@@ -111,7 +115,8 @@ spoiler: netty memory, 源码学习
 1. 结构图
     1. 数据结构：平衡二叉树
 1. 组成
-    1. `PoolChunk`。负责内存的分配逻辑，最小单位是一个page,**8k**,由2048个subpage组成
+    1. `PoolChunk`。负责内存的分配逻辑，最小单位是一个page,**8k**,由2048个subpage组成，向OS申请的最小内存，使用完全二叉树来对组织内部的内存。
+    1. `PoolChunkList`。管理`PoolChunk`的链表。
     1. `PoolSubPage`。一个内存页大小默认是**8k**
 ![image](./PoolThreadCache.png)
 ## Recycler对象池
