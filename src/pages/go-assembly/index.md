@@ -3,9 +3,6 @@ title: plan9 assembly 完全解析【转】
 date: '2020-10-23'
 spoiler: golang,plan9,assembly
 ---
-
-# plan9 assembly 完全解析【转】
-
 众所周知，Go 使用了 Unix 老古董(误 们发明的 plan9 汇编。就算你对 x86 汇编有所了解，在 plan9 里还是有些许区别。说不定你在看代码的时候，偶然发现代码里的 SP 看起来是 SP，但它实际上不是 SP 的时候就抓狂了哈哈哈。
 
 本文将对 plan9 汇编进行全面的介绍，同时解答你在接触 plan9 汇编时可能遇到的大部分问题。
