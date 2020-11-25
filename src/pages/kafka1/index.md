@@ -1,6 +1,6 @@
 ---
 title: kafka原理
-date: '2020-11-08'
+date: '2020-11-25'
 spoiler: 原理
 ---
 ## 消息中间件好处
@@ -40,7 +40,24 @@ spoiler: 原理
     min.insync.replicas = ${N/2 + 1}
     unclean.leader.election.enable = false
     ```
-
+    AP【可用性和分区容错性】配置
+    ```sh
+    request.required.acks=1
+    min.insync.replicas = 1
+    unclean.leader.election.enable = false
+    ```
+### kafka消息备份和同步
+1. 根据分区的多副本策略来解决消息的备份问题
+1. 名词解释
+    1. ISR : leader 副本保持一定同步的 follower 副本, 包括 leader 副本自己，叫 In Sync Replica，最终会反馈到zookeeper上。
+    1. AR: 所有副本 (replicas) 统称为 assigned replicas, 即 AR
+    1. OSR: follower 同 leader 同步数据有一些延迟的节点
+    1. HW: Highwater, 俗称高水位，它表示了一个特定的消息偏移量(offset), 在一个 parttion 中 consumer 只能拉取这个 offset 之前的消息(此 offset 跟 consumer offset 不是一个概念) ；
+    1. LEO: LogEndOffset, 日志末端偏移量, 用来表示当前日志文件中下一条写入消息的 offset；
+    1. leader HW: 该 Partititon 所有副本的 LEO 最小值；
+    1. follower HW: min(follower 自身 LEO 和 leader HW)；
+    1. Leader HW = 所有副本 LEO 最小值；
+    1. Follower HW = min(follower 自身 LEO 和 leader HW)。
 ### 保存数据
 > 顺序写入的方式将数据保存到磁盘
 
@@ -60,3 +77,21 @@ spoiler: 原理
 ![image](./consumer-msg.png)
 1. 点对点模式。由消费者主动去kafka集群拉取消息
 1. 消费者组consumer的数量与partition的数量一致
+
+### 消费场景
+1. AutoCommit（实际消息会丢）
+```sh
+    enable.auto.commit = true
+    // 自动提交的时间间隔
+    auto.commit.interval.ms
+```
+2. 手动commit（at least once，消息重复，重启会丢）
+```sh
+    // oldest:topic里最早的消息，大于commit的位置，小于HW，也受到broker上消息保留时间和位移影响，不保证一定能消费到topic起始位置的消息
+    sarama.offset.initial （oldest, newest）
+    // 主题偏移量日志文的保留时长，默认设为1440s
+    offsets.retention.minutes
+```
+
+## 资料
+1. [简单理解kafka的消息可靠性](https://mp.weixin.qq.com/s/T6gCc8OBgyV-yeAg_MUzPQ)
