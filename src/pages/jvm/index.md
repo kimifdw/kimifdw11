@@ -34,7 +34,7 @@ spoiler: jvm cms
    1. 与 Mark-Sweep 第一阶段类似。
    1. 按存活对象按照整理顺序进行整理。
 1. Copying（复制）。通过碰撞指针的方式进行快速地分配内存。
-   ![image](./收集算法.png)
+   ![image](./shoujisuanfa.png)
 
 ## GC 评价标准
 
@@ -42,7 +42,7 @@ spoiler: jvm cms
 1. **吞吐量（Throughput）**。应用 GC 耗时占系统总运行时间的百分比，吞吐量优先的收集器可以接受较长的停顿。一次停顿的时间不超过应用服务的 TP9999，GC 的吞吐量不小于 99.99%
 1. **Footprint（资源量大小测量）**。
 1. **反应速度**。
-   ![image](./评价标准.png)
+   ![image](./pingjiabiaozhun.png)
 
 ## GC Cause
 
@@ -67,7 +67,7 @@ spoiler: jvm cms
 
 1. **IO 交互型**。互联网服务，对内存要求不大，大部分对象在 TP9999 的时间内都会死亡，Young 区越大越好。
 1. **MEM 计算型**。分布式计算服务，对内存要求高，对象存活时间长，old 区越大越好
-   ![image](./应用服务.png)
+   ![image](./application-service.png)
 
 ## 问题分类
 
@@ -85,14 +85,14 @@ spoiler: jvm cms
       1. Old GC 不频繁但单次耗时大
 1. FULL GC
    1. 常规内存泄露问题的解题思路
-      ![image](./解题思路.png)
+      ![image](./solution.png)
 1. MetaSpace。元空间回收引发的问题
 1. Direct Memory。
    1. 堆外内存泄露。通过 top 命令发现 Java 进程的 RES 甚至超过了-Xmx 的大小
    1. 使用`gperftools`工具来追踪分配内存的命令([参考工具](https://blog.csdn.net/10km/article/details/83820080))；
    1. 使用`BTrace`定位具体的调用栈（[参考工具](https://www.cnblogs.com/fengzheng/p/7416942.html)）。
    1. 分析堆外内存问题如下：
-      ![image](./堆外内存.png)
+      ![image](./out-memory.png)
 1. JNI
 
 - GC 问题较难排查，需要谨慎使用
@@ -109,7 +109,7 @@ spoiler: jvm cms
    1. 优先通过摘掉流量的方式来恢复
 1. 因果分析。判断 GC 异常与其他系统指标异常的因果关系。
 1. 根因分析。
-   ![image](./根因鱼骨图.png)
+   ![image](./result-fish.png)
 
 ### 调优建议
 
@@ -119,7 +119,7 @@ spoiler: jvm cms
 1. 善用搜索。重点关注 StackOverFlow、Github 中的 issue 以及各种论坛博客
 1. 调优重点。
 1. GC 参数。
-   ![image](./参数.png)
+   ![image](./param.png)
 1. 禁用偏向锁。
 
 ## 资料
