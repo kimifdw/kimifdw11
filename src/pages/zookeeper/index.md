@@ -66,3 +66,4 @@ spoiler: zookeeper
 ## 资料
 1. [zookeeper官网](https://zookeeper.apache.org/)
 2. [zookeeper实践](https://zhuanlan.zhihu.com/p/134549250)
+3. [zookeeper监控](https://blog.csdn.net/qq_25934401/article/details/84345905)
