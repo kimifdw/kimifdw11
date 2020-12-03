@@ -93,5 +93,15 @@ spoiler: 原理
     offsets.retention.minutes
 ```
 
+## 指令
+1. 创建topic
+```sh
+./kafka-topics.sh --create --topic dev2wx --replication-factor 1 --partitions 2 --zookeeper 172.16.124.91:2181
+```
+2. 查看topic
+```sh
+./kafka-topics.sh --list --zookeeper 172.16.124.91:2181
+```
+
 ## 资料
 1. [简单理解kafka的消息可靠性](https://mp.weixin.qq.com/s/T6gCc8OBgyV-yeAg_MUzPQ)
