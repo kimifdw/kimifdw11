@@ -69,8 +69,57 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">jvm cms</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-11-22<!-- --> • ☕️ 6 min read</p></header><div><h2 id="内存划分"><a href="#%E5%86%85%E5%AD%98%E5%88%92%E5%88%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存划分</h2>
-<p>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">jvm cms</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-12-7<!-- --> • ☕️☕️ 10 min read</p></header><div><h2 id="运行时数据区域"><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>运行时数据区域</h2>
+<ol>
+<li>线程运行时不会因为扩展而导致内存溢出</li>
+<li>2.</li>
+</ol>
+<h3 id="程序计数器"><a href="#%E7%A8%8B%E5%BA%8F%E8%AE%A1%E6%95%B0%E5%99%A8" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>程序计数器</h3>
+<p>一块较小的内存空间，是当前线程所执行的字节码的行号指示器</p>
+<h3 id="java-虚拟机栈"><a href="#java-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java 虚拟机栈</h3>
+<p>存放编译期可知的各种 java 基本数据类型、对象引用和 returnAddress 类型</p>
+<h3 id="本地方法栈"><a href="#%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>本地方法栈</h3>
+<p>为虚拟机使用到的本地方法服务</p>
+<h3 id="java-堆"><a href="#java-%E5%A0%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>java 堆</h3>
+<ol>
+<li>虚拟机所管理的内存中最大的一块</li>
+<li>被所有线程共享的一块内存区域</li>
+<li>唯一目的用于存放对象实例</li>
+</ol>
+<h3 id="方法区"><a href="#%E6%96%B9%E6%B3%95%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>方法区</h3>
+<ol>
+<li>被各个线程所共享的内存区域</li>
+<li>
+<p>用于存储被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等</p>
+<h3 id="永久代"><a href="#%E6%B0%B8%E4%B9%85%E4%BB%A3" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>永久代</h3>
+<ol>
+<li>在 HotSpot 虚拟机上开发、部署程序</li>
+<li>存在<code class="language-text">-XX:MaxPermSize</code>的上限</li>
+<li>逐步被本地内存所取代</li>
+</ol>
+<h4 id="运行时常量池"><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>运行时常量池</h4>
+<p>用于存放编译期生成的各种字面量与符号引用</p>
+<h3 id="元数据"><a href="#%E5%85%83%E6%95%B0%E6%8D%AE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>元数据</h3>
+<ol>
+<li><code class="language-text">-XX:MaxMetaspaceSize</code>。设置元空间最大值，默认为-1（只限制与本地内存大小）</li>
+<li><code class="language-text">-XX:MetaspaceSize</code>。指定元空间的初始空间大小</li>
+<li><code class="language-text">-XX:MinMetaspaceFreeRatio</code>。在垃圾收集之后控制最小的元空间剩余容量的百分比。</li>
+</ol>
+</li>
+</ol>
+<h3 id="直接内存"><a href="#%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>直接内存</h3>
+<p>分配不受 Java 堆大小的限制</p>
+<h2 id="内存划分"><a href="#%E5%86%85%E5%AD%98%E5%88%92%E5%88%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>内存划分</h2>
+<ol>
+<li>
+<p>内存布局分为三个部分</p>
+<ol>
+<li>对象头。</li>
+<li>用于存储对象自身的运行时数据【Mark Word】</li>
+<li>类型指针。对象指向它的类型元数据的指针</li>
+<li>实例数据。对象真正的有效信息，在程序代码里面定义的各种类型的字段内容</li>
+<li>对齐填充，
+
   <a
     class="gatsby-resp-image-link"
     href="/static/06d9cb5b48eee09456f416b4c25cb5f5/41045/mem-struct.png"
@@ -105,22 +154,59 @@
   </span>
   
   </a>
-    </p>
-<ol>
+    </li>
+</ol>
+</li>
 <li>蓝色部分为 GC 主要工作区</li>
 <li>Direct Memory 中，分配内存不够时 GC 通过<code class="language-text">Cleaner#clean</code>间接管理</li>
 <li>任何自动内存管理系统都会面临的步骤：为新对象分配空间，收集垃圾对象空间</li>
 </ol>
 <h2 id="分配对象"><a href="#%E5%88%86%E9%85%8D%E5%AF%B9%E8%B1%A1" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>分配对象</h2>
 <ol>
-<li><strong>空闲列表</strong>。通过额外的存储记录空闲的地址，将随机 IO 变为顺序 IO</li>
-<li><strong>碰撞指针</strong>。通过一个指针作为分界点，需要分配内存时，仅需把指针往空闲的一端移动与对象大小相等的距离，分配效率较高，但使用场景有限</li>
+<li><strong>空闲列表</strong>。从列表中足够大的空间划分给对象实例，并更新列表上的记录。通过额外的存储记录空闲的地址，将随机 IO 变为顺序 IO</li>
+<li><strong>碰撞指针</strong>。通过一个指针作为分界点，需要分配内存时，仅需把指针往空闲的一端移动与对象大小相等的距离，分配效率较高，但使用场景有限。【带空间压缩整理的收集器】</li>
+<li>虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。</li>
+<li>本地线程分配缓存。每个线程在 Java 堆中预先分配一小块内存</li>
 </ol>
 <h2 id="收集对象"><a href="#%E6%94%B6%E9%9B%86%E5%AF%B9%E8%B1%A1" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>收集对象</h2>
 <h3 id="识别垃圾"><a href="#%E8%AF%86%E5%88%AB%E5%9E%83%E5%9C%BE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>识别垃圾</h3>
 <ol>
-<li>引用计数法【早期使用】。对每个对象的引用进行计数，多线程环境下同步代价高，能处理循环引用问题</li>
-<li><strong>可达性分析（引用链法）</strong>。从 GC Root 开始进行对象搜索，被搜索到的对象即为可达对象</li>
+<li>引用计数法【早期使用】。对每个对象的引用进行计数，多线程环境下同步代价高，能处理循环引用问题。相互引用无法进行回收。</li>
+<li>
+<p><strong>可达性分析（引用链法）</strong>。从 GC Root 开始进行对象搜索，被搜索到的对象即为可达对象。</p>
+<ol>
+<li>可作为 GC Root 的对象。</li>
+<li>引用的对象</li>
+<li>类静态属性引用的对象</li>
+<li>常量引用的对象</li>
+<li>JNI 引用的对象</li>
+<li>内部的引用机制</li>
+<li>所有被同步锁持有的对象</li>
+<li>反映虚拟机内部情况的对象</li>
+</ol>
+</li>
+<li>
+<p>引用</p>
+<ol>
+<li>分类</li>
+<li>强引用。指程序代码中 new 的引用赋值</li>
+<li>软引用。一些有用但非必须的对象</li>
+<li>弱引用。比软引用更弱，生命周期为下一次垃圾收集为止</li>
+<li>虚引用。最弱的引用关系，为了能在这个对象被收集器回收时收到一个系统通知</li>
+</ol>
+</li>
+<li>任何对象的 finalize()方法都只会被系统自动调用一次</li>
+<li>
+<p>方法区回收</p>
+<ol>
+<li>废弃的常量。</li>
+<li>已回收的实例</li>
+<li>类加载器已被回收</li>
+<li>类对应的 java.lang.Class 对象没有在任何地方呗引用</li>
+<li>不再使用的类型</li>
+<li><code class="language-text">-verbose:class</code>和<code class="language-text">-XX:+TraceClassLoading</code>来查看类加载信息</li>
+</ol>
+</li>
 </ol>
 <h3 id="收集算法"><a href="#%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>收集算法</h3>
 <ol>
@@ -490,7 +576,42 @@
 <li>善用搜索。重点关注 StackOverFlow、Github 中的 issue 以及各种论坛博客</li>
 <li>调优重点。</li>
 <li>GC 参数。
-<img src="./param.png" alt="image"></li>
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/288626be6f7542136e46ed209a9e2743/41045/param.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 33.108108108108105%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAYAAAAIy204AAAACXBIWXMAABYlAAAWJQFJUiTwAAABIklEQVQoz12RgY6DIBBE+f9PvCaX1LPWU0FQUUBhurvWpHckk01YeDsDqv6p0bYtqvsdkx1hjYYdqeqB1L81wFkL55yoqipoYzDyOeukZ0nzPEPxgW31iOaJ7bfC9vxGMC32dcHuJ6TZkEbk40ApBSVnxBgxviG8d61MPcVTBGg7BP1E6GsBRtuL0uKQGUTiC1ynaYLWWhxt2yZOeQj31LquiCEIMBIw6obctghdJTWneIJIF5ABwzAI1FB0TnkNVNxgaPIOcTKIbhBXieIeDCtnlPwB7LoOdV2L+r6H9ysCmdr3HYqnrN7LO8XxjM3vV/AX9Cl+O77HThnO0R19TkoJalkWyX9sXj5hJ6dcSznd/Bevx+OBr9sNTdMg0N1rcf8F69QcRpsbMyIAAAAASUVORK5CYII='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/288626be6f7542136e46ed209a9e2743/fcda8/param.png"
+        srcset="/static/288626be6f7542136e46ed209a9e2743/12f09/param.png 148w,
+/static/288626be6f7542136e46ed209a9e2743/e4a3f/param.png 295w,
+/static/288626be6f7542136e46ed209a9e2743/fcda8/param.png 590w,
+/static/288626be6f7542136e46ed209a9e2743/efc66/param.png 885w,
+/static/288626be6f7542136e46ed209a9e2743/c83ae/param.png 1180w,
+/static/288626be6f7542136e46ed209a9e2743/41045/param.png 2434w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
 <li>禁用偏向锁。</li>
 </ol>
 <h2 id="资料"><a href="#%E8%B5%84%E6%96%99" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>资料</h2>
@@ -498,7 +619,7 @@
 <li><a href="https://book.douban.com/subject/6809987/" target="_blank" rel="nofollow noopener noreferrer">The Garbage Collection Handbook</a></li>
 <li>深入理解 Java 虚拟机</li>
 <li><a href="https://tech.meituan.com/2020/11/12/java-9-cms-gc.html" target="_blank" rel="nofollow noopener noreferrer">美团博客-CMS GC 问题上</a></li>
-</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/designModel/">← <!-- -->设计模式</a></li><li><a rel="next" href="/kafka1/">kafka原理<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">FDW-blog</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/rest-atom/">← <!-- -->atom相关知识点</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
   if(true) {
