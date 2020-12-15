@@ -96,11 +96,20 @@ spoiler: 原理
 ## 指令
 1. 创建topic
 ```sh
-./kafka-topics.sh --create --topic dev2wx --replication-factor 1 --partitions 2 --zookeeper 172.16.124.91:2181
+./kafka-topics.sh --create --topic dev2wx --replication-factor 1 --partitions 2 --zookeeper master:2181
 ```
 2. 查看topic
 ```sh
-./kafka-topics.sh --list --zookeeper 172.16.124.91:2181
+./kafka-topics.sh --list --zookeeper master:2181
+```
+3. 查看consumer list
+```
+./kafka-consumer-groups.sh --bootstrap-server master:9092 --list
+```
+./kafka-topics.sh --list --zookeeper master:2181
+4. 消费积压情况
+```sh
+./kafka-consumer-groups.sh --bootstrap-server master:9092 --describe --group logstash
 ```
 
 ## 资料
