@@ -61,7 +61,7 @@ class BlogPostTemplate extends React.Component {
               }}
               to={'/'}
             >
-              FDW-blog
+              F&Y-BLOG
             </Link>
           </h3>
           <Bio />

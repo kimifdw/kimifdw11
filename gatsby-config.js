@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'FDW-blog',
+    title: 'F&Y-BLOG',
     author: 'kimifdw',
     description: 'kimifdw 的个人博客',
     siteUrl: 'https://kimifdw.github.io',
@@ -62,8 +62,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `FDW-blog`,
-        short_name: `FDW-blog`,
+        name: `F&Y-BLOG`,
+        short_name: `F&Y-BLOG`,
         start_url: `/`,
         background_color: `#ffffff`,
         theme_color: `#ffa7c4`,
