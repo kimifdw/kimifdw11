@@ -1,14 +1,18 @@
 ---
 title: netty内存原理
-date: '2020-11-06'
+date: "2020-11-06"
 spoiler: netty memory, 源码学习
 ---
+
 # 内存原理
-> 参考Jemalloc的技术特性
+
+> 参考 Jemalloc 的技术特性
 
 1. `Arena`。将其分成许多个小块来分而治之。
-1. `Thread cache`。给各自的线程thread cache领域。
+1. `Thread cache`。给各自的线程 thread cache 领域。
+
 ## 创建堆缓冲区
+
 ```java
     public static ByteBuf buffer(int initialCapacity) {
         return ALLOC.heapBuffer(initialCapacity);
@@ -25,7 +29,9 @@ spoiler: netty memory, 源码学习
         return newHeapBuffer(initialCapacity, maxCapacity);
     }
 ```
+
 ## 基于内存池创建堆缓冲区
+
 ```java
     // PooledByteBufAllocator
     @Override
@@ -75,10 +81,12 @@ spoiler: netty memory, 源码学习
 ```
 
 ## 分配的内存类型
+
 1. 直接内存
 1. 堆内存
 
 ## 基于内存池分配堆内存
+
 ```java
     // PoolArena
     @Override
@@ -108,24 +116,24 @@ spoiler: netty memory, 源码学习
 ```
 
 ## 内存分配总结
+
 1. 从本地线程缓冲池中找到`poolThreadCache`，再从`poolThreadCache`中找到`heapArena`，如果有**存在**`headArena`就是开始分配内存
-2. 分配内存的时候先从`对象回收器RECYCLER`中回收一个对象`PooledByteBuf`。对象回收器类似一个对象池的作用，在进行分配内存，对象可以循环利用，提供内存分配效率和JVM gc效率，这个对象回收器是基于引用计数方式实现的。
+2. 分配内存的时候先从`对象回收器RECYCLER`中回收一个对象`PooledByteBuf`。对象回收器类似一个对象池的作用，在进行分配内存，对象可以循环利用，提供内存分配效率和 JVM gc 效率，这个对象回收器是基于引用计数方式实现的。
 3. 分配内存
 4. 0 copy
-    1. 主要指用户态和内核态之间来回copy数据
+   1. 主要指用户态和内核态之间来回 copy 数据
 
 ## PoolThreadCache
+
 1. 原理。给每个线程预先分配一块内存，在每个对象需要进行对象创建分配内存的时候先从本地线程缓存中获取内存，获取不到在从堆中申请内存，在一定程度上减少操作同一块内存时的锁争用
 1. 结构图
-    1. 数据结构：平衡二叉树
-1. 组成
-    1. `PoolChunk`。负责内存的分配逻辑，最小单位是一个page,**8k**,由2048个subpage组成，向OS申请的最小内存，使用完全二叉树来对组织内部的内存。
-    1. `PoolChunkList`。管理`PoolChunk`的链表。
-    1. `PoolSubPage`。一个内存页大小默认是**8k**
-![image](./PoolThreadCache.png)
+   1. 数据结构：平衡二叉树
+1. 组成 1. `PoolChunk`。负责内存的分配逻辑，最小单位是一个 page,**8k**,由 2048 个 subpage 组成，向 OS 申请的最小内存，使用完全二叉树来对组织内部的内存。 1. `PoolChunkList`。管理`PoolChunk`的链表。 1. `PoolSubPage`。一个内存页大小默认是**8k**
+   ![image](./PoolThreadCache.png)
 
-## Recycler对象池
-> 基于netty的`stack`实现，采用了栈和队列实现。stack用来支持同一个线程内的对象使用和回收，把当前回收的线程和要回收对象对应的stack绑定到一个weakOrderQueue存储在当前要回收对象所在的stack中，之所以这样设计在并发情况下**一个线程绑定一个队列减少多个线程之间的锁争用提供应用的并发度**
+## Recycler 对象池
+
+> 基于 netty 的`stack`实现，采用了栈和队列实现。stack 用来支持同一个线程内的对象使用和回收，把当前回收的线程和要回收对象对应的 stack 绑定到一个 weakOrderQueue 存储在当前要回收对象所在的 stack 中，之所以这样设计在并发情况下**一个线程绑定一个队列减少多个线程之间的锁争用提供应用的并发度**
 
 ![image](./Recycler.png)
 
@@ -146,7 +154,8 @@ spoiler: netty memory, 源码学习
     }
 ```
 
-### 处理回收DefaultHandler
+### 处理回收 DefaultHandler
+
 ```java
     private static final class DefaultHandle<T> implements Handle<T> {
         // 标记对象回收的id
@@ -174,7 +183,7 @@ spoiler: netty memory, 源码学习
             // 如果ID不一致，则表示已经回收
             if (lastRecycledId != recycleId || stack == null) {
                 throw new IllegalStateException("recycled already");
-            }            
+            }
             stack.push(this);
         }
     }
@@ -196,15 +205,16 @@ spoiler: netty memory, 源码学习
 ```
 
 ## 命中逻辑及内存回收
+
 1. 内存规格
-![image](./memory-region-cache.png)
+   ![image](./memory-region-cache.png)
 1. 内存分配流程
-    1. PoolThreadCache。线程独有的内存仓库
-    1. PoolArean。几个线程共享的内存仓库
-    1. 全局变量指向的内存仓库，为所有线程共用
-    1. PoolChunck。向OS申请的最小内存，默认为16M
-    1. Page。PoolChunk所能管理的最小内存，PageSize默认为8k
-    ![image](./memory.png)
+   1. PoolThreadCache。线程独有的内存仓库
+   1. PoolArean。几个线程共享的内存仓库
+   1. 全局变量指向的内存仓库，为所有线程共用
+   1. PoolChunck。向 OS 申请的最小内存，默认为 16M
+   1. Page。PoolChunk 所能管理的最小内存，PageSize 默认为 8k
+      ![image](./memory.png)
 1. 堆外内存回收
 
 ```java
@@ -228,7 +238,7 @@ abstract class PooledByteBuf<T> extends AbstractReferenceCountedByteBuf {
 }
 ```
 
-4. ByteBuf释放内存
+4. ByteBuf 释放内存
 
 ```java
 void free(PoolChunk<T> chunk, ByteBuffer nioBuffer, long handle, int normCapacity, PoolThreadCache cache) {

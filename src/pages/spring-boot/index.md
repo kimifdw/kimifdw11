@@ -1,9 +1,11 @@
 ---
 title: spring boot部分源码解读
-date: '2020-10-31'
+date: "2020-10-31"
 spoiler: spring boot, 源码学习
 ---
-## spring boot启动
+
+## spring boot 启动
+
 ```java
 /**
 	 * Run the Spring application, creating and refreshing a new
@@ -34,7 +36,7 @@ spoiler: spring boot, 源码学习
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
-			// 4. 准备上下文，装配bean（完成单例对象的注册；绑定上下文到监听器）		
+			// 4. 准备上下文，装配bean（完成单例对象的注册；绑定上下文到监听器）
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
 			// 5. 刷新context
 			refreshContext(context);
@@ -65,7 +67,9 @@ spoiler: spring boot, 源码学习
 		return context;
 	}
 ```
+
 ## runListeners
+
 ```java
 	private SpringApplicationRunListeners getRunListeners(String[] args) {
 		Class<?>[] types = new Class<?>[] { SpringApplication.class, String[].class };

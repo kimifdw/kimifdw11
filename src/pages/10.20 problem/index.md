@@ -1,14 +1,17 @@
 ---
 title: 1020随笔
-date: '2020-10-20'
+date: "2020-10-20"
 spoiler: zookeeper,uuid,question
 ---
-# zookeeper问题
+
+# zookeeper 问题
+
 1. 问题点![image](./zookeeper-flink.png)
-1. 解决方案：不是zookeeper问题。
-原因：因为在flink或kafka向zookeeper获取对应路径的时候，zookeeper发现自身并没有创建这条路径，就会返回以上的错误。其实可以看到这条记录在zookeeper日志中是INFO，并不是error，所以对应的flink或kafka会过滤掉这些错误
+1. 解决方案：不是 zookeeper 问题。
+   原因：因为在 flink 或 kafka 向 zookeeper 获取对应路径的时候，zookeeper 发现自身并没有创建这条路径，就会返回以上的错误。其实可以看到这条记录在 zookeeper 日志中是 INFO，并不是 error，所以对应的 flink 或 kafka 会过滤掉这些错误
 
-[stackoverflow中的解答](https://stackoverflow.com/questions/43559328/got-user-level-keeperexception-when-processing)
+[stackoverflow 中的解答](https://stackoverflow.com/questions/43559328/got-user-level-keeperexception-when-processing)
 
-# uuid描述记录
+# uuid 描述记录
+
 ![image](./uuid.png)
