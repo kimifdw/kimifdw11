@@ -46,7 +46,15 @@ git stash pop
 git stash apply
 ```
 
+### 获得干净的工作区
+
+```git
+git stash push -u
+```
+
 ## 合并与重置
+
+_对于本地的分支或者确定只有一个人使用的远端分支用 rebase，其余情况用 merge_
 
 ### 放弃工作目录下的所有修改
 
@@ -70,4 +78,12 @@ git revert <commit>
 
 ```git
 git reset --keep <commit>
+```
+
+### rebase 使用注意点
+
+_rebase 会导致新的 commit 节点产生，不要对多人共用的远端分支进行 rebase_
+
+```git
+git rebase -i
 ```
