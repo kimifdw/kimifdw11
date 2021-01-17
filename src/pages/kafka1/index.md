@@ -1,6 +1,6 @@
 ---
 title: kafka原理
-date: "2020-11-25"
+date: "2021-01-17"
 spoiler: 原理
 ---
 
@@ -22,8 +22,8 @@ spoiler: 原理
 ![image](./kafka-architecture.png)
 
 1. 消费者组。同一个分区的数据只能被消费者组中的一个消费者消费；同一个消费者组的消费者可以消费同一个 topic 的不同分区的数据
-1. producer 采用发送 push 的方式将消息发到 broker 上，broker 存储后。由 consumer 采用 pull 模式订阅并消费信息
-1. partition 是文件，支持多个副本
+2. producer 采用发送 push 的方式将消息发到 broker 上，broker 存储后。由 consumer 采用 pull 模式订阅并消费信息
+3. partition 是文件，支持多个副本
 
 ## 优点
 
@@ -53,13 +53,13 @@ spoiler: 原理
    - 1。只要 leader 应答就可以发送下一条，只确保 leader 发送成功
    - all[-1]。需要所有 follower 都完成 leader 的同步才会发送下一条，确保 leader 发送成功和所有的副本完成备份
 3. CP【一致性和分区容错性】配置
-   ```sh
+   ```bash
    request.required.acks=-1
    min.insync.replicas = ${N/2 + 1}
    unclean.leader.election.enable = false
    ```
    AP【可用性和分区容错性】配置
-   ```sh
+   ```bash
    request.required.acks=1
    min.insync.replicas = 1
    unclean.leader.election.enable = false
@@ -68,7 +68,7 @@ spoiler: 原理
 ### kafka 消息备份和同步
 
 1. 根据分区的多副本策略来解决消息的备份问题
-1. 名词解释
+2. 名词解释
    1. ISR : leader 副本保持一定同步的 follower 副本, 包括 leader 副本自己，叫 In Sync Replica，最终会反馈到 zookeeper 上。
    1. AR: 所有副本 (replicas) 统称为 assigned replicas, 即 AR
    1. OSR: follower 同 leader 同步数据有一些延迟的节点
@@ -78,6 +78,8 @@ spoiler: 原理
    1. follower HW: min(follower 自身 LEO 和 leader HW)；
    1. Leader HW = 所有副本 LEO 最小值；
    1. Follower HW = min(follower 自身 LEO 和 leader HW)。
+3. 副本
+    1. 定义。在不同节点上持久化同一份数据，当某一个节点上存储的数据丢失时，可以从副本上读取该数据
 
 ### 保存数据
 
@@ -86,6 +88,31 @@ spoiler: 原理
 #### partition 结构
 
 > 以文件夹的方式在服务器中存储
+
+1. 影响分区数量的因素
+
+- 生产者的峰值带宽
+- 消费者的峰值带宽
+- 消费者的消费能力。同一个消费组里同一个分区只能被一个消费者消费
+
+2.  选取合适的分区数量
+    > 建议分区的数量一定要大于等于消费者的数量来实现最大并发
+
+- Num=max(T/PT,T/CT)=T/min(PT,CT)
+  1. Num：分区数
+  2. T：目标吞吐量
+  3. PT：生产者写入单个分区的最大吞吐量
+  4. CT：消费者从单个分区消费的最大吞吐
+  5. 分区数量=T/PT 和 T/CT 中的
+- PT 影响的因素：批处理的规模、压缩算法、确认机制、副本数等有关
+
+3. 信息参考
+
+- 单个分区可以实现消息的顺序写入
+- 单个分区只能被同消费组的单个消费者进程消费
+- 单个消费者进程可同时消费多个分区
+- 分区越多，当 Leader 节点失效后，其他分区重新进行 Leader 选举的耗时会越长
+- 分区的数量是可以动态增加的，只增不减，但增加会出现 rebalance 的情况
 
 #### message 结构
 
@@ -109,7 +136,7 @@ spoiler: 原理
 
 1. AutoCommit（实际消息会丢）
 
-```sh
+```bash
     enable.auto.commit = true
     // 自动提交的时间间隔
     auto.commit.interval.ms
@@ -117,7 +144,7 @@ spoiler: 原理
 
 2. 手动 commit（at least once，消息重复，重启会丢）
 
-```sh
+```bash
     // oldest:topic里最早的消息，大于commit的位置，小于HW，也受到broker上消息保留时间和位移影响，不保证一定能消费到topic起始位置的消息
     sarama.offset.initial （oldest, newest）
     // 主题偏移量日志文的保留时长，默认设为1440s
