@@ -10,4 +10,14 @@ spoiler: golang
 ## go test
 
 1. `go help test`
-1. `go help testflag`
+2. `go help testflag`
+
+## go tool trace
+> 跟踪程序的执行情况，包括GC、锁等
+
+1. `go run main.go 2>trace.out`：运行trace到输出文件
+2. `go tool trace trace.out`
+
+## 资料整理
+1. [go-tool-trace](https://eddycjy.gitbook.io/golang/di-9-ke-gong-ju/go-tool-trace)
+
