@@ -185,3 +185,4 @@ spoiler: 原理
 ## 资料
 
 1. [简单理解 kafka 的消息可靠性](https://mp.weixin.qq.com/s/T6gCc8OBgyV-yeAg_MUzPQ)
+2. [基于SSD的Kafka应用层缓存架构设计与实现](https://blog.csdn.net/MeituanTech/article/details/112645937)
