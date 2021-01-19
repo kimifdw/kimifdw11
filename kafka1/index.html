@@ -69,7 +69,7 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">kafka原理</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2021-1-17<!-- --> • ☕️ 7 min read</p></header><div><h2 id="消息中间件好处"><a href="#%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%A5%BD%E5%A4%84" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>消息中间件好处</h2>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">kafka原理</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2021-1-19<!-- --> • ☕️☕️ 9 min read</p></header><div><h2 id="消息中间件好处"><a href="#%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%A5%BD%E5%A4%84" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>消息中间件好处</h2>
 <ol>
 <li>解耦</li>
 <li>异步</li>
@@ -210,6 +210,14 @@
 </li>
 <li>零拷贝。所有数据通过 DMA（直接内存访问）来进行传输，没有在内存层面去复制数据</li>
 <li>数据批量处理</li>
+<li>
+<p>kafka引擎读写行为特点</p>
+<ul>
+<li>数据的消费频率随时间变化，越久远的数据消费频率越低</li>
+<li>每个分区只有Leader提供读写服务</li>
+<li>对于一个客户端而言，消费行为是线性的，数据并不会重复消费</li>
+</ul>
+</li>
 </ol>
 <h2 id="工作流程分析"><a href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>工作流程分析</h2>
 <h3 id="发送数据"><a href="#%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>发送数据</h3>
@@ -314,9 +322,44 @@ unclean.leader.election.enable <span class="token operator">=</span> <span class
 min.insync.replicas <span class="token operator">=</span> <span class="token number">1</span>
 unclean.leader.election.enable <span class="token operator">=</span> <span class="token boolean">false</span></code></pre></div>
 </li>
-</ul>
+<li>
+<p>Producer写入
+Server端的I/O线程统一将请求中的数据写入到操作系统的PageCache后立即返回，当消息条数到达一定阈值后，Kafka应用本身或操作系统内核会触发强制刷盘操作
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/d256acbf1cd91ddb0559e1ca7d51a80c/6728c/producer.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 303px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 110.13513513513513%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAIAAABPIytRAAAACXBIWXMAAAsSAAALEgHS3X78AAAB/0lEQVQ4y32U6bKaQBCFef+3yROk8iNLpWJZSW6qTIkaRRACXIRBkD0f04rLhZwf4zjTp5fTPRiu60ZR9HpFGIb7R2y32yAIXsdgxHHcdV3btp1G0zScnM/noiiyLCvLUilVVVU3BuN4PAqn1ajrmkQOh4Nt257nsZKLkNs3GImMO8KeNNjgazLyExlgKtnihUTYdxO4kDFqNPCCEn80lsvlarUiMoe4wOlgcyOL++qKQiNJEoLneS5/MZAVYH8how0WaZqermCPzpCJydVpDNjgwqCNUmd9B07oP+19eyUF0kv4hmVZT4Kxh0aTuCL+qFR4fCDfgw5TDmpJ8GEKBDfyZrPhR3rbK1KUWZb7fkA5nA86iZZsSFiS78m73S7Q0A2rPM9VKnEcsralN5zDQSSZ1oe0IfdpwyzSyvm2/vou/P2hi16y2EtUilPKpvOmaWIps3wj8276qiilqbo8TCN7b/5wNy8He2dZe8l8UjCJLOnVTe0Hf8HHT19ms9l8PqfC/6k9pN1Wp3L/WZnvWX/9/E6fSZK0JVXHcXzfnyDr59gWSVeldR5TJyIjKas8KRF8knyfFVWgBflPvacLmX7KJKserEmaKhrDYPMZUHKaJLGGuoI9Y29gdD9D7DmlvOGdy+dF8DRnBkrgGFXEN3tmc7FYrNfrIaDcDn8H/APgnPKTZ/gw3wAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/d256acbf1cd91ddb0559e1ca7d51a80c/6728c/producer.png"
+        srcset="/static/d256acbf1cd91ddb0559e1ca7d51a80c/12f09/producer.png 148w,
+/static/d256acbf1cd91ddb0559e1ca7d51a80c/e4a3f/producer.png 295w,
+/static/d256acbf1cd91ddb0559e1ca7d51a80c/6728c/producer.png 303w"
+        sizes="(max-width: 303px) 100vw, 303px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </p>
 <h3 id="kafka-消息备份和同步"><a href="#kafka-%E6%B6%88%E6%81%AF%E5%A4%87%E4%BB%BD%E5%92%8C%E5%90%8C%E6%AD%A5" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>kafka 消息备份和同步</h3>
-<ol>
+</li>
 <li>根据分区的多副本策略来解决消息的备份问题</li>
 <li>
 <p>名词解释</p>
@@ -336,9 +379,125 @@ unclean.leader.election.enable <span class="token operator">=</span> <span class
 <p>副本</p>
 <ol>
 <li>定义。在不同节点上持久化同一份数据，当某一个节点上存储的数据丢失时，可以从副本上读取该数据</li>
-</ol>
+<li>分配规则。每个Broker都有均等分配Partition的Leader机会
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/575454e10c0aa764ad1451a24e336672/e9c9b/partition.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 39.189189189189186%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAAsSAAALEgHS3X78AAABnklEQVQY00WR2UsbURTG5/8UQR+qiIKtD4b6oAkqNXUJgbhGDS6xVNFWLVUTDaGtGAMaNIkaUTKajNQkYmYy290944Ifl8v3nXN/D+dcSdOMmm4hQ6OEESooE8RG2DIcQzmlAukq3OChi0wDYwyGcwGSZPkmLxeNcgHbNmOccGHqmqFWwDAKBY6rRebIeU9qJY5NgCE6sIVYOK4EVpLBLVmpWIlMaXQ+Prt8kMhUqjqZ2bweWzoMRwq398b6/l1o9eh7rFgomUACLVV11LOw1DU98nk2mJbV3b3jUe/g9PBgJJrMl/hHd6zdtebyRI8uHsf6v/W3DHg7Z9IXZQfmXHowaGvnQkdDb3OTP3WlhiLJuq/eBt+X4M7f/H/i9gR87m7/wFAyq3xyx+o/zDW2rSZO7l/hmolD2+dTG7mJ9TOlrP3LKuO/Tid/p/+kixXV8q+dBn5mJjczl4UH/49s32KqL5zK3TxS4uASIc7oz0GAhyW/iDGBMBdvghZ/Swhx03re9svowNhIYCIwBub1EPLunTpiNmKWzeBbwAP4BC7Nna7N1UivAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/575454e10c0aa764ad1451a24e336672/fcda8/partition.png"
+        srcset="/static/575454e10c0aa764ad1451a24e336672/12f09/partition.png 148w,
+/static/575454e10c0aa764ad1451a24e336672/e4a3f/partition.png 295w,
+/static/575454e10c0aa764ad1451a24e336672/fcda8/partition.png 590w,
+/static/575454e10c0aa764ad1451a24e336672/e9c9b/partition.png 627w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
+<li>
+<p>分配算法。</p>
+<ul>
+<li>将所有N Broker和待分配的i个Partition排序</li>
+<li>将第i个Partition分配到第(i mod n)个Broker上</li>
+<li>将第i个Partition的第j个副本分配到第((i + j) mod n)个Broker上</li>
+</ul>
 </li>
 </ol>
+</li>
+<li>
+<p>消息接收</p>
+<ol>
+<li>主要利用了操作系统的<strong>ZeroCopy</strong>机制，当Kafka Broker接收到读数据请求时，会向操作系统发送sendfile系统调用，操作系统接收后，首先试图从PageCache中获取数据
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/7244339f04d74916f859ee6e44fc51fb/d0c94/producer2.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 383px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 85.13513513513513%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAAsSAAALEgHS3X78AAABqElEQVQ4y3WSbY+CMBCE+///2SV+BxMvegSVA3mTAvKm98CcjcQ4H8rSdnZ2p2uua1RVFcfx+Xxm/V1AUD3xerMsS/N4wf1+Z23bFkKaplmW5Xl+Op3aBX3f64KDEUeYponfpmngFEXBWi6YFnRdh/jtdnMyK2WnD4ZhQO39lNRkWSlPTxBfLpcgCPb7PSvNU/Y4jjpNkuRwOLB/PB6JDQokq9dQ5dba+g06Ui+GGzhBxDosIEAqiiLusT8+oVMC2sZLijc0hg2uDQGrd7sdfCWCIy8FdpCcyUoDXyYJla2zorzaZpwePCn903y/QEbyFv/KOIQB8GnJ2qrhLP4Jt5vA32SnLTqoqWApE5NxJkPgB+sYDIqZ58jWNg2PkL2vJvnGInTCMOQO7XBOFnVqcMWl/ATf9z3P483kNsXrteey5b7qoX/am8uvmy4PpmKvgUUcNcQ14fAxaybzYUs28oDcIF15rbprdK8jTRH7IouJzExWz9xwE6aYJinRzZ+bZ60wUTWUrklqFmiM2KHOLEtph0b4dacK2EHSfDKJ96N57OUVVNo7/gDyyNQzq4ZwoAAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/7244339f04d74916f859ee6e44fc51fb/d0c94/producer2.png"
+        srcset="/static/7244339f04d74916f859ee6e44fc51fb/12f09/producer2.png 148w,
+/static/7244339f04d74916f859ee6e44fc51fb/e4a3f/producer2.png 295w,
+/static/7244339f04d74916f859ee6e44fc51fb/d0c94/producer2.png 383w"
+        sizes="(max-width: 383px) 100vw, 383px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
+<li>如果数据不存在，会触发缺页异常中断将数据从磁盘读入到临时缓冲区中，随后通过DMA操作直接将数据拷贝到网卡缓冲区中等待后续的TCP传输。
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/61794ddb39ec1a2b2862e39a9821176f/045fd/producer3.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 403px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 81.08108108108108%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAIAAACZeshMAAAACXBIWXMAAAsSAAALEgHS3X78AAABxklEQVQoz12TSW+DQAyF+f+/pdfee64SKWlUqVIVyhL2sENg2NIvGNKkPliD7ef37Bm08tnqunZd17Ztx3FOp5NpmnEc53lOqqqqx8osy7Trg03ThCcaBEGaplEU0agoiq7rmqZRSj0Wq1ZpAhCknNu2pQ4eDpfLRYLjOPZ9D+G9BVntESZnAIiHuZlNqu8FpIZ+WMDSEmHDagzp+z4zn89nDrCB7GYji0fUAqY3H8ImBhVBlkRTzqQokBTzo4i+ZAlq5Cil5bQaWliVZVnEwYtg8eA9z+MWwAdBqMFOG/zfYNPouJ5hmHlR9vMUAOC4F8CJeETdwPAkSTIPpppWNWqoyqIu07pICACjO6WoQwieu0QU+NvM4FGCjCLPDCf+OMbm12b39vL9/tpXIVTDKl6MFS5gGjMkIbriIdH1YxSFrEKuDk7ezH2X/8Eo4YPeHNAfz4byqfKu14759/udruusUIYHvMwsqwYjlxzNBm2WJsnPxj5++kEk3cMwNAxDnt0Clmd4G2zdBxK4T/4N1Q2GaW2328PhwN0QpJICvLw8TR49391qRNlnmiZ45hQqgpLCS4uFuX42oYWKIRme1vL+/lXS+hcEmZV8pVRKawAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/61794ddb39ec1a2b2862e39a9821176f/045fd/producer3.png"
+        srcset="/static/61794ddb39ec1a2b2862e39a9821176f/12f09/producer3.png 148w,
+/static/61794ddb39ec1a2b2862e39a9821176f/e4a3f/producer3.png 295w,
+/static/61794ddb39ec1a2b2862e39a9821176f/045fd/producer3.png 403w"
+        sizes="(max-width: 403px) 100vw, 403px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
+</ol>
+</li>
+</ul>
 <h3 id="保存数据"><a href="#%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>保存数据</h3>
 <blockquote>
 <p>顺序写入的方式将数据保存到磁盘</p>
@@ -381,6 +540,13 @@ unclean.leader.election.enable <span class="token operator">=</span> <span class
 <li>offset。占 8byte 的有序 id 号，唯一确定每条消息在 partition 内的位置</li>
 <li>消息大小</li>
 <li>消息体。</li>
+</ol>
+<h4 id="文件存储设计特点"><a href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E8%AE%BE%E8%AE%A1%E7%89%B9%E7%82%B9" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>文件存储设计特点</h4>
+<ol>
+<li>Kafka把topic中一个parition大文件分成多个小文件段，通过多个小文件段，就容易定期清除或删除已经消费完文件，减少磁盘占用。</li>
+<li>通过<strong>索引</strong>信息可以快速定位message和确定response的最大大小。</li>
+<li>通过<strong>index元数据</strong>全部映射到memory，可以避免segment file的IO磁盘操作。</li>
+<li>通过<strong>索引文件</strong>稀疏存储，可以大幅降低index文件元数据占用空间大小。</li>
 </ol>
 <h4 id="存储策略"><a href="#%E5%AD%98%E5%82%A8%E7%AD%96%E7%95%A5" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>存储策略</h4>
 <ol>
@@ -466,6 +632,8 @@ unclean.leader.election.enable <span class="token operator">=</span> <span class
 <ol>
 <li><a href="https://mp.weixin.qq.com/s/T6gCc8OBgyV-yeAg_MUzPQ" target="_blank" rel="nofollow noopener noreferrer">简单理解 kafka 的消息可靠性</a></li>
 <li><a href="https://blog.csdn.net/MeituanTech/article/details/112645937" target="_blank" rel="nofollow noopener noreferrer">基于SSD的Kafka应用层缓存架构设计与实现</a></li>
+<li><a href="https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html" target="_blank" rel="nofollow noopener noreferrer">Kafka文件存储机制那些事</a></li>
+<li><a href="https://blog.csdn.net/lizhitao/article/details/25667831" target="_blank" rel="nofollow noopener noreferrer">kafka服务器配置</a></li>
 </ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/git shell/">← <!-- -->git日常易被遗忘的命令</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
