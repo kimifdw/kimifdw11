@@ -1,6 +1,6 @@
 ---
 title: kafka原理
-date: "2021-01-17"
+date: "2021-01-19"
 spoiler: 原理
 ---
 
@@ -33,6 +33,10 @@ spoiler: 原理
    1. 原理。可以像读写硬盘一样读写内存（逻辑内存），不必关心内存的大小
 3. 零拷贝。所有数据通过 DMA（直接内存访问）来进行传输，没有在内存层面去复制数据
 4. 数据批量处理
+5. kafka引擎读写行为特点
+   - 数据的消费频率随时间变化，越久远的数据消费频率越低
+   - 每个分区只有Leader提供读写服务
+   - 对于一个客户端而言，消费行为是线性的，数据并不会重复消费
 
 ## 工作流程分析
 
@@ -64,7 +68,9 @@ spoiler: 原理
    min.insync.replicas = 1
    unclean.leader.election.enable = false
    ```
-
+4. Producer写入
+   Server端的I/O线程统一将请求中的数据写入到操作系统的PageCache后立即返回，当消息条数到达一定阈值后，Kafka应用本身或操作系统内核会触发强制刷盘操作
+   ![image](./producer.png)
 ### kafka 消息备份和同步
 
 1. 根据分区的多副本策略来解决消息的备份问题
@@ -80,6 +86,17 @@ spoiler: 原理
    1. Follower HW = min(follower 自身 LEO 和 leader HW)。
 3. 副本
     1. 定义。在不同节点上持久化同一份数据，当某一个节点上存储的数据丢失时，可以从副本上读取该数据
+    2. 分配规则。每个Broker都有均等分配Partition的Leader机会
+    ![image](./partition.png)
+    3. 分配算法。
+         - 将所有N Broker和待分配的i个Partition排序
+         - 将第i个Partition分配到第(i mod n)个Broker上
+         - 将第i个Partition的第j个副本分配到第((i + j) mod n)个Broker上
+4. 消息接收
+   1. 主要利用了操作系统的**ZeroCopy**机制，当Kafka Broker接收到读数据请求时，会向操作系统发送sendfile系统调用，操作系统接收后，首先试图从PageCache中获取数据
+   ![image](./producer2.png)
+   2. 如果数据不存在，会触发缺页异常中断将数据从磁盘读入到临时缓冲区中，随后通过DMA操作直接将数据拷贝到网卡缓冲区中等待后续的TCP传输。
+   ![image](./producer3.png)
 
 ### 保存数据
 
@@ -119,6 +136,12 @@ spoiler: 原理
 1. offset。占 8byte 的有序 id 号，唯一确定每条消息在 partition 内的位置
 1. 消息大小
 1. 消息体。
+
+#### 文件存储设计特点
+1. Kafka把topic中一个parition大文件分成多个小文件段，通过多个小文件段，就容易定期清除或删除已经消费完文件，减少磁盘占用。
+2. 通过**索引**信息可以快速定位message和确定response的最大大小。
+3. 通过**index元数据**全部映射到memory，可以避免segment file的IO磁盘操作。
+4. 通过**索引文件**稀疏存储，可以大幅降低index文件元数据占用空间大小。
 
 #### 存储策略
 
@@ -185,3 +208,6 @@ spoiler: 原理
 ## 资料
 
 1. [简单理解 kafka 的消息可靠性](https://mp.weixin.qq.com/s/T6gCc8OBgyV-yeAg_MUzPQ)
+2. [基于SSD的Kafka应用层缓存架构设计与实现](https://blog.csdn.net/MeituanTech/article/details/112645937)
+3. [Kafka文件存储机制那些事](https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html)
+4. [kafka服务器配置](https://blog.csdn.net/lizhitao/article/details/25667831)
