@@ -15,3 +15,14 @@ spoiler: zookeeper,uuid,question
 # uuid 描述记录
 
 ![image](./uuid.png)
+
+# 雪花算法原理
+
+> 雪花算法。基于 64bit 的 long 型的数字
+
+## 构成
+
+- 1bit。无用
+- 41bit。毫秒数【时间戳，2^41-1，即 69 年的时间】
+- 10bit。工作机器 ID【5bit，机房 ID，2^5 个机房；5bit，机器 ID，2^5 个机器】
+- 12bit。序列号【2^12-1】
