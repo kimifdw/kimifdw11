@@ -69,21 +69,70 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">golang命令集</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-23<!-- --> • ☕️ 1 min read</p></header><div><h2 id="go文件转成汇编"><a href="#go%E6%96%87%E4%BB%B6%E8%BD%AC%E6%88%90%E6%B1%87%E7%BC%96" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go文件转成汇编</h2>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">golang命令集</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2020-10-23<!-- --> • ☕️ 1 min read</p></header><div><h1 id="go-常用指令"><a href="#go-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go 常用指令</h1>
+<h2 id="go-tool-nm"><a href="#go-tool-nm" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go tool nm</h2>
+<p><code class="language-text">go tool nm ./lock.exe</code>。如下图所示：
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/1e9c3abc975de492ac387c458f88a588/1ac66/nm.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 12.162162162162163%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAACCAIAAADXZGvcAAAACXBIWXMAAAsSAAALEgHS3X78AAAAS0lEQVQI143MwRHAIAhEUfuvMTrgaBwUTAIFGGIFebOHf9rQ2hnjAQA5Z4+Y0pzic0Q0dw0e9+dSUxE2s7UF1afWwsydul8g4vrtBWfxcVN5dMHiAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/1e9c3abc975de492ac387c458f88a588/fcda8/nm.png"
+        srcset="/static/1e9c3abc975de492ac387c458f88a588/12f09/nm.png 148w,
+/static/1e9c3abc975de492ac387c458f88a588/e4a3f/nm.png 295w,
+/static/1e9c3abc975de492ac387c458f88a588/fcda8/nm.png 590w,
+/static/1e9c3abc975de492ac387c458f88a588/1ac66/nm.png 651w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    
+第一列：内存地址；第二列：类型；第三列：符号</p>
+<h2 id="go-文件转成汇编"><a href="#go-%E6%96%87%E4%BB%B6%E8%BD%AC%E6%88%90%E6%B1%87%E7%BC%96" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go 文件转成汇编</h2>
 <p><code class="language-text">go tool compile -N -l -S xx.go</code></p>
+<h2 id="汇编文件转成-go-文件"><a href="#%E6%B1%87%E7%BC%96%E6%96%87%E4%BB%B6%E8%BD%AC%E6%88%90-go-%E6%96%87%E4%BB%B6" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>汇编文件转成 go 文件</h2>
+<p>`go tool objdump lock.o</p>
 <h2 id="go-test"><a href="#go-test" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go test</h2>
 <ol>
 <li><code class="language-text">go help test</code></li>
 <li><code class="language-text">go help testflag</code></li>
 </ol>
+<h2 id="代码测试覆盖率"><a href="#%E4%BB%A3%E7%A0%81%E6%B5%8B%E8%AF%95%E8%A6%86%E7%9B%96%E7%8E%87" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>代码测试覆盖率</h2>
+<ol>
+<li><code class="language-text">go test -coverprofile=coverage.out</code></li>
+<li><code class="language-text">go tool cover -func=coverage.out</code></li>
+</ol>
 <h2 id="go-tool-trace"><a href="#go-tool-trace" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go tool trace</h2>
 <blockquote>
-<p>跟踪程序的执行情况，包括GC、锁等</p>
+<p>跟踪程序的执行情况，包括 GC、锁等</p>
 </blockquote>
 <ol>
-<li><code class="language-text">go run main.go 2&gt;trace.out</code>：运行trace到输出文件</li>
+<li><code class="language-text">go run main.go 2&gt;trace.out</code>：运行 trace 到输出文件</li>
 <li><code class="language-text">go tool trace trace.out</code></li>
 </ol>
+<h2 id="go-doc-http"><a href="#go-doc-http" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>go doc http</h2>
+<blockquote>
+<p>展示 golang 的 api 文档</p>
+</blockquote>
 <h2 id="资料整理"><a href="#%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>资料整理</h2>
 <ol>
 <li><a href="https://eddycjy.gitbook.io/golang/di-9-ke-gong-ju/go-tool-trace" target="_blank" rel="nofollow noopener noreferrer">go-tool-trace</a></li>

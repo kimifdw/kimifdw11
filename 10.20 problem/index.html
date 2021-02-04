@@ -145,7 +145,18 @@
   </span>
   
   </a>
-    </p></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li></li><li><a rel="next" href="/thread-safe/">线程安全性<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+    </p>
+<h1 id="雪花算法原理"><a href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>雪花算法原理</h1>
+<blockquote>
+<p>雪花算法。基于 64bit 的 long 型的数字</p>
+</blockquote>
+<h2 id="构成"><a href="#%E6%9E%84%E6%88%90" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>构成</h2>
+<ul>
+<li>1bit。无用</li>
+<li>41bit。毫秒数【时间戳，2^41-1，即 69 年的时间】</li>
+<li>10bit。工作机器 ID【5bit，机房 ID，2^5 个机房；5bit，机器 ID，2^5 个机器】</li>
+<li>12bit。序列号【2^12-1】</li>
+</ul></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li></li><li><a rel="next" href="/DDD/">DDD随想<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
   if(true) {
