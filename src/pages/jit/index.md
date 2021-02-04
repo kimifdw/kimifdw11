@@ -1,6 +1,6 @@
 ---
 title: Java即时编译器原理解析及实践
-date: "2021-1-21"
+date: "2021-01-21"
 spoiler: jit
 ---
 
