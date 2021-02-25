@@ -43,6 +43,18 @@ spoiler: jvm cms
 2. 被所有线程共享的一块内存区域
 3. 唯一目的用于存放对象实例
 
+### JVM堆大小
+1. 影响垃圾回收性能的是**可用内存大小**
+2. 内存空间如下图所示：
+![image](./memory-struct.png)
+2. 堆大小准则
+   1. 设置`-Xms`和`-Xmx`设置为相同的值
+   2. 向虚拟机授予尽可能多的内存
+   3. 随着处理器数量的增加而增加内存
+3. 年轻代。通过`-XX:NewRatio=3`来控制，即`eden`+`survivos spaces`大小为堆大小的1/4
+   1. survivos空间大小。`-XX:SurvivorRatio=6`，设置eden与survivos空间占比为1:6,也就是占年轻代空间的1/8（存在两个survivor）
+   2. `-XX:+ PrintTenuringDistribution`：显示阀值与年轻代对象的年龄，可以观察应用程序对象的寿命分布
+
 ### 方法区
 
 1. 被各个线程所共享的内存区域
@@ -241,3 +253,4 @@ spoiler: jvm cms
 2. 深入理解 Java 虚拟机
 3. [美团博客-CMS GC 问题上](https://tech.meituan.com/2020/11/12/java-9-cms-gc.html)
 4. [oracle jdk](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/parallel.html#CHDCFBIF)
+5. [jdk 堆内存大小](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/sizing.html#sizing_generations)
