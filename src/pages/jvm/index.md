@@ -4,6 +4,22 @@ date: "2021-01-21"
 spoiler: jvm cms
 ---
 
+## 并行收集器
+1. 启用。`-XX:+ UseParallelGC`
+2. 启用线程数。`-XX: parallelgclines =<N>`控制线程数
+      1. **线程数>8**，占5/8个。
+      2. **线程数<8**，数值为线程个数。
+3. 碎片效应。
+   1. 原因。由于多个处理器进行垃圾回收时，在年轻代升级到老年代过程中会产生碎片化。
+   2. 解决方案。
+         1. 减少垃圾收集器线程的数量
+         2. 增加老年代生成的大小
+4. 行为指定
+   1. 最大垃圾收集暂停时间。`-XX:MaxGCPauseMillis =<N>`，无法保证一定满足要求
+   2. 吞吐量。` -XX:GCTimeRatio=<N>`，垃圾收集时间与应用时间的比率：`1/(1+<N>)`
+   3. 占用空间（堆大小）。`-Xmx <N>`，指定最大堆占用空间，`-Xms <N>`，最小化堆的大小
+   4. `java -XX:+PrintFlagsFinal`，查看当前jdk的**默认配置**
+
 ## 运行时数据区域
 
 1. 线程运行时不会因为扩展而导致内存溢出
@@ -156,7 +172,7 @@ spoiler: jvm cms
 1. 实验分析。
 1. 反证分析。判断表象的发不发生跟结果是否有相关性。
 1. 问题点
-   1. CPU 负载高。用火焰图看下热点
+   1. CPU 负载高。用**火焰图**看下热点
    1. 慢查询增多。DB 情况
    1. 线程 Block。锁竞争
 
@@ -222,5 +238,6 @@ spoiler: jvm cms
 ## 资料
 
 1. [The Garbage Collection Handbook](https://book.douban.com/subject/6809987/)
-1. 深入理解 Java 虚拟机
-1. [美团博客-CMS GC 问题上](https://tech.meituan.com/2020/11/12/java-9-cms-gc.html)
+2. 深入理解 Java 虚拟机
+3. [美团博客-CMS GC 问题上](https://tech.meituan.com/2020/11/12/java-9-cms-gc.html)
+4. [oracle jdk](https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/parallel.html#CHDCFBIF)
