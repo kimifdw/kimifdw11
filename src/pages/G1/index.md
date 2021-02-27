@@ -14,7 +14,7 @@ spoiler: G1
     2. 可用空闲空间块无法满足分配要求
 3. SATB。快照技术来找到所有活动对象，类似于CMS增量更新
 4. 卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。
-5. Humongous object。任何**大于区域大小一半**的对象，在老年代区域会被分配到Humongous regions.
+5. Humongous object。任何**大于区域大小一半**的对象，被直接分配到了老年代区域。
 
 # 优势
 1. 将对象从堆的一个或多个区域复制到堆上的单个区域，并在此过程中压缩和释放内存
@@ -30,13 +30,14 @@ spoiler: G1
 G1非实时收集器。
 
 # 堆分区
-> Java对象堆被划分为多个大小相等的区域，1MB~32MB不等，不超过2048个区域
+> Java对象堆被划分为多个大小相等的区域，1MB~32MB不等，不超过2048个区域，内存布局如下图所示
 
 ![image](./memory-heap.png)
 1. 年轻代。浅蓝色区域
 2. 混合集合。深蓝色的旧区域
 3. 正在收集部分。红色框标记
 4. 幸存者区域。标有S
+5. 巨大对象。标有H
 
 # 暂停(STW)
 1. 年轻代STW只发生在年轻代
@@ -47,6 +48,8 @@ G1非实时收集器。
 2. `-XX:+ParallelGCThreads=<N>`。STW的工作线程数量，与服务器的核数有关，默认值按(cpu <= 8) ? cpu : 3 + ((cpu * 5) / 8)
 3. `-XX:G1MixedGCLiveThresholdPercent=<N>`。混合垃圾收集器中旧区域的占用阀值。
 4. `-XX:+UnlockExperimentalVMOptions`。解锁实验性标志的值
+5. 其他默认重要的参数配置
+![image](./import-property.png)
 
 # 标记周期
 ![image](./remark-life.png)
