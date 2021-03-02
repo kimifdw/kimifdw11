@@ -81,9 +81,18 @@
 <li>可用空闲空间块无法满足分配要求</li>
 </ol>
 </li>
-<li>SATB。快照技术来找到所有活动对象，类似于CMS增量更新</li>
+<li>
+<p>SATB。快照技术来找到所有活动对象，类似于CMS增量更新，采用三色标记算法。</p>
+<ol>
+<li>白。对象没有被标记，标记阶段结束后，会被当做垃圾回收掉</li>
+<li>灰。对象被标记，它的field还没有被标记或标记完</li>
+<li>黑。对象被标记，且它的所有field也被标记完了</li>
+</ol>
+</li>
 <li>卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。</li>
-<li>Humongous object。任何<strong>大于区域大小一半</strong>的对象，在老年代区域会被分配到Humongous regions.</li>
+<li>Humongous object。任何<strong>大于区域大小一半</strong>的对象，被直接分配到了老年代区域。</li>
+<li>RSet【Remembered Set】。辅助GC过程的一种结构，典型的空间换时间工具</li>
+<li>CSet【Collection Set】。记录了GC要收集的Region集合，集合里的Region是任意年代的。</li>
 </ol>
 <h1 id="优势"><a href="#%E4%BC%98%E5%8A%BF" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>优势</h1>
 <ol>
@@ -101,7 +110,7 @@
 <p>G1非实时收集器。</p>
 <h1 id="堆分区"><a href="#%E5%A0%86%E5%88%86%E5%8C%BA" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>堆分区</h1>
 <blockquote>
-<p>Java对象堆被划分为多个大小相等的区域，1MB~32MB不等，不超过2048个区域</p>
+<p>Java对象堆被划分为多个大小相等的区域，1MB~32MB不等，不超过2048个区域，内存布局如下图所示</p>
 </blockquote>
 <p>
   <a
@@ -141,6 +150,7 @@
 <li>混合集合。深蓝色的旧区域</li>
 <li>正在收集部分。红色框标记</li>
 <li>幸存者区域。标有S</li>
+<li>巨大对象。标有H，在cleanup和Full gc阶段回收</li>
 </ol>
 <h1 id="暂停stw"><a href="#%E6%9A%82%E5%81%9Cstw" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>暂停(STW)</h1>
 <ol>
@@ -153,6 +163,43 @@
 <li><code class="language-text">-XX:+ParallelGCThreads=&lt;N&gt;</code>。STW的工作线程数量，与服务器的核数有关，默认值按(cpu &#x3C;= 8) ? cpu : 3 + ((cpu * 5) / 8)</li>
 <li><code class="language-text">-XX:G1MixedGCLiveThresholdPercent=&lt;N&gt;</code>。混合垃圾收集器中旧区域的占用阀值。</li>
 <li><code class="language-text">-XX:+UnlockExperimentalVMOptions</code>。解锁实验性标志的值</li>
+<li>其他默认重要的参数配置
+
+  <a
+    class="gatsby-resp-image-link"
+    href="/static/80f51ee3b9c2dd46223075099bffc6f6/e1250/import-property.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+  
+  <span
+    class="gatsby-resp-image-wrapper"
+    style="position: relative; display: block;  max-width: 590px; margin-left: auto; margin-right: auto;"
+  >
+    <span
+      class="gatsby-resp-image-background-image"
+      style="padding-bottom: 47.2972972972973%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAIAAAC9o5sfAAAACXBIWXMAAAsSAAALEgHS3X78AAAA6klEQVQoz01RC7LEIAjz/netgvjBV3f7gmhnMztbtIQkNFzXRcR/B2MMZi6l1LJRdyVidW2tvs2htda7fn6QM6cUyYAiJaK0DmDf9z3n9DYUQVWhhsP3QERijFkK5UqcQcMAXEo1zed5vA0UkAeufpXRjSzRJKFMGJR2bcAQ6HW4VQ14vGSflw2QKetn8OS9tznN9otQy+7wPECGbdPaaVdlqbGceTQAI7uBdw1YBGxellk4CzGTbwtmsMkF/xTY1CZDdtv+fkBDQhBgCW/tc6hh+P8YfjTltjpwdWzfbGq8ggPnuSof59Cu/yFKB4LljL5UAAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+    >
+      <img
+        class="gatsby-resp-image-image"
+        style="width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;"
+        alt="image"
+        title=""
+        src="/static/80f51ee3b9c2dd46223075099bffc6f6/fcda8/import-property.png"
+        srcset="/static/80f51ee3b9c2dd46223075099bffc6f6/12f09/import-property.png 148w,
+/static/80f51ee3b9c2dd46223075099bffc6f6/e4a3f/import-property.png 295w,
+/static/80f51ee3b9c2dd46223075099bffc6f6/fcda8/import-property.png 590w,
+/static/80f51ee3b9c2dd46223075099bffc6f6/efc66/import-property.png 885w,
+/static/80f51ee3b9c2dd46223075099bffc6f6/c83ae/import-property.png 1180w,
+/static/80f51ee3b9c2dd46223075099bffc6f6/e1250/import-property.png 1786w"
+        sizes="(max-width: 590px) 100vw, 590px"
+      />
+    </span>
+  </span>
+  
+  </a>
+    </li>
 </ol>
 <h1 id="标记周期"><a href="#%E6%A0%87%E8%AE%B0%E5%91%A8%E6%9C%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>标记周期</h1>
 <p>
@@ -198,8 +245,12 @@
 </ol>
 <h1 id="收集周期"><a href="#%E6%94%B6%E9%9B%86%E5%91%A8%E6%9C%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>收集周期</h1>
 <h2 id="混合收集"><a href="#%E6%B7%B7%E5%90%88%E6%94%B6%E9%9B%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>混合收集</h2>
-<h2 id="年轻代"><a href="#%E5%B9%B4%E8%BD%BB%E4%BB%A3" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>年轻代</h2>
 <ol>
+<li>选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region</li>
+<li>
+<p>并非FULL GC，只能回收部分老年代的分区</p>
+<h2 id="年轻代"><a href="#%E5%B9%B4%E8%BD%BB%E4%BB%A3" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>年轻代</h2>
+</li>
 <li>收集eden regions和survivor regions</li>
 <li>特定对象的目标区域取决于对象的年龄，升级到老年代</li>
 <li>对象包含在下一个年轻代或混合垃圾收集的CSet</li>
