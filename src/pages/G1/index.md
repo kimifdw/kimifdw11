@@ -16,10 +16,11 @@ spoiler: G1
     1. 白。对象没有被标记，标记阶段结束后，会被当做垃圾回收掉
     2. 灰。对象被标记，它的field还没有被标记或标记完
     3. 黑。对象被标记，且它的所有field也被标记完了
-4. 卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。
+4. 卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。是RSet的一种实现
 5. Humongous object。任何**大于区域大小一半**的对象，被直接分配到了老年代区域。
-6. RSet【Remembered Set】。辅助GC过程的一种结构，典型的空间换时间工具
+6. RSet【Remembered Set】。用于记录从非收集部分指向收集部分的指针集合的抽象数据结构【partial GC】。辅助GC过程的一种结构，典型的空间换时间工具。
 7. CSet【Collection Set】。记录了GC要收集的Region集合，集合里的Region是任意年代的。
+8. 分区垃圾收集器的特征。可以自由选择任意多个region来独立收集构成收集集合（CSet），靠RSet实现。
 
 # 优势
 1. 将对象从堆的一个或多个区域复制到堆上的单个区域，并在此过程中压缩和释放内存
@@ -56,22 +57,30 @@ G1非实时收集器。
 5. 其他默认重要的参数配置
 ![image](./import-property.png)
 
-# 标记周期
+# 垃圾收集
+## 全局并发标记（global concurrent marking)
 ![image](./remark-life.png)
-1. Initial marking phase（初始标记阶段）。年轻代垃圾回收器承载
+基于SATB形式的并发标记
+1. Initial marking phase（初始标记阶段，**暂停阶段**）。扫描根集合，标记所有从根集合可直接达到的对象并将它们的字段压入扫描栈中等到后续扫描。年轻代垃圾回收器承载，不额外进行处理。
 2. Root region scanning phase（根区域扫描阶段）。扫描初始标记阶段标记的幸存者区域
 3. Concurrent marking phase（**并发标记阶段**）。查找整个堆中可访问的活动的对象。
-4. Remark phase（标记阶段）。STW收集
+4. Remark phase（标记阶段，**暂停阶段**）。STW收集
 5. Cleanup phase（**清理阶段【并发】**）。执行计费和RSet清理的STW操作,清理部分为并发完成。
+
+## 拷贝存活对象（evacuation）
+1. 全暂停的。负责把一部分region里的活对象拷贝到空region里取，然后回收原本的region的空间。
+2. 分区垃圾收集器的特征。可以自由选择任意多个region来独立收集构成收集集合（CSet），靠RSet实现。
 
 # 收集周期
 ## 混合收集
 1. 选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region
-2. 并非FULL GC，只能回收部分老年代的分区
+2. **并非FULL GC**，只能回收部分老年代的分区
 ## 年轻代
 1. 收集eden regions和survivor regions
 2. 特定对象的目标区域取决于对象的年龄，升级到老年代
 3. 对象包含在下一个年轻代或混合垃圾收集的CSet
+4. 通过控制young gen的region个数来控制young GC的开销。
+5. **young gen region总是在CSet内**
 
 # 推荐建议
 1. 年轻代大小。避免使用`-Xmn`或`-XX:NewRatio`来显示设置年轻代大小
