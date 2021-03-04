@@ -69,7 +69,7 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">Garbage-First Garbage Collector(G1)回收器</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2021-2-27<!-- --> • ☕️ 5 min read</p></header><div><h1 id="定义"><a href="#%E5%AE%9A%E4%B9%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>定义</h1>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">Garbage-First Garbage Collector(G1)回收器</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">2021-2-27<!-- --> • ☕️ 6 min read</p></header><div><h1 id="定义"><a href="#%E5%AE%9A%E4%B9%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>定义</h1>
 <p>一种server-style的垃圾收集器，适用于具有大内存的多处理器计算器</p>
 <h1 id="名词定义"><a href="#%E5%90%8D%E8%AF%8D%E5%AE%9A%E4%B9%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>名词定义</h1>
 <ol>
@@ -89,10 +89,11 @@
 <li>黑。对象被标记，且它的所有field也被标记完了</li>
 </ol>
 </li>
-<li>卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。</li>
+<li>卡表。Java HotSpot VM使用字节数组作为卡表，每个字节称为卡，卡与堆中的地址范围相对应。是RSet的一种实现</li>
 <li>Humongous object。任何<strong>大于区域大小一半</strong>的对象，被直接分配到了老年代区域。</li>
-<li>RSet【Remembered Set】。辅助GC过程的一种结构，典型的空间换时间工具</li>
+<li>RSet【Remembered Set】。用于记录从非收集部分指向收集部分的指针集合的抽象数据结构【partial GC】。辅助GC过程的一种结构，典型的空间换时间工具。</li>
 <li>CSet【Collection Set】。记录了GC要收集的Region集合，集合里的Region是任意年代的。</li>
+<li>分区垃圾收集器的特征。可以自由选择任意多个region来独立收集构成收集集合（CSet），靠RSet实现。</li>
 </ol>
 <h1 id="优势"><a href="#%E4%BC%98%E5%8A%BF" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>优势</h1>
 <ol>
@@ -201,7 +202,8 @@
   </a>
     </li>
 </ol>
-<h1 id="标记周期"><a href="#%E6%A0%87%E8%AE%B0%E5%91%A8%E6%9C%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>标记周期</h1>
+<h1 id="垃圾收集"><a href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>垃圾收集</h1>
+<h2 id="全局并发标记（global-concurrent-marking"><a href="#%E5%85%A8%E5%B1%80%E5%B9%B6%E5%8F%91%E6%A0%87%E8%AE%B0%EF%BC%88global-concurrent-marking" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>全局并发标记（global concurrent marking)</h2>
 <p>
   <a
     class="gatsby-resp-image-link"
@@ -235,25 +237,33 @@
   </span>
   
   </a>
-    </p>
+    
+基于SATB形式的并发标记</p>
 <ol>
-<li>Initial marking phase（初始标记阶段）。年轻代垃圾回收器承载</li>
+<li>Initial marking phase（初始标记阶段，<strong>暂停阶段</strong>）。扫描根集合，标记所有从根集合可直接达到的对象并将它们的字段压入扫描栈中等到后续扫描。年轻代垃圾回收器承载，不额外进行处理。</li>
 <li>Root region scanning phase（根区域扫描阶段）。扫描初始标记阶段标记的幸存者区域</li>
 <li>Concurrent marking phase（<strong>并发标记阶段</strong>）。查找整个堆中可访问的活动的对象。</li>
-<li>Remark phase（标记阶段）。STW收集</li>
+<li>Remark phase（标记阶段，<strong>暂停阶段</strong>）。STW收集</li>
 <li>Cleanup phase（<strong>清理阶段【并发】</strong>）。执行计费和RSet清理的STW操作,清理部分为并发完成。</li>
+</ol>
+<h2 id="拷贝存活对象（evacuation）"><a href="#%E6%8B%B7%E8%B4%9D%E5%AD%98%E6%B4%BB%E5%AF%B9%E8%B1%A1%EF%BC%88evacuation%EF%BC%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>拷贝存活对象（evacuation）</h2>
+<ol>
+<li>全暂停的。负责把一部分region里的活对象拷贝到空region里取，然后回收原本的region的空间。</li>
+<li>分区垃圾收集器的特征。可以自由选择任意多个region来独立收集构成收集集合（CSet），靠RSet实现。</li>
 </ol>
 <h1 id="收集周期"><a href="#%E6%94%B6%E9%9B%86%E5%91%A8%E6%9C%9F" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>收集周期</h1>
 <h2 id="混合收集"><a href="#%E6%B7%B7%E5%90%88%E6%94%B6%E9%9B%86" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>混合收集</h2>
 <ol>
 <li>选定所有年轻代里的Region，外加根据global concurrent marking统计得出收集收益高的若干老年代Region</li>
 <li>
-<p>并非FULL GC，只能回收部分老年代的分区</p>
+<p><strong>并非FULL GC</strong>，只能回收部分老年代的分区</p>
 <h2 id="年轻代"><a href="#%E5%B9%B4%E8%BD%BB%E4%BB%A3" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>年轻代</h2>
 </li>
 <li>收集eden regions和survivor regions</li>
 <li>特定对象的目标区域取决于对象的年龄，升级到老年代</li>
 <li>对象包含在下一个年轻代或混合垃圾收集的CSet</li>
+<li>通过控制young gen的region个数来控制young GC的开销。</li>
+<li><strong>young gen region总是在CSet内</strong></li>
 </ol>
 <h1 id="推荐建议"><a href="#%E6%8E%A8%E8%8D%90%E5%BB%BA%E8%AE%AE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>推荐建议</h1>
 <ol>
@@ -325,7 +335,7 @@
 <ol>
 <li><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/gctuning/g1_gc_tuning.html#humongous" target="_blank" rel="nofollow noopener noreferrer">Garbage-First Garbage Collector Tuning</a></li>
 <li><a href="https://cloud.tencent.com/developer/article/1459638" target="_blank" rel="nofollow noopener noreferrer">详解 JVM Garbage First(G1) 垃圾收集器</a></li>
-</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/cms/">← <!-- -->Concurrent Mark Sweep(CMS)回收器</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/cms/">← <!-- -->Concurrent Mark Sweep(CMS)回收器</a></li><li><a rel="next" href="/java-tools/">jdk 工具级<!-- --> →</a></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
   if(true) {
