@@ -6,7 +6,7 @@ spoiler: linux 指令集
 
 
 ## 常用指令
-1. `history`。
+1. `history`。查询用户操作日志
 > export HISTTIMEFORMAT="%F %T `who -u am i 2>/dev/null| awk '{print $NF}'|sed -e 's/[()]//g'` `whoami` "
 
 ![image](./history.png)

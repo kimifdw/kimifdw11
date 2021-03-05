@@ -27,7 +27,7 @@ spoiler: reactor模型
 
 ![image](./multiple-reactors.png)
 
-- 由主 acceptor 分配到其他 reactor 去处理
+- 由主 acceptor 分配到其他 reactor 去处理，子reactor进行socket读写操作
 
 # nio 其他功能
 
