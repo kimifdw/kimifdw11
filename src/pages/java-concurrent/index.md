@@ -46,6 +46,26 @@ spoiler: 并发
 
 ## 3. ReadWriteLock（接口）
 1. 支持**并发访问**共享资源
+2. 一个线程成功读锁定将会看到之前发布的写锁定所做的所有更新
+3. 适用场景
+    1. 读多写少的场景
+    `Determining whether to grant the read lock or the write lock, when both readers and writers are waiting, at the time that a writer releases the write lock. Writer preference is common, as writes are expected to be short and infrequent. Reader preference is less common as it can lead to lengthy delays for a write if the readers are frequent and long-lived as expected. Fair, or "in-order" implementations are also possible.`
+    2. 是否存在读锁被激活而写锁在等待，可能会降低并发的可能性
+    `Determining whether readers that request the read lock while a reader is active and a writer is waiting, are granted the read lock. Preference to the reader can delay the writer indefinitely, while preference to the writer can reduce the potential for concurrency.`
+    3. 锁是否可重入
+    `Determining whether the locks are reentrant: can a thread with the write lock reacquire it? Can it acquire a read lock while holding the write lock? Is the read lock itself reentrant?`
+    4. 是否允许锁降级
+    `Can the write lock be downgraded to a read lock without allowing an intervening writer? Can a read lock be upgraded to a write lock, in preference to other waiting readers or writers?`
+4. 方法
+    1. `readLock()`。读锁
+    2. ·writeLock()`。写锁
+## 4. Condition（接口）
+
+## 5. ReentrantLock/ReentrantReadWriteLock
+1. 重进入。任意线程在获取到锁之后能购再次获取该锁而不会被锁所阻塞
+
+## 6. StampedLock（1.8）
+
 
 # 二、synchronized
 1. 提供对与每个对象相关联的隐式监视器锁的访问，但强制所有锁获取和释放以块结构的方式发生
