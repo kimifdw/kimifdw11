@@ -71,17 +71,66 @@ spoiler: 并发
 
 ### 四、 ReentrantLock/ReentrantReadWriteLock
 
-1. 重进入。任意线程在获取到锁之后能购再次获取该锁而不会被锁所阻塞
-
+1. 重进入。任意线程在获取到锁之后能购再次获取该锁而不会被锁所阻塞 
+2. 与synchronized类似，具有更好的扩展性
+3. 定义。由最后成功锁定但尚未解锁的线程所拥有，可以用`isHeldByCurrentThread`和`getHoldCount`来进行检查
+4. 在公平锁场景下，不能保证任何特定的执行顺序，更倾向授予**等待时间最长**的线程的访问
+5. 未定义时长的`tryLock`支持不公平锁，同一线程下的锁有限制，超过此限制会导致锁定方法异常
+6. 利用**AQS**实现同步（包含公平和非公平），默认ReentrantLock为不公平锁，独占锁
+7. 方法（除LOCK接口外）
+    1. 测试和调试。
+        1. `getHoldCount`。查询当前线程对该锁的保持数目，此信息只用于测试和调试。0表示没有获取到锁
+        2. `isHeldByCurrentThread`。查询当前锁是否由当前线程所持有
+    2. 系统监控。
+        1. `isLocked`。查询此锁是否有任何线程保持
+        2. `getOwner`。返回当前拥有此锁的线程，也有可能为空
+        3. `hasQueuedThreads`/`hasQueuedThread`/`getQueueLength`/`getQueuedThreads`。查询等待锁的线程队列信息
+        4. `hasWaiters`/`getWaitQueueLength`/`getWaitingThreads`。根据条件查询等待线程的信息
+8. ReentrantReadWriteLock与ReentrantLock的方法类似
 ### 五、 StampedLock（1.8）
+
+### 六、AbstractQueuedSynchronizer
+1. 在JDK1.6后增加了独占锁功能
+2. 一个框架，用于实现依赖于FIFO等待队列的阻塞锁和相关的同步器（semaphores、events等），为依赖单个原子int值表示状态的同步器提供有用的基础
+3. 状态字段的同步操作依赖`getState`、`setState`和`compareAndSetState`的原子操作来更新int值
+3. 子类应定义为非公共内部帮助类来实现其封闭类的同步属性方法
+4. 默认支持互斥模式或共享模式，等待线程共享FIFO队列
+5. ConditionObject类由支持独占模式的子类用作Condition实现
+6. 用法（使用`getState`、`setState`、`compareAndSetState`检查和修改同步状态），只支持实现以下方法【线程安全】
+    1. tryAcquire
+    2. tryRelease
+    3. tryAcquireShared
+    4. tryReleaseShared
+    5. isHeldExclusively
+7. *核心*
+    1. CLH队列【JSR-166】。
+        ![image](./CLH.png)
+        1. 一个**FIFO双向队列**，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了
+        2. 从tail入队【原子操作】，head出队【原子操作】
+        3. `prev`链用于处理取消
+        4. `next`链来实现阻止机制，每个节点的线程ID保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。
+        5. 在构造节点时，设置头和尾指针。
+        6. 节点状态标识
+            1. CANCELLED[1]。后驱节点被中断或超时，需要移出队列
+            2. SIGNAL[-1]。后驱节点被阻塞了
+            3. CONDITION[-2]。Condition专用
+            4. PROPAGATE[-3]。传播，适用于共享模式
+    
+
+
+### 七、AbstractOwnableSynchronizer（1.6）
+> 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
 
 ## synchronized
 
 1. 提供对与每个对象相关联的隐式监视器锁的访问，但强制所有锁获取和释放以块结构的方式发生
 2. 当获取多个锁时，它们必须以**相反的顺序**被释放，并且所有的锁都必须被释放在与它们相同的词汇范围内。
 
+
 ## 资料整理
 
 1. [jdk8 内存模型](https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html#jls-17.4)
 2. [java se8 中文版](https://www.matools.com/api/java8)
 3. [史上最全的 Java 并发系列](https://juejin.cn/post/6844904047305031693)
+4. [JUC 同步队列](https://segmentfault.com/a/1190000018948010)
+5. [JUC 同步队列](https://segmentfault.com/a/1190000015562787?utm_source=sf-related)
