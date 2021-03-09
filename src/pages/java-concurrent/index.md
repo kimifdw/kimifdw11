@@ -65,9 +65,10 @@ spoiler: 并发
       `Can the write lock be downgraded to a read lock without allowing an intervening writer? Can a read lock be upgraded to a write lock, in preference to other waiting readers or writers?`
 4. 方法
    1. `readLock()`。读锁
-   2. ·writeLock()`。写锁
+   2. `writeLock()`。写锁
 
 ### 三、 Condition（接口）
+
 
 ### 四、 ReentrantLock/ReentrantReadWriteLock
 
@@ -87,7 +88,17 @@ spoiler: 并发
         3. `hasQueuedThreads`/`hasQueuedThread`/`getQueueLength`/`getQueuedThreads`。查询等待锁的线程队列信息
         4. `hasWaiters`/`getWaitQueueLength`/`getWaitingThreads`。根据条件查询等待线程的信息
 8. ReentrantReadWriteLock与ReentrantLock的方法类似
+9. RRW当线程获取到写锁后，可以降级为读锁
 ### 五、 StampedLock（1.8）
+
+1. 功能锁，基于三种模式来控制读/写访问，锁状态基于版本和模式控制，如版本返回0则表示无法获取访问权限，锁的释放和转换需要基于返回版本来控制，不匹配则失败。
+2. 三种模式
+   1. writting==>1。独占锁类似
+   2. reading==>2。读锁类似
+   3. Optimistic reading==>3（乐观读模式），乐观读锁在数据一致性上需要复制一个对象
+3. 设计为在线程安全组件的开发中用作内部实用程序，采用序列锁的算法，而并非其他锁普遍采用的AQS。利用CLH队列进行线程的管理，通过同步状态值来表示锁的状态和类型。
+4. 方法
+   1. `tryConvertToReadLock`/`tryConvertToOptimisticRead`/`tryConvertToWriteLock`。锁切换
 
 ### 六、AbstractQueuedSynchronizer
 1. 在JDK1.6后增加了独占锁功能
@@ -97,13 +108,13 @@ spoiler: 并发
 4. 默认支持互斥模式或共享模式，等待线程共享FIFO队列
 5. ConditionObject类由支持独占模式的子类用作Condition实现
 6. 用法（使用`getState`、`setState`、`compareAndSetState`检查和修改同步状态），只支持实现以下方法【线程安全】
-    1. tryAcquire
-    2. tryRelease
-    3. tryAcquireShared
-    4. tryReleaseShared
-    5. isHeldExclusively
+    1. tryAcquire。排他获取锁
+    2. tryRelease。排他释放锁
+    3. tryAcquireShared。共享获取锁
+    4. tryReleaseShared。共享释放锁
+    5. isHeldExclusively。是否为排他状态
 7. *核心*
-    1. CLH队列【JSR-166】。
+   1. CLH队列【JSR-166】。
         ![image](./CLH.png)
         1. 一个**FIFO双向队列**，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了
         2. 从tail入队【原子操作】，head出队【原子操作】
@@ -115,6 +126,11 @@ spoiler: 并发
             2. SIGNAL[-1]。后驱节点被阻塞了
             3. CONDITION[-2]。Condition专用
             4. PROPAGATE[-3]。传播，适用于共享模式
+   2. 方法
+      1. `getState`。同步返回当前的值
+      2. `setState`。同步修改当前值
+      3. `compareAndSetHead`/`compareAndSetState`/`compareAndSetTail`/`compareAndSetWaitStatus`/`compareAndSetNext`。使用unsafe类来实现原子操作
+      4. `enq`。插入队列
     
 
 
@@ -133,4 +149,4 @@ spoiler: 并发
 2. [java se8 中文版](https://www.matools.com/api/java8)
 3. [史上最全的 Java 并发系列](https://juejin.cn/post/6844904047305031693)
 4. [JUC 同步队列](https://segmentfault.com/a/1190000018948010)
-5. [JUC 同步队列](https://segmentfault.com/a/1190000015562787?utm_source=sf-related)
+5. [JUC 同步队列](https://segmentfault.com/blog/ressmix_multithread?page=1)
