@@ -127,6 +127,10 @@ spoiler: 并发
             3. CONDITION[-2]。Condition专用
             4. PROPAGATE[-3]。传播，适用于共享模式，下一次共享式同步状态获取将会无条件地被传播下去
             5. IINITAL[0]。初始值
+         7. 问题点。
+            1. 如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知
+            2. 排队是否公平？公平锁，后申请获取锁的排在队列末尾
+            3. 如何唤醒？CLH通过每个线程**自旋**。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。
    2. 方法
       1. `getState`。同步返回当前的值
       2. `setState`。同步修改当前值
@@ -158,3 +162,4 @@ spoiler: 并发
 3. [史上最全的 Java 并发系列](https://juejin.cn/post/6844904047305031693)
 4. [JUC 同步队列](https://segmentfault.com/a/1190000018948010)
 5. [JUC 同步队列](https://segmentfault.com/blog/ressmix_multithread?page=1)
+6. [面试](https://blog.csdn.net/qq_34337272/article/details/81252853)
