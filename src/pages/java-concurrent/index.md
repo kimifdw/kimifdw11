@@ -101,19 +101,20 @@ spoiler: 并发
    1. `tryConvertToReadLock`/`tryConvertToOptimisticRead`/`tryConvertToWriteLock`。锁切换
 
 ### 六、AbstractQueuedSynchronizer
+
 1. 在JDK1.6后增加了独占锁功能
 2. 一个框架，用于实现依赖于FIFO等待队列的阻塞锁和相关的同步器（semaphores、events等），为依赖单个原子int值表示状态的同步器提供有用的基础
 3. 状态字段的同步操作依赖`getState`、`setState`和`compareAndSetState`的原子操作来更新int值
-3. 子类应定义为非公共内部帮助类来实现其封闭类的同步属性方法
-4. 默认支持互斥模式或共享模式，等待线程共享FIFO队列
-5. ConditionObject类由支持独占模式的子类用作Condition实现
-6. 用法（使用`getState`、`setState`、`compareAndSetState`检查和修改同步状态），只支持实现以下方法【线程安全】
+4. 子类应定义为非公共内部帮助类来实现其封闭类的同步属性方法
+5. 默认支持互斥模式或共享模式，等待线程共享FIFO队列
+6. ConditionObject类由支持独占模式的子类用作Condition实现
+7. 用法（使用`getState`、`setState`、`compareAndSetState`检查和修改同步状态），只支持实现以下方法【线程安全】
     1. tryAcquire。排他获取锁
     2. tryRelease。排他释放锁
     3. tryAcquireShared。共享获取锁
     4. tryReleaseShared。共享释放锁
     5. isHeldExclusively。是否为排他状态
-7. *核心*
+8. *核心*
    1. CLH队列【JSR-166】。
         ![image](./CLH.png)
         1. 一个**FIFO双向队列**，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了
@@ -132,13 +133,13 @@ spoiler: 并发
       2. `setState`。同步修改当前值
       3. `compareAndSetHead`/`compareAndSetState`/`compareAndSetTail`/`compareAndSetWaitStatus`/`compareAndSetNext`。使用unsafe类来实现原子操作
       4. `enq`。插入队列
-    
-
 
 ### 七、AbstractOwnableSynchronizer（1.6）
+
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
 
 ### 八、LockSupport
+
 1. 创建锁和其他同步类的基本线程阻塞原语
 2. 重点关注`park`方法和`unpark`方法，不能累加许可（与Semaphore不同）
 3. 方法（都依赖unsafe包中对应的方法来进行控制）
@@ -158,3 +159,4 @@ spoiler: 并发
 3. [史上最全的 Java 并发系列](https://juejin.cn/post/6844904047305031693)
 4. [JUC 同步队列](https://segmentfault.com/a/1190000018948010)
 5. [JUC 同步队列](https://segmentfault.com/blog/ressmix_multithread?page=1)
+4. [CLH队列](https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&utm_medium=article)
