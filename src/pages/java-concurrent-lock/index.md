@@ -219,6 +219,6 @@ spoiler: locks
 7. [CLH队列](https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&utm_medium=article)
 8. [Java锁的种类以及辨析](http://ifeve.com/java_lock_see2/)
 9. [ReentrantLock源码分析](http://ifeve.com/juc-aqs-reentrantlock/)
-10. [线程状态](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.State.html)
+10. ~~[线程状态](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.State.html)~~
 11. [JAVA互斥锁(synchronized&Lock)：行为分析及源码](http://ifeve.com/java%e4%ba%92%e6%96%a5%e9%94%81synchronizedlock%ef%bc%9a%e8%a1%8c%e4%b8%ba%e5%88%86%e6%9e%90%e5%8f%8a%e6%ba%90%e7%a0%81/)
-12. [](https://www.cnblogs.com/wangwudi/p/12302668.html)
+12. [synchronized简介](https://www.cnblogs.com/wangwudi/p/12302668.html)
