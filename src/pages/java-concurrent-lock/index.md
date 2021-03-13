@@ -44,7 +44,7 @@ spoiler: locks
 4. 悲观锁策略。每一次执行临界区代码都会产生冲突，获取到锁的时候同时会阻塞其他线程获取该锁。
 5. CAS操作——乐观锁策略
    1. 问题点。
-      - 无法感知检查时中途的变化
+      - 无法感知检查时中途的变化【ABA问题】
       - 自旋时间过长【死循环】
       - 只能保证一个共享变量的原子操作
 6. 偏向锁
@@ -206,6 +206,7 @@ spoiler: locks
 2. 当获取多个锁时，它们必须以**相反的顺序**被释放，并且所有的锁都必须被释放在与它们相同的词汇范围内。
 3. 策略。一个对象对一个以上的线程可见，则对该对象变量的所有读取或写入均通过同步方法完成。
 4. 每个对象拥有一个计数器，当线程获取该对象锁后，计数器就会加一，释放锁后就会将计数器减一。
+5. 利用java的指令集实现的锁，通过monitorenter和monitorexit jvm指令【监视器锁】来完成的，而监视器锁底层依赖于操作系统的Mutex Lock（互斥锁）来实现
 
 
 ## 资料整理
@@ -213,12 +214,14 @@ spoiler: locks
 1. [jdk8 内存模型](https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html#jls-17.4)
 2. [java se8 中文版](https://www.matools.com/api/java8)
 3. [史上最全的 Java 并发系列](https://juejin.cn/post/6844904047305031693)
-4. [JUC 同步队列](https://segmentfault.com/a/1190000018948010)
+4. ~~[JUC 同步队列](https://segmentfault.com/a/1190000018948010)~~
 5. [JUC 同步队列](https://segmentfault.com/blog/ressmix_multithread?page=1)
 6. [面试](https://blog.csdn.net/qq_34337272/article/details/81252853)
-7. [CLH队列](https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&utm_medium=article)
+7. ~~[CLH队列](https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&utm_medium=article)~~
 8. [Java锁的种类以及辨析](http://ifeve.com/java_lock_see2/)
 9. [ReentrantLock源码分析](http://ifeve.com/juc-aqs-reentrantlock/)
 10. ~~[线程状态](https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.State.html)~~
 11. [JAVA互斥锁(synchronized&Lock)：行为分析及源码](http://ifeve.com/java%e4%ba%92%e6%96%a5%e9%94%81synchronizedlock%ef%bc%9a%e8%a1%8c%e4%b8%ba%e5%88%86%e6%9e%90%e5%8f%8a%e6%ba%90%e7%a0%81/)
 12. [synchronized简介](https://www.cnblogs.com/wangwudi/p/12302668.html)
+13. [深入图解AQS实现原理和源码分析](https://blog.csdn.net/Seky_fei/article/details/106111832?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control)
+14. [synchronized总结](https://zhuanlan.zhihu.com/p/29866981)
