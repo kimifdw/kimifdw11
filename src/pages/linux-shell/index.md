@@ -51,8 +51,12 @@ spoiler: linux 指令集
 ## TCP 相关
 
 1. `/proc/sys/net/ipv4/tcp_wmem`。发送缓冲区，三个值分别代表最小值，默认值，最大值
-1. `/proc/sys/net/ipv4/tcp_rmem`。接收缓冲区，三个值分别代表最小值，默认值，最大值
-1. `ip addr show ens33 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'`。查看 ip addr 的地址
+2. `/proc/sys/net/ipv4/tcp_rmem`。接收缓冲区，三个值分别代表最小值，默认值，最大值
+3. `ip addr show ens33 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'`。查看 ip addr 的地址
+
+### curl
+
+1. `curl -o /dev/null -s -w "time_connect: %{time_connect}\n time_start transfer: %{time_starttransfer}\n time_nslookup:%{time_namelookup}\n time_total: %{time_total}\n" "https://jdznjjtest.auxgroup.com/app/errorcode"`。
 
 ## 查看防火墙
 
@@ -119,3 +123,9 @@ spoiler: linux 指令集
 ## 建议
 
 1. 尽量不要使用 root 直接登录系统，应使用一般账号登录系统，有需要再转换身份
+
+## 资料
+ 
+1. [CURL -w 参数详解](https://blog.csdn.net/weifangan/article/details/80741981)
+2. [curl官方说明书](https://curl.se/docs/manpage.html)
+3. [curl-cheat-sheet](https://curl.github.io/curl-cheat-sheet/http-sheet.html)
