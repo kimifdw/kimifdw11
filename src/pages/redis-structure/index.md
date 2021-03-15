@@ -97,6 +97,7 @@ spoiler: redis
     - [sds源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
     - [sds源文件 sds.h](https://github.com/redis/redis/blob/unstable/src/sds.h)
     - [深入浅出redis sds](https://blog.csdn.net/qq193423571/article/details/81637075)
+    - [全网最细节的sds讲解](https://zhuanlan.zhihu.com/p/269496479)
 
 ### dict
 
@@ -108,4 +109,4 @@ spoiler: redis
 2. [值得一看的35个Redis面试题总结](https://segmentfault.com/a/1190000022381177)
 3. [redis文章](https://www.cnblogs.com/shoshana-kong/tag/redis/)
 4. [redis官方文档](https://redis.io/topics/data-types-intro)
-5. [redis官方文档译文](http://ifeve.com/redis-data-types/)
+5. [redis官方文档译文](http://ifeve.com/redis-data-types/）
