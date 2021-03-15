@@ -186,7 +186,53 @@ spoiler: locks
          2. `setState`。同步修改当前值
          3. `compareAndSetHead`/`compareAndSetState`/`compareAndSetTail`/`compareAndSetWaitStatus`/`compareAndSetNext`。使用unsafe类来实现原子操作
    3. 线程的阻塞/唤醒【利用**LockSupport**的park和unpark来实现】
-
+   4. 一次lock的调用过程
+      1. 调用**tryAcquire方法**尝试获取锁，获取成功的话修改state并直接返回true，获取失败的话把当前线程加到等待队列**addWaiter**中
+      2. 加到等待队列之后先检查前置节点状态是否是signal，如果是的话直接阻塞当前线程等待唤醒，如果不是的话判断是否是cancel状态，是cancel状态就往前遍历并把cancel状态的节点从队列中删除。如果状态是0或者propagate的话将其修改成signal
+      3. 阻塞被唤醒之后如果是队首并且尝试获取锁成功就返回true，否则就继续执行前一步的代码进入阻塞
+   5. 一次unlock的调用过程
+      1. 修改状态位
+      2. 唤醒排队的节点
+      3. 结合lock方法，被唤醒的节点会自动替换当前节点成为head
+9. 源码分析
+   1. lock核心
+   ```java
+      public final void acquire(int arg) {
+        if (!tryAcquire(arg) &&
+            acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+            selfInterrupt();
+    }
+   ```
+   2. unlock核心
+   ```java
+      public final boolean release(int arg) {
+        if (tryRelease(arg)) {
+            Node h = head;
+            if (h != null && h.waitStatus != 0)
+                unparkSuccessor(h);
+            return true;
+        }
+        return false;
+    }
+   ```
+   3. enq（尾部入队）
+   ```java
+   private Node addWaiter(Node mode) {
+        Node node = new Node(Thread.currentThread(), mode);
+        // Try the fast path of enq; backup to full enq on failure
+        Node pred = tail;
+        // cas入尾队列，如不行则在调用enq入队
+        if (pred != null) {
+            node.prev = pred;
+            if (compareAndSetTail(pred, node)) {
+                pred.next = node;
+                return node;
+            }
+        }
+        enq(node);
+        return node;
+    }
+   ```
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
