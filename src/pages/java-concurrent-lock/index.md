@@ -1,6 +1,6 @@
 ---
 title: java concurrent locks
-date: "2021-03-06"
+date: "2021-03-15"
 spoiler: locks
 ---
 
@@ -233,6 +233,8 @@ spoiler: locks
         return node;
     }
    ```
+   10. 其他实现
+      - `CountDownLatch`
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁

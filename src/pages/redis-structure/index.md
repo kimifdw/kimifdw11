@@ -31,6 +31,10 @@ spoiler: redis
 1. 二进制安全，最大长度为512MB
 2. 编码为int/raw/embstr
     - embstr。字符串对象的长度小于**44**字节，使用embstr对象。创建只会分配一次内存
+3. sds（Simple Dynamic String）字符串结构。string的底层实现
+    - 可动态扩展内存
+    - 二进制安全
+    - 兼容传统的C语言字符串类型
 
 ### LIST（列表）
 
@@ -69,6 +73,27 @@ spoiler: redis
 1. 抽象日志数据类型，仅追加map数据类型的集合
 
 ## 内部数据结构
+
+### sds
+
+1. 内部结构
+![image](./sds-struct.png)
+2. 内存结构
+![image](./sds-mem-structure.png)
+3. 按字符串的使用大小来设置多个头部格式，不按动态头部来设置
+    - header。
+        1. len: 表示字符串的真正长度（不包含NULL结束符在内）。
+        2. alloc: 表示字符串的最大容量（不包含最后多余的那个字节）。
+        3. flags: **总是占用一个字节**。其中的最低3个bit用来表示header的类型
+    - 字符串数组。
+3. 动态扩容
+    - 原则。新长度=(新增加长度+原长度)>(1024 * 1024)?(新增长度+原长度) + (1024 * 1024) :(新增加长度+原长度) * 2。可能会涉及对header类型的修改
+    - 具体实现。`sdsMakeRoomFor`方法。
+4. 资料
+    - [sds数据结构详解](http://zhangtielei.com/posts/blog-redis-sds.html)
+    - [SDS扩容](https://blog.csdn.net/weixin_40318210/article/details/85316315)
+    - [sds源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
+    - [sds源文件 sds.h](https://github.com/redis/redis/blob/unstable/src/sds.h)
 
 ### dict
 
