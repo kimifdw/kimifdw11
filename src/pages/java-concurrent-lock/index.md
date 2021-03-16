@@ -279,6 +279,8 @@ spoiler: locks
                }
             }
             ```
+         4. 资料
+            - [CountDownLatch源码分析](https://segmentfault.com/a/1190000015807573)
       - `CyclicBarrier`。
 ### 七、AbstractOwnableSynchronizer（1.6）
 
