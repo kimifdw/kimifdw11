@@ -43,12 +43,13 @@ spoiler: redis
 
 ### LIST（列表）
 
-1. 根据插入顺序排序的字符串元素的集合，基于**双向链表**实现。插入或删除快，查找慢
+1. 根据插入**顺序排序**的字符串元素的集合，基于**双向链表**实现。插入或删除快，查找慢
 2. `LPUSH`命令将新元素从列表的**头部**添加
 3. `RPUSH`命令将新元素从列表的**尾部**添加
 4. `LTRIM`命令限制列表可查看的数据量
-5. 列表的最大长度是 2^32-1 个元素（一个列表多达 40 多亿的数据）
-6. 编码为**ziplist**或**linkedlist**
+5. `BRPOP`和`BLPOP`。仅当将元素添加到列表中或用户指定的超时时间到时，能等待元素到来而不是采用轮训的方式。
+6. 列表的最大长度是 2^32-1 个元素（一个列表多达 40 多亿的数据）
+7. 编码为**ziplist**或**linkedlist**
    - ziplist。压缩链表，节省内存空间【数据量不能太大】
    - linkedlist。双向链表
 
@@ -96,16 +97,30 @@ spoiler: redis
         1. `sdsMakeRoomFor`方法实现扩容。
         2. `sdscatlen`方法实现扩容策略。
 4. 资料
-    - [sds数据结构详解](http://zhangtielei.com/posts/blog-redis-sds.html)
+    - [sds数据结构详解（推荐）](http://zhangtielei.com/posts/blog-redis-sds.html)
     - [SDS扩容](https://blog.csdn.net/weixin_40318210/article/details/85316315)
     - [sds源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
     - [sds源文件 sds.h](https://github.com/redis/redis/blob/unstable/src/sds.h)
     - [深入浅出redis sds](https://blog.csdn.net/qq193423571/article/details/81637075)
-    - [全网最细节的sds讲解](https://zhuanlan.zhihu.com/p/269496479)
+    - [全网最细节的sds讲解（推荐）](https://zhuanlan.zhihu.com/p/269496479)
 
 ### dict
 
 ### ziplist
+
+1. 定义。是经过特殊编码的双向链表，存储字符串和整数值，整数被编码为实际整数，而不是一系列字符，按小端存储
+2. 内存结构
+![image](./ziplist-structure.png)
+   - `zlbytes`。表示ziplist占用的字节总数（4个字节）
+   - `zltail`。表示ziplist表中最后一项（entry）在ziplist中的偏移字节数。可以很方便地找到最后一项（不用遍历整个ziplist），从而可以在ziplist尾端快速地执行push或pop操作。
+   - `zllen`。数据项（entry）的个数，2^16-1（2个字节）
+   - `entry`。真正存放数据的数据项，长度不确定
+      1. 内部结构
+      ![image](./entry-structure.png)
+   - `zlend`。结束标识，固定值（255）
+3. 资料
+   - [Redis内部数据结构详解(4)——ziplist](http://zhangtielei.com/posts/blog-redis-ziplist.html)
+   - [redis ziplist源码分析](https://segmentfault.com/a/1190000017328042)
 
 ## 资料
 
