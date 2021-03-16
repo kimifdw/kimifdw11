@@ -1,6 +1,6 @@
 ---
 title: java concurrent locks
-date: "2021-03-15"
+date: "2021-03-16"
 spoiler: locks
 ---
 
@@ -17,6 +17,10 @@ spoiler: locks
 - 运行状态
 - 阻塞状态
 - 死亡状态
+- 中断状态
+   1. 如果一个线程阻塞在**wait方法**，或者线程的**join方法**，再或者**sleep方法**上，线程的中断状态被清空设置为false，并且被interrupt的线程将收到一个中断异常。
+   2. 如果线程阻塞在IO操作，**channel将被关闭**，并且线程的中断状态会被设置为true，并且被interrupt的线程将收到一个ClosedByInterruptException异常。
+   3. 如果线程阻塞在**selector方法**，中断线程的中断状态将设置为true，并且从select操作立即返回，只有selector的wakeup方法被调用可能返回一个非0值。
 
 ![image](./thread-state.png)
 
@@ -234,7 +238,48 @@ spoiler: locks
     }
    ```
    10. 其他实现
-      - `CountDownLatch`
+      - `CountDownLatch`。计数使用，一旦降为0，无法重置。
+         1. 场景。
+            - 作为一个开关或入口【初始值设为1】
+            - 作为一个完成信号。
+            - 将问题分成N个部分，当所有子任务完成后才能通过等待
+         2. 内存一致性影响。在计数达到零之前，一个线程调用`countDown`方法之前，一定有一个线程成功调用了`await`方法
+         3. 方法
+            - `await()`。等当前线程等待，直到锁存器递减计数到0为止
+            - `countDown()`。减少锁存器的计数，如果计数达到0，则释放所有等待线程
+            - 由AQS来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（**Propagate**）状态，以实现共享结点的连续唤醒
+            ```java
+            private static final class Sync extends AbstractQueuedSynchronizer {
+               private static final long serialVersionUID = 4982264981922014374L;
+
+               Sync(int count) {
+                     setState(count);
+               }
+
+               int getCount() {
+                     return getState();
+               }
+
+               protected int tryAcquireShared(int acquires) {
+                     return (getState() == 0) ? 1 : -1;
+               }
+
+               protected boolean tryReleaseShared(int releases) {
+                     // Decrement count; signal when transition to zero
+                     // 执行自旋锁并CAS
+                     for (;;) {
+                        int c = getState();
+                        if (c == 0)
+                           return false;
+                        int nextc = c-1;
+                        
+                        if (compareAndSetState(c, nextc))
+                           return nextc == 0;
+                     }
+               }
+            }
+            ```
+      - `CyclicBarrier`。
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
