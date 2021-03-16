@@ -281,7 +281,18 @@ spoiler: locks
             ```
          4. 资料
             - [CountDownLatch源码分析](https://segmentfault.com/a/1190000015807573)
-      - `CyclicBarrier`。
+      - `CyclicBarrier`。与`CountDownLatch`类似，区别是支持数值重置，允许一组线程全部相互等待以到达一个公共的屏障点。
+         1. 场景。
+            - 涉及固定大小的线程方的程序中使用。
+            - 若其中一个线程出现异常，则所有线程都会以`BrokenBarrierException`异常退出【all-or-none breakage model】
+         2. 内存一致性影响。一个线程调用`await`方法之前，一定有一个线程成功调用了`await`方法
+         3. 方法【一个栅栏对应一个generation对象，对象包含一个broken值来标识】
+            - `await`。直到所有各方都在此栅栏上调用了await，核心逻辑在`doawait`方法里
+            - `reset`。先break，在重新创建新的generation对象
+            - 使用`ReentrantLock`和`Condition`来实现
+         4. 资料
+            - [CyclicBarrier源码分析](https://segmentfault.com/a/1190000015888316?utm_source=sf-related)
+            
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
