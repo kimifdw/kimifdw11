@@ -165,3 +165,5 @@ spoiler: epoll
 4. [深入理解epoll](https://www.infoq.cn/article/26LPJzSp9EChwgNIc7Lq)
 5. [深入理解epool(知乎)](https://zhuanlan.zhihu.com/p/93609693)
 6. [epoll实现中共享内存问题](https://www.zhihu.com/question/39792257/answer/128739710)
+7. [epoll c语言实现](https://github.com/eklitzke/epollet/blob/master/poll.c)
+8. [C10K](http://www.kegel.com/c10k.html)
