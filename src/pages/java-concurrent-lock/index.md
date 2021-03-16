@@ -292,7 +292,8 @@ spoiler: locks
             - 使用`ReentrantLock`和`Condition`来实现
          4. 资料
             - [CyclicBarrier源码分析](https://segmentfault.com/a/1190000015888316?utm_source=sf-related)
-            
+      - `semaphore`。
+
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
