@@ -86,41 +86,51 @@ spoiler: redis
 2. 内存结构
    ![image](./sds-mem-structure.png)
 3. 按字符串的使用大小来设置多个头部格式，不按动态头部来设置
-    - header。
-        1. len: 表示字符串的真正长度（不包含NULL结束符在内）。
-        2. alloc: 表示字符串的最大容量（不包含最后多余的那个字节）。
-        3. flags: **总是占用一个字节**。其中的最低3个bit用来表示header的类型
-    - 字符串数组。
-3. 动态扩容
-    - 原则。新长度=(新增加长度+原长度)>(1024 * 1024)?(新增长度+原长度) + (1024 * 1024) :(新增加长度+原长度) * 2。可能会涉及对header类型的修改
-    - 具体实现。
-        1. `sdsMakeRoomFor`方法实现扩容。
-        2. `sdscatlen`方法实现扩容策略。
-4. 资料
-    - [sds数据结构详解（推荐）](http://zhangtielei.com/posts/blog-redis-sds.html)
-    - [SDS扩容](https://blog.csdn.net/weixin_40318210/article/details/85316315)
-    - [sds源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
-    - [sds源文件 sds.h](https://github.com/redis/redis/blob/unstable/src/sds.h)
-    - [深入浅出redis sds](https://blog.csdn.net/qq193423571/article/details/81637075)
-    - [全网最细节的sds讲解（推荐）](https://zhuanlan.zhihu.com/p/269496479)
+   - header。
+     1. len: 表示字符串的真正长度（不包含 NULL 结束符在内）。
+     2. alloc: 表示字符串的最大容量（不包含最后多余的那个字节）。
+     3. flags: **总是占用一个字节**。其中的最低 3 个 bit 用来表示 header 的类型
+   - 字符串数组。
+4. 动态扩容
+   - 原则。新长度=(新增加长度+原长度)>(1024 _ 1024)?(新增长度+原长度) + (1024 _ 1024) :(新增加长度+原长度) \* 2。可能会涉及对 header 类型的修改
+   - 具体实现。
+     1. `sdsMakeRoomFor`方法实现扩容。
+     2. `sdscatlen`方法实现扩容策略。
+5. 资料
+   - [sds 数据结构详解（推荐）](http://zhangtielei.com/posts/blog-redis-sds.html)
+   - [SDS 扩容](https://blog.csdn.net/weixin_40318210/article/details/85316315)
+   - [sds 源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
+   - [sds 源文件 sds.h](https://github.com/redis/redis/blob/unstable/src/sds.h)
+   - [深入浅出 redis sds](https://blog.csdn.net/qq193423571/article/details/81637075)
+   - [全网最细节的 sds 讲解（推荐）](https://zhuanlan.zhihu.com/p/269496479)
 
 ### dict
 
 ### ziplist
 
-1. 定义。是经过特殊编码的双向链表，存储字符串和整数值，整数被编码为实际整数，而不是一系列字符，按小端存储
+1. 定义。是经过特殊编码的双向链表，存储字符串和整数值，整数被编码为实际整数，而不是一系列字符，按小端存储。是一个连续的内存空间，将一些必要的偏移量信息记录在节点里，能跳到上一个节点或下一个节点
 2. 内存结构
-![image](./ziplist-structure.png)
-   - `zlbytes`。表示ziplist占用的字节总数（4个字节）
-   - `zltail`。表示ziplist表中最后一项（entry）在ziplist中的偏移字节数。可以很方便地找到最后一项（不用遍历整个ziplist），从而可以在ziplist尾端快速地执行push或pop操作。
-   - `zllen`。数据项（entry）的个数，2^16-1（2个字节）
+   ![image](./ziplist-structure.png)
+
+   - `zlbytes`。表示 ziplist 占用的字节总数（4 个字节）
+   - `zltail`。表示 ziplist 表中最后一项（entry）在 ziplist 中的偏移字节数。可以很方便地找到最后一项（不用遍历整个 ziplist），从而可以在 ziplist 尾端快速地执行 push 或 pop 操作。
+   - `zllen`。数据项（entry）的个数，2^16-1（2 个字节）
    - `entry`。真正存放数据的数据项，长度不确定
-      1. 内部结构
-      ![image](./entry-structure.png)
+
+     1. 内部结构
+
+        ![image](./entry-structure.png)
+
+        - `prevlen`。记录上一个节点的长度
+        - `encoding`。当前节点的编码规则
+        - `data`。当前节点的值
+
    - `zlend`。结束标识，固定值（255）
+
 3. 资料
-   - [Redis内部数据结构详解(4)——ziplist](http://zhangtielei.com/posts/blog-redis-ziplist.html)
-   - [redis ziplist源码分析](https://segmentfault.com/a/1190000017328042)
+   - [Redis 内部数据结构详解(4)——ziplist](http://zhangtielei.com/posts/blog-redis-ziplist.html)
+   - [redis ziplist 源码分析](https://segmentfault.com/a/1190000017328042)
+   - [redis 源码分析](https://segmentfault.com/a/1190000016901154)
 
 ## 资料
 
@@ -129,3 +139,4 @@ spoiler: redis
 3. [redis 文章](https://www.cnblogs.com/shoshana-kong/tag/redis/)
 4. [redis 官方文档](https://redis.io/topics/data-types-intro)
 5. [redis 官方文档译文](http://ifeve.com/redis-data-types/)
+6. [redis 设计与实现](http://redisbook.com/index.html)
