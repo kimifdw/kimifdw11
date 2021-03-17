@@ -43,19 +43,22 @@ spoiler: redis
 
 ### LIST（列表）
 
-1. 根据插入**顺序排序**的字符串元素的集合，基于**双向链表**实现。插入或删除快，查找慢
-2. `LPUSH`命令将新元素从列表的**头部**添加
-3. `RPUSH`命令将新元素从列表的**尾部**添加
-4. `LTRIM`命令限制列表可查看的数据量
-5. `BRPOP`和`BLPOP`。仅当将元素添加到列表中或用户指定的超时时间到时，能等待元素到来而不是采用轮训的方式。
-6. 列表的最大长度是 2^32-1 个元素（一个列表多达 40 多亿的数据）
-7. 编码为**ziplist**或**linkedlist**
+1. 根据插入**顺序排序**的字符串元素的集合，基于**双向链表**实现。插入或删除快，查找慢。
+2. 方法
+   - `LPUSH`命令将新元素从列表的**头部**添加
+   - `RPUSH`命令将新元素从列表的**尾部**添加
+   - `LTRIM`命令限制列表可查看的数据量
+   - `BRPOP`和`BLPOP`。仅当将元素添加到列表中或用户指定的超时时间到时，能等待元素到来而不是采用轮训的方式。
+3. 列表的最大长度是 2^32-1 个元素（一个列表多达 40 多亿的数据）
+4. 编码为**ziplist**或**linkedlist**
    - ziplist。压缩链表，节省内存空间【数据量不能太大】
    - linkedlist。双向链表
 
 ### HASH（哈希）
 
 1. 由与值相关联的字段组成的映射。字段和值都是字符串
+2. 方法
+   - `HINCRBY`。按增量递增存储在键处存储的哈希中字段中存储的数字，返回的是增加操作后的值
 
 ### SET（集合）
 
@@ -96,7 +99,11 @@ spoiler: redis
    - 具体实现。
      1. `sdsMakeRoomFor`方法实现扩容。
      2. `sdscatlen`方法实现扩容策略。
-5. 资料
+5. 与C语言字符串的区别
+   - 获取字符串长度：O(1)
+   - 杜绝缓冲区溢出
+   - 减少修改字符串时带来的内存重分配次数
+6. 资料
    - [sds 数据结构详解（推荐）](http://zhangtielei.com/posts/blog-redis-sds.html)
    - [SDS 扩容](https://blog.csdn.net/weixin_40318210/article/details/85316315)
    - [sds 源文件 sds.c](https://github.com/redis/redis/blob/unstable/src/sds.c)
@@ -105,6 +112,14 @@ spoiler: redis
    - [全网最细节的 sds 讲解（推荐）](https://zhuanlan.zhihu.com/p/269496479)
 
 ### dict
+
+1. 一个用于维护key和value映射关系的数据结构【基于哈希表的算法】，为解决算法中的查找问题。
+2. 特点。采用**增量式重哈希**的方法，避免一次性对所有key进行重哈希，在查找、插入、删除时都会触发重哈希
+3. 数据结构。定义两个哈希表用于重哈希
+![image](./dict-structure.png)
+
+4. 资料
+   - [dict原理](http://zhangtielei.com/posts/blog-redis-dict.html)
 
 ### ziplist
 
