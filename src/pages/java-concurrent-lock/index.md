@@ -349,6 +349,8 @@ spoiler: locks
 ![image](./mutux-lock.png)
 9. 资料
    - [synchronized总结（推荐）](https://zhuanlan.zhihu.com/p/29866981)
+   - [oracle jdk8对于synchronized的描述](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html)
+   - [synchronized源码](https://www.cnblogs.com/sqy123/p/9811574.html)
 
 ## 资料整理
 
