@@ -1,6 +1,6 @@
 ---
 title: java concurrent locks
-date: "2021-03-16"
+date: "2021-03-17"
 spoiler: locks
 ---
 
@@ -146,6 +146,8 @@ spoiler: locks
 
 ### 六、AbstractQueuedSynchronizer
 
+> 设计思想：分离构建同步器时的一系列关注点，所有操作都围绕着资源（同步状态）来展开
+
 1. 在JDK1.6后增加了独占锁功能，由`AbstractOwnableSynchronizer`实现
 2. 一个框架，用于实现依赖于FIFO等待队列的阻塞锁和相关的同步器（semaphores、events等），为依赖单个原子int值表示状态的同步器提供有用的基础
 3. 状态字段的同步操作依赖`getState`、`setState`和`compareAndSetState`的原子操作来更新int值（基于unsafe类库实现）
@@ -245,8 +247,8 @@ spoiler: locks
             - 将问题分成N个部分，当所有子任务完成后才能通过等待
          2. 内存一致性影响。在计数达到零之前，一个线程调用`countDown`方法之前，一定有一个线程成功调用了`await`方法
          3. 方法
-            - `await()`。等当前线程等待，直到锁存器递减计数到0为止
-            - `countDown()`。减少锁存器的计数，如果计数达到0，则释放所有等待线程
+            - `await()`。等当前线程等待，直到锁存器递减计数到0为止，状态state>0时阻塞，线程需要等待。
+            - `countDown()`。减少锁存器的计数，如果计数达到0，则释放所有等待线程，state==0时，资源可用。
             - 由AQS来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（**Propagate**）状态，以实现共享结点的连续唤醒
             ```java
             private static final class Sync extends AbstractQueuedSynchronizer {
@@ -292,8 +294,21 @@ spoiler: locks
             - 使用`ReentrantLock`和`Condition`来实现
          4. 资料
             - [CyclicBarrier源码分析](https://segmentfault.com/a/1190000015888316?utm_source=sf-related)
-      - `semaphore`。
-
+      - `semaphore`。维护一组许可证，通过`acquire`和`release`方法来对许可证进行获取和释放，在未获取到许可时，线程将一直等待。支持公平与非公平，在非公平状态下不保证获得许可的顺序；公平策略支持FIFO来选择许可。默认为**非公平策略**设置
+         1. 场景。用于限制线程的数量
+            - 公平策略适用于控制资源访问
+            - 非公平策略适用于与其他类型的同步控制，提高吞吐量
+         2. 二进制信号量。指初始化为**1**的信号量，具有与**Lock**类似的功能，但这个信号量**并不从属于**某个线程
+         3. 内存一致性影响。调用一个线程的`release`之前，一定有其他线程的**acquire**已经成功触发
+         4. 方法【AQS的共享模式】
+            - `aquire`。从信号量汇总获取许可证，如果没有或线程未被其他线程interrupted则阻塞，许可证<0时资源不可用
+            - `acquireUninterruptibly`。与`aquire`不同的是不支持线程的interrupted，即如果被其他线程interrupted，仍将继续阻塞；只能依赖其他线程的release操作
+            - `tryAcquire`。即使信号量被设置为公平，该方法仍可立即获得许可证，若要遵守公平，则需要使用`tryAcquire(0,TimeUnit.SECONDS)`
+            - `release`。释放许可证。
+            - `availablePermits`。获取可用的许可数量，这个值会实时变化
+            - `drainPermits`。获取可用的许可数量，并将可用值置为0
+         5. 资料
+            - [Semaphore源码分析](https://segmentfault.com/a/1190000015918459)
 ### 七、AbstractOwnableSynchronizer（1.6）
 
 > 基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁
