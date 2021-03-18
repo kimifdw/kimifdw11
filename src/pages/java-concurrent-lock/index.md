@@ -131,14 +131,14 @@ spoiler: locks
 5. 未定义时长的`tryLock`支持不公平锁，同一线程下的锁有限制，超过此限制会导致锁定方法异常
 6. 利用**AQS**实现同步（包含公平和非公平），默认ReentrantLock为不公平锁，独占锁
 7. 方法（除LOCK接口外）
-    1. 测试和调试。
-         - `getHoldCount`。查询当前线程对该锁的保持数目，此信息只用于测试和调试。0表示没有获取到锁
-         - `isHeldByCurrentThread`。查询当前锁是否由当前线程所持有
-    2. 系统监控。
-        - `isLocked`。查询此锁是否有任何线程保持
-        - `getOwner`。返回当前拥有此锁的线程，也有可能为空
-        - `hasQueuedThreads`/`hasQueuedThread`/`getQueueLength`/`getQueuedThreads`。查询等待锁的线程队列信息
-        - `hasWaiters`/`getWaitQueueLength`/`getWaitingThreads`。根据条件查询等待线程的信息
+    - 测试和调试。
+         1. `getHoldCount`。查询当前线程对该锁的保持数目，此信息只用于测试和调试。0表示没有获取到锁
+         2. `isHeldByCurrentThread`。查询当前锁是否由当前线程所持有
+    - 系统监控。
+        1. `isLocked`。查询此锁是否有任何线程保持
+        2. `getOwner`。返回当前拥有此锁的线程，也有可能为空
+        3. `hasQueuedThreads`/`hasQueuedThread`/`getQueueLength`/`getQueuedThreads`。查询等待锁的线程队列信息
+        4. `hasWaiters`/`getWaitQueueLength`/`getWaitingThreads`。根据条件查询等待线程的信息
 8. ReentrantReadWriteLock与ReentrantLock的方法类似
 9. RRW当线程获取到写锁后，可以降级为读锁
 
@@ -151,7 +151,7 @@ spoiler: locks
    - Optimistic reading==>3（乐观读模式），乐观读锁在数据一致性上需要复制一个对象
 3. 设计为在线程安全组件的开发中用作内部实用程序，采用序列锁的算法，而并非其他锁普遍采用的AQS。利用CLH队列进行线程的管理，通过同步状态值来表示锁的状态和类型。
 4. 方法
-   1. `tryConvertToReadLock`/`tryConvertToOptimisticRead`/`tryConvertToWriteLock`。锁切换
+   - `tryConvertToReadLock`/`tryConvertToOptimisticRead`/`tryConvertToWriteLock`。锁切换
 
 ### 六、AbstractQueuedSynchronizer
 
@@ -164,11 +164,11 @@ spoiler: locks
 5. 默认支持互斥模式或共享模式，等待线程共享FIFO队列
 6. ConditionObject类由支持独占模式的子类用作Condition实现
 7. 用法（使用`getState`、`setState`、`compareAndSetState`检查和修改同步状态），只支持实现以下方法【线程安全】
-    1. tryAcquire。排他获取锁
-    2. tryRelease。排他释放锁
-    3. tryAcquireShared。共享获取锁
-    4. tryReleaseShared。共享释放锁
-    5. isHeldExclusively。是否为排他状态
+    - tryAcquire。排他获取锁
+    - tryRelease。排他释放锁
+    - tryAcquireShared。共享获取锁
+    - tryReleaseShared。共享释放锁
+    - isHeldExclusively。是否为排他状态
 8. *核心*
    1. CLH队列【JSR-166】，FIFO的等待队列。
          ![image](./CLH.png)
@@ -178,9 +178,9 @@ spoiler: locks
          4. `next`链来实现阻止机制，每个节点的线程ID保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。
          5. 在构造节点时，设置头和尾指针。
          6. 问题点。
-            1. 如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知，从尾部进行插入
-            2. 排队是否公平？公平锁，后申请获取锁的排在队列末尾
-            3. 如何唤醒？CLH通过每个线程**自旋**。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。
+            - 如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知，从尾部进行插入
+            - 排队是否公平？公平锁，后申请获取锁的排在队列末尾
+            - 如何唤醒？CLH通过每个线程**自旋**。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。
          7. 锁的释放和锁定
          ![image](./clh-operate.png)
          8. 锁的实现（尾部插入实现）
@@ -327,9 +327,9 @@ spoiler: locks
 1. 创建锁和其他同步类的基本线程阻塞原语
 2. 重点关注`park`方法和`unpark`方法，不能累加许可（与Semaphore不同）
 3. 方法（都依赖unsafe包中对应的方法来进行控制）
-   1. `park`。禁止当前线程被调度除非得到许可，使用unsafe.pack包来实现，响应中断但不抛出异常。一般要放在一个**循环判断体**里面
-   2. `unpark`。为给定的线程提供许可
-   3. `getBroker`。返回提供给最近调用尚未解除阻塞的park方法的阻止程序对象，如果不阻止则返回null。 返回的值只是一个瞬间的快照 - 线程可能已经被阻止或阻止在不同的阻止对象上。
+   - `park`。禁止当前线程被调度除非得到许可，使用unsafe.pack包来实现，响应中断但不抛出异常。一般要放在一个**循环判断体**里面
+   - `unpark`。为给定的线程提供许可
+   - `getBroker`。返回提供给最近调用尚未解除阻塞的park方法的阻止程序对象，如果不阻止则返回null。 返回的值只是一个瞬间的快照 - 线程可能已经被阻止或阻止在不同的阻止对象上。
 
 ## synchronized（锁定的方法块）
 
@@ -351,10 +351,24 @@ spoiler: locks
 - 工作方式。
 
 ![image](./mutux-lock.png)
-9. 资料
+
+10. jvm指令
+   等待监视器（`Object.wait`）和通知其他线程（`Object.notifyAll`/`Object.notify`）
+   - monitorenter。
+      1. 每个对象都与一个监视器关联，且只有在**拥有者**的情况下，监视器才被锁定
+      2. 场景。
+         - 如果与objectref关联的监视器的条目计数为零，则线程进入监视器，并将其条目计数设置为1。
+         - 如果线程已经拥有与objectref关联的监视器，则它将重新进入监视器，从而增加其条目计数。
+         - 如果另一个线程已经拥有与objectref相关联的监视器，则该线程将阻塞直到监视器的条目计数为零，然后再次尝试获取所有权。
+   - monitorexit
+      1. 必须是引用类型，线程必须是引用实例相关监视器的所有者。用来减少与objectref相关联的监视器的数目，如数目为0，线程则退出监视器。就是我们常说的释放锁
+      2. synchronized方法的同步退出由虚拟机返回的指令处理；异常退出则由虚拟机通过异常机制处理
+
+11. 资料
    - [synchronized总结（推荐）](https://zhuanlan.zhihu.com/p/29866981)
    - [oracle jdk8对于synchronized的描述](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html)
    - [synchronized源码](https://www.cnblogs.com/sqy123/p/9811574.html)
+   - [jvm8](https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf)
 
 ## 资料整理
 
