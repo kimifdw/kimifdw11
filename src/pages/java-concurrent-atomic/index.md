@@ -90,9 +90,11 @@ static {
 ## LongAddr（1.8）
 
 1. 多线程唤醒下会比AtomicLong的吞吐量高，典型的以空间换时间
+2. 实现思路。**分散热点**，将value值分散到一个数组中，不同线程会命中到数组的不同槽中，各个线程只对自己槽中的那个值进行**CAS**操作，减小冲突概率。最后再将值累加起来
 
 2. 资料
 - [Java多线程进阶（十七）—— J.U.C之atomic框架：LongAdder](https://segmentfault.com/a/1190000015865714)
+- [atomicLong vs LongAddr](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
 ## 资料
 
