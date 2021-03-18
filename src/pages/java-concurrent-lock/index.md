@@ -353,7 +353,7 @@ spoiler: locks
 ![image](./mutux-lock.png)
 
 10. jvm指令
-   等待监视器（`Object.wait`）和通知其他线程（`Object.notifyAll`/`Object.notify`）
+   等待监视器（`Object.wait`）和通知其他线程（`Object.notifyAll`/`Object.notify`）；增加`ACC_SYNCHRONIZED`标识
    - monitorenter。
       1. 每个对象都与一个监视器关联，且只有在**拥有者**的情况下，监视器才被锁定
       2. 场景。
