@@ -353,7 +353,8 @@ spoiler: locks
 ![image](./mutux-lock.png)
 
 10. jvm指令
-   等待监视器（`Object.wait`）和通知其他线程（`Object.notifyAll`/`Object.notify`）；增加`ACC_SYNCHRONIZED`标识
+   > 等待监视器（`Object.wait`）和通知其他线程（`Object.notifyAll`/`Object.notify`），增加`ACC_SYNCHRONIZED`标识
+
    - monitorenter。
       1. 每个对象都与一个监视器关联，且只有在**拥有者**的情况下，监视器才被锁定
       2. 场景。
@@ -361,14 +362,14 @@ spoiler: locks
          - 如果线程已经拥有与objectref关联的监视器，则它将重新进入监视器，从而增加其条目计数。
          - 如果另一个线程已经拥有与objectref相关联的监视器，则该线程将阻塞直到监视器的条目计数为零，然后再次尝试获取所有权。
    - monitorexit
+
       1. 必须是引用类型，线程必须是引用实例相关监视器的所有者。用来减少与objectref相关联的监视器的数目，如数目为0，线程则退出监视器。就是我们常说的释放锁
       2. synchronized方法的同步退出由虚拟机返回的指令处理；异常退出则由虚拟机通过异常机制处理
-
 11. 资料
-   - [synchronized总结（推荐）](https://zhuanlan.zhihu.com/p/29866981)
-   - [oracle jdk8对于synchronized的描述](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html)
-   - [synchronized源码](https://www.cnblogs.com/sqy123/p/9811574.html)
-   - [jvm8](https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf)
+      - [synchronized总结（推荐）](https://zhuanlan.zhihu.com/p/29866981)
+      - [oracle jdk8对于synchronized的描述](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html)
+      - [synchronized源码](https://www.cnblogs.com/sqy123/p/9811574.html)
+      - [jvm8](https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf)
 
 ## 资料整理
 
