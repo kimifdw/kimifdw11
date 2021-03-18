@@ -87,6 +87,13 @@ static {
 3. 计算公式
    ![image](./atomicIntegerArray.png)
 
+## LongAddr（1.8）
+
+1. 多线程唤醒下会比AtomicLong的吞吐量高，典型的以空间换时间
+
+2. 资料
+- [Java多线程进阶（十七）—— J.U.C之atomic框架：LongAdder](https://segmentfault.com/a/1190000015865714)
+
 ## 资料
 
 1. [atomic](https://segmentfault.com/a/1190000015831791)
