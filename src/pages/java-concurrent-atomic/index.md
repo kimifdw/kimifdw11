@@ -1,6 +1,6 @@
 ---
 title: java concurrent atomic
-date: "2021-03-12"
+date: "2021-03-21"
 spoiler: atomic
 ---
 
@@ -87,13 +87,14 @@ static {
 3. 计算公式
    ![image](./atomicIntegerArray.png)
 
-## LongAddr（1.8）
+## LongAddr/（1.8）
 
-1. 多线程唤醒下会比AtomicLong的吞吐量高，典型的以空间换时间
-2. 实现思路。**分散热点**，将value值分散到一个数组中，不同线程会命中到数组的不同槽中，各个线程只对自己槽中的那个值进行**CAS**操作，减小冲突概率。最后再将值累加起来
+1. 多线程唤醒下会比 AtomicLong 的吞吐量高，典型的以空间换时间
+2. 实现思路。**分散热点**，将 value 值分散到一个数组中，不同线程会命中到数组的不同槽中，各个线程只对自己槽中的那个值进行**CAS**操作，减小冲突概率。最后再将值累加起来；只能每次对给定的整数执行一次加法
+3. `LongAccumulator`。实现思路与`LongAddr`类似，区别在于可实现任意函数操作
+4. 资料
 
-2. 资料
-- [Java多线程进阶（十七）—— J.U.C之atomic框架：LongAdder](https://segmentfault.com/a/1190000015865714)
+- [Java 多线程进阶（十七）—— J.U.C 之 atomic 框架：LongAdder](https://segmentfault.com/a/1190000015865714)
 - [atomicLong vs LongAddr](http://blog.palominolabs.com/2014/02/10/java-8-performance-improvements-longadder-vs-atomiclong/)
 
 ## 资料
