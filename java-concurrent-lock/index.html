@@ -69,7 +69,7 @@
 
                 setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
               })();
-            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">java concurrent locks</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">3/17/2021<!-- --> • ☕️☕️☕️☕️ 21 min read</p></header><div><h1 id="java-current-lock"><a href="#java-current-lock" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JAVA Current Lock</h1>
+            </script><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div style="color:var(--textNormal);background:var(--bg);transition:color 0.2s ease-out, background 0.2s ease-out;min-height:100vh"><div style="margin-left:auto;margin-right:auto;max-width:42rem;padding:2.625rem 1.3125rem"><header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2.625rem"><h3 style="font-family:Montserrat, sans-serif;margin-top:0;margin-bottom:0;height:42px;line-height:2.625rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="height:24px"></div></header><main><article><header><h1 style="color:var(--textTitle)">java concurrent locks</h1><p style="font-size:0.83255rem;line-height:1.75rem;display:block;margin-bottom:1.75rem;margin-top:-1.4rem">3/21/2021<!-- --> • ☕️☕️☕️☕️ 21 min read</p></header><div><h1 id="java-current-lock"><a href="#java-current-lock" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JAVA Current Lock</h1>
 <h2 id="locks-全景图"><a href="#locks-%E5%85%A8%E6%99%AF%E5%9B%BE" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>LOCKS 全景图</h2>
 <p>
   <a
@@ -114,9 +114,9 @@
 <li>
 <p>中断状态</p>
 <ol>
-<li>如果一个线程阻塞在<strong>wait方法</strong>，或者线程的<strong>join方法</strong>，再或者<strong>sleep方法</strong>上，线程的中断状态被清空设置为false，并且被interrupt的线程将收到一个中断异常。</li>
-<li>如果线程阻塞在IO操作，<strong>channel将被关闭</strong>，并且线程的中断状态会被设置为true，并且被interrupt的线程将收到一个ClosedByInterruptException异常。</li>
-<li>如果线程阻塞在<strong>selector方法</strong>，中断线程的中断状态将设置为true，并且从select操作立即返回，只有selector的wakeup方法被调用可能返回一个非0值。</li>
+<li>如果一个线程阻塞在<strong>wait 方法</strong>，或者线程的<strong>join 方法</strong>，再或者<strong>sleep 方法</strong>上，线程的中断状态被清空设置为 false，并且被 interrupt 的线程将收到一个中断异常。</li>
+<li>如果线程阻塞在 IO 操作，<strong>channel 将被关闭</strong>，并且线程的中断状态会被设置为 true，并且被 interrupt 的线程将收到一个 ClosedByInterruptException 异常。</li>
+<li>如果线程阻塞在<strong>selector 方法</strong>，中断线程的中断状态将设置为 true，并且从 select 操作立即返回，只有 selector 的 wakeup 方法被调用可能返回一个非 0 值。</li>
 </ol>
 </li>
 </ul>
@@ -157,7 +157,7 @@
     </p>
 <h2 id="锁的状态"><a href="#%E9%94%81%E7%9A%84%E7%8A%B6%E6%80%81" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>锁的状态</h2>
 <blockquote>
-<p>锁可以升级但不能降级 </p>
+<p>锁可以升级但不能降级</p>
 </blockquote>
 <ol>
 <li>无锁状态</li>
@@ -205,38 +205,28 @@
     </p>
 <ul>
 <li>优点。实现简单，避免了操作系统进程调度和线程上下文切换的开销。</li>
-<li>
-<p>缺点。</p>
-<ol>
-<li>锁饥饿问题。死锁是两个或者多个进程，<strong>相互等待</strong>对方占有的资源，而又不能释放自己的资源</li>
-<li>性能问题。</li>
-</ol>
-</li>
+<li>缺点。 1. 锁饥饿问题。死锁是两个或者多个进程，<strong>相互等待</strong>对方占有的资源，而又不能释放自己的资源 2. 性能问题。</li>
 <li>适用场景
 锁竞争不激烈、锁持有时间短的场景。</li>
-<li>
-<p>自适应的自旋锁（1.6）</p>
-<ol>
+<li>自适应的自旋锁（1.6）</li>
 <li>前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定。自旋成功，下次自旋次数会更多；自旋失败，下次自旋次数则会减少</li>
 <li>使用场景。轻量级锁通过自适应的自旋锁来升级为重量级锁</li>
-</ol>
-</li>
 </ul>
 </li>
 <li>互斥锁。</li>
-<li>CLH锁（自旋锁的改进）。利用严格的<strong>FIFO策略</strong>避免饥饿问题；利用不同的状态变量中自旋，减少CPU的开销。</li>
+<li>CLH 锁（自旋锁的改进）。利用严格的<strong>FIFO 策略</strong>避免饥饿问题；利用不同的状态变量中自旋，减少 CPU 的开销。</li>
 <li>悲观锁策略。每一次执行临界区代码都会产生冲突，获取到锁的时候同时会阻塞其他线程获取该锁。</li>
 <li>
-<p>CAS操作——乐观锁策略</p>
+<p>CAS 操作——乐观锁策略</p>
 <ol>
 <li>问题点。</li>
-<li>无法感知检查时中途的变化【ABA问题】</li>
+<li>无法感知检查时中途的变化【ABA 问题】</li>
 <li>自旋时间过长【死循环】</li>
 <li>只能保证一个共享变量的原子操作</li>
 </ol>
 </li>
 <li>偏向锁（乐观锁）。为了在只有一个线程执行同步块时提高性能，适用于无多线程的场景。</li>
-<li>轻量级锁（乐观锁）。在线程近乎交替执行同步块时提高性能，即A和B两个线程交替执行。</li>
+<li>轻量级锁（乐观锁）。在线程近乎交替执行同步块时提高性能，即 A 和 B 两个线程交替执行。</li>
 <li>重量级锁（悲观锁）。如存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁</li>
 </ol>
 <h3 id="一-lock（接口）"><a href="#%E4%B8%80-lock%EF%BC%88%E6%8E%A5%E5%8F%A3%EF%BC%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>一. lock（接口）</h3>
@@ -250,41 +240,25 @@
 <li>
 <p><code class="language-text">lockInterruptibly()</code>。尝试获取可被中断的锁，除非当前线程被 interrupted。</p>
 <ol>
-<li>
-<p>不可用—>可用</p>
-<ul>
+<li>不可用—>可用</li>
 <li>锁是由当前线程获取</li>
 <li>一些其他线程 interrupts 当前线程，并且支持中断锁获取</li>
-</ul>
-</li>
-<li>
-<p>中断清除</p>
-<ul>
+<li>中断清除</li>
 <li>进入该方法时设置了中断状态</li>
 <li>interrupted，同时获取锁，并支持锁中断，然后<code class="language-text">InterruptedException</code>被关上</li>
-</ul>
-</li>
 </ol>
 </li>
 <li><code class="language-text">tryLock()</code>。非阻塞尝试获取锁（可定时的与可轮询的锁获取模式）</li>
 <li>
 <p><code class="language-text">tryLock(long,TimeUnit)</code>。尝试获取超时锁</p>
 <ol>
-<li>
-<p>不可用—>可用</p>
-<ul>
+<li>不可用—>可用</li>
 <li>锁是由当前线程获取</li>
 <li>一些其他线程 interrupts 当前线程，并且支持中断锁获取</li>
 <li>指定的等待时间过去了</li>
-</ul>
-</li>
-<li>
-<p>中断清除</p>
-<ul>
+<li>中断清除</li>
 <li>进入该方法时设置了中断状态</li>
 <li>interrupted，同时获取锁，并支持锁中断，然后<code class="language-text">InterruptedException</code>被关上</li>
-</ul>
-</li>
 </ol>
 </li>
 <li><code class="language-text">unlock</code>。释放锁</li>
@@ -345,39 +319,31 @@
 </ol>
 <h3 id="四、-reentrantlockreentrantreadwritelock"><a href="#%E5%9B%9B%E3%80%81-reentrantlockreentrantreadwritelock" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>四、 ReentrantLock/ReentrantReadWriteLock</h3>
 <ol>
-<li>重进入。任意线程在获取到锁之后能购再次获取该锁而不会被锁所阻塞 </li>
-<li>与synchronized类似，具有更好的扩展性</li>
+<li>重进入。任意线程在获取到锁之后能购再次获取该锁而不会被锁所阻塞</li>
+<li>与 synchronized 类似，具有更好的扩展性</li>
 <li>定义。由最后成功锁定但尚未解锁的线程所拥有，可以用<code class="language-text">isHeldByCurrentThread</code>和<code class="language-text">getHoldCount</code>来进行检查</li>
 <li>在公平锁场景下，不能保证任何特定的执行顺序，更倾向授予<strong>等待时间最长</strong>的线程的访问</li>
 <li>未定义时长的<code class="language-text">tryLock</code>支持不公平锁，同一线程下的锁有限制，超过此限制会导致锁定方法异常</li>
-<li>利用<strong>AQS</strong>实现同步（包含公平和非公平），默认ReentrantLock为不公平锁，独占锁</li>
+<li>利用<strong>AQS</strong>实现同步（包含公平和非公平），默认 ReentrantLock 为不公平锁，独占锁</li>
 <li>
-<p>方法（除LOCK接口外）</p>
+<p>方法（除 LOCK 接口外）</p>
 <ul>
-<li>
-<p>测试和调试。</p>
-<ol>
-<li><code class="language-text">getHoldCount</code>。查询当前线程对该锁的保持数目，此信息只用于测试和调试。0表示没有获取到锁</li>
+<li>测试和调试。</li>
+<li><code class="language-text">getHoldCount</code>。查询当前线程对该锁的保持数目，此信息只用于测试和调试。0 表示没有获取到锁</li>
 <li><code class="language-text">isHeldByCurrentThread</code>。查询当前锁是否由当前线程所持有</li>
-</ol>
-</li>
-<li>
-<p>系统监控。</p>
-<ol>
+<li>系统监控。</li>
 <li><code class="language-text">isLocked</code>。查询此锁是否有任何线程保持</li>
 <li><code class="language-text">getOwner</code>。返回当前拥有此锁的线程，也有可能为空</li>
 <li><code class="language-text">hasQueuedThreads</code>/<code class="language-text">hasQueuedThread</code>/<code class="language-text">getQueueLength</code>/<code class="language-text">getQueuedThreads</code>。查询等待锁的线程队列信息</li>
 <li><code class="language-text">hasWaiters</code>/<code class="language-text">getWaitQueueLength</code>/<code class="language-text">getWaitingThreads</code>。根据条件查询等待线程的信息</li>
-</ol>
-</li>
 </ul>
 </li>
-<li>ReentrantReadWriteLock与ReentrantLock的方法类似</li>
-<li>RRW当线程获取到写锁后，可以降级为读锁</li>
+<li>ReentrantReadWriteLock 与 ReentrantLock 的方法类似</li>
+<li>RRW 当线程获取到写锁后，可以降级为读锁</li>
 </ol>
 <h3 id="五、-stampedlock（18）"><a href="#%E4%BA%94%E3%80%81-stampedlock%EF%BC%8818%EF%BC%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>五、 StampedLock（1.8）</h3>
 <ol>
-<li>功能锁，基于三种模式(读、写、乐观读)来控制读/写访问，锁状态基于版本和模式控制，如版本返回0则表示无法获取访问权限，锁的释放和转换需要基于返回版本来控制，不匹配则失败。</li>
+<li>功能锁，基于三种模式(读、写、乐观读)来控制读/写访问，锁状态基于版本和模式控制，如版本返回 0 则表示无法获取访问权限，锁的释放和转换需要基于返回版本来控制，不匹配则失败。</li>
 <li>
 <p>三种模式</p>
 <ul>
@@ -386,11 +352,20 @@
 <li>Optimistic reading==>3（乐观读模式），乐观读锁在数据一致性上需要复制一个对象</li>
 </ul>
 </li>
-<li>设计为在线程安全组件的开发中用作内部实用程序，采用序列锁的算法，而并非其他锁普遍采用的AQS。利用CLH队列进行线程的管理，通过同步状态值来表示锁的状态和类型。</li>
+<li>设计为在线程安全组件的开发中用作内部实用程序，采用序列锁的算法，而并非其他锁普遍采用的 AQS。利用<strong>CLH 队列</strong>进行线程的管理，通过同步状态值来表示锁的状态和类型。</li>
 <li>
 <p>方法</p>
 <ul>
 <li><code class="language-text">tryConvertToReadLock</code>/<code class="language-text">tryConvertToOptimisticRead</code>/<code class="language-text">tryConvertToWriteLock</code>。锁切换</li>
+<li><code class="language-text">acquireWrite</code>/<code class="language-text">acquireRead</code>。通过自旋尝试、加入等待队列、直至最终 Unsafe.park()挂起</li>
+</ul>
+</li>
+<li>读写锁的改进版，在读的同时不会去阻塞写。</li>
+<li>
+<p>实现思想</p>
+<ul>
+<li>基于 CLH 锁实现。</li>
+<li>CLH 锁。一种自旋锁，保证没有饥饿，并且保证 FIFO 的服务顺序。</li>
 </ul>
 </li>
 </ol>
@@ -399,12 +374,12 @@
 <p>设计思想：分离构建同步器时的一系列关注点，所有操作都围绕着资源（同步状态）来展开</p>
 </blockquote>
 <ol>
-<li>在JDK1.6后增加了独占锁功能，由<code class="language-text">AbstractOwnableSynchronizer</code>实现</li>
-<li>一个框架，用于实现依赖于FIFO等待队列的阻塞锁和相关的同步器（semaphores、events等），为依赖单个原子int值表示状态的同步器提供有用的基础</li>
-<li>状态字段的同步操作依赖<code class="language-text">getState</code>、<code class="language-text">setState</code>和<code class="language-text">compareAndSetState</code>的原子操作来更新int值（基于unsafe类库实现）</li>
+<li>在 JDK1.6 后增加了独占锁功能，由<code class="language-text">AbstractOwnableSynchronizer</code>实现</li>
+<li>一个框架，用于实现依赖于 FIFO 等待队列的阻塞锁和相关的同步器（semaphores、events 等），为依赖单个原子 int 值表示状态的同步器提供有用的基础</li>
+<li>状态字段的同步操作依赖<code class="language-text">getState</code>、<code class="language-text">setState</code>和<code class="language-text">compareAndSetState</code>的原子操作来更新 int 值（基于 unsafe 类库实现）</li>
 <li>子类应定义为非公共内部帮助类来实现其封闭类的同步属性方法</li>
-<li>默认支持互斥模式或共享模式，等待线程共享FIFO队列</li>
-<li>ConditionObject类由支持独占模式的子类用作Condition实现</li>
+<li>默认支持互斥模式或共享模式，等待线程共享 FIFO 队列</li>
+<li>ConditionObject 类由支持独占模式的子类用作 Condition 实现</li>
 <li>
 <p>用法（使用<code class="language-text">getState</code>、<code class="language-text">setState</code>、<code class="language-text">compareAndSetState</code>检查和修改同步状态），只支持实现以下方法【线程安全】</p>
 <ul>
@@ -417,9 +392,8 @@
 </li>
 <li>
 <p><em>核心</em></p>
-<ol>
-<li>
-<p>CLH队列【JSR-166】，FIFO的等待队列。
+<ul>
+<li>CLH 队列【JSR-166】，FIFO 的等待队列。
 
   <a
     class="gatsby-resp-image-link"
@@ -452,19 +426,18 @@
   </span>
   
   </a>
-    </p>
-<ol>
-<li>一个<strong>FIFO的隐式双向队列</strong>，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了</li>
-<li>从tail入队【原子操作】，head出队【原子操作】</li>
+    </li>
+<li>一个<strong>FIFO 的隐式双向队列</strong>，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了</li>
+<li>从 tail 入队【原子操作】，head 出队【原子操作】</li>
 <li><code class="language-text">prev</code>链用于处理取消</li>
-<li><code class="language-text">next</code>链来实现阻止机制，每个节点的线程ID保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。</li>
+<li><code class="language-text">next</code>链来实现阻止机制，每个节点的线程 ID 保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。</li>
 <li>在构造节点时，设置头和尾指针。</li>
 <li>
 <p>问题点。</p>
 <ul>
 <li>如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知，从尾部进行插入</li>
 <li>排队是否公平？公平锁，后申请获取锁的排在队列末尾</li>
-<li>如何唤醒？CLH通过每个线程<strong>自旋</strong>。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。</li>
+<li>如何唤醒？CLH 通过每个线程<strong>自旋</strong>。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。</li>
 </ul>
 </li>
 <li>锁的释放和锁定
@@ -536,227 +509,217 @@
   </a>
     </li>
 <li>
-<p>AQS的优化点【基于CLH队列】</p>
+<p>AQS 的优化点【基于 CLH 队列】</p>
 <ul>
 <li>将自旋锁改为基于<strong>LockSupport</strong>的线程阻塞操作</li>
 <li>
-<p>拓展CLH队列</p>
+<p>拓展 CLH 队列</p>
 <ol>
-<li>
-<p>扩展每个节点的状态，<code class="language-text">volatile int waitStatus</code>。</p>
-<ul>
+<li>扩展每个节点的状态，<code class="language-text">volatile int waitStatus</code>。</li>
 <li>CANCELLED[1]。后驱节点被中断或超时，需要移出队列。在同步队列中等待超时或被中断，需要从队列中取消等待，在该状态将不会变化</li>
 <li>SIGNAL[-1]。后驱节点被阻塞了，正常等待。后继节点地线程处于等待状态，当前节点释放获取取消同步状态，后继节点地线程即开始运行</li>
-<li>CONDITION[-2]。Condition专用</li>
+<li>CONDITION[-2]。Condition 专用</li>
 <li>PROPAGATE[-3]。传播，适用于共享模式，下一次共享式同步状态获取将会无条件地被传播下去</li>
 <li>IINITAL[0]。初始值</li>
-</ul>
-</li>
 <li>显式的维护前驱节点和后继节点。锁的释放会去主动唤醒下一个线程</li>
-<li>辅助GC。释放锁时显示设置为null</li>
+<li>辅助 GC。释放锁时显示设置为 null</li>
 </ol>
 </li>
 </ul>
 </li>
-</ol>
-</li>
-<li>
-<p>同步状态的定义</p>
-<ul>
+<li>同步状态的定义</li>
 <li><code class="language-text">getState</code>。同步返回当前的值</li>
 <li><code class="language-text">setState</code>。同步修改当前值</li>
-<li><code class="language-text">compareAndSetHead</code>/<code class="language-text">compareAndSetState</code>/<code class="language-text">compareAndSetTail</code>/<code class="language-text">compareAndSetWaitStatus</code>/<code class="language-text">compareAndSetNext</code>。使用unsafe类来实现原子操作</li>
-</ul>
-</li>
-<li>线程的阻塞/唤醒【利用<strong>LockSupport</strong>的park和unpark来实现】</li>
-<li>一次lock的调用过程</li>
-<li>调用<strong>tryAcquire方法</strong>尝试获取锁，获取成功的话修改state并直接返回true，获取失败的话把当前线程加到等待队列<strong>addWaiter</strong>中</li>
-<li>加到等待队列之后先检查前置节点状态是否是signal，如果是的话直接阻塞当前线程等待唤醒，如果不是的话判断是否是cancel状态，是cancel状态就往前遍历并把cancel状态的节点从队列中删除。如果状态是0或者propagate的话将其修改成signal</li>
-<li>阻塞被唤醒之后如果是队首并且尝试获取锁成功就返回true，否则就继续执行前一步的代码进入阻塞</li>
-<li>一次unlock的调用过程</li>
+<li><code class="language-text">compareAndSetHead</code>/<code class="language-text">compareAndSetState</code>/<code class="language-text">compareAndSetTail</code>/<code class="language-text">compareAndSetWaitStatus</code>/<code class="language-text">compareAndSetNext</code>。使用 unsafe 类来实现原子操作</li>
+<li>线程的阻塞/唤醒【利用<strong>LockSupport</strong>的 park 和 unpark 来实现】</li>
+<li>一次 lock 的调用过程</li>
+<li>调用<strong>tryAcquire 方法</strong>尝试获取锁，获取成功的话修改 state 并直接返回 true，获取失败的话把当前线程加到等待队列<strong>addWaiter</strong>中</li>
+<li>加到等待队列之后先检查前置节点状态是否是 signal，如果是的话直接阻塞当前线程等待唤醒，如果不是的话判断是否是 cancel 状态，是 cancel 状态就往前遍历并把 cancel 状态的节点从队列中删除。如果状态是 0 或者 propagate 的话将其修改成 signal</li>
+<li>阻塞被唤醒之后如果是队首并且尝试获取锁成功就返回 true，否则就继续执行前一步的代码进入阻塞</li>
+<li>一次 unlock 的调用过程</li>
 <li>修改状态位</li>
 <li>唤醒排队的节点</li>
-<li>结合lock方法，被唤醒的节点会自动替换当前节点成为head</li>
-</ol>
+<li>结合 lock 方法，被唤醒的节点会自动替换当前节点成为 head</li>
+</ul>
 </li>
 <li>
 <p>源码分析</p>
-<ol>
-<li>
-<p>lock核心</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">tryAcquire</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
-    <span class="token function">acquireQueued</span><span class="token punctuation">(</span><span class="token function">addWaiter</span><span class="token punctuation">(</span><span class="token class-name">Node</span><span class="token punctuation">.</span>EXCLUSIVE<span class="token punctuation">)</span><span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token function">selfInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<ul>
+<li>lock 核心</li>
+</ul>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">  <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">tryAcquire</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+        <span class="token function">acquireQueued</span><span class="token punctuation">(</span><span class="token function">addWaiter</span><span class="token punctuation">(</span><span class="token class-name">Node</span><span class="token punctuation">.</span>EXCLUSIVE<span class="token punctuation">)</span><span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token function">selfInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre></div>
-</li>
-<li>
-<p>unlock核心</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">release</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">tryRelease</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token class-name">Node</span> h <span class="token operator">=</span> head<span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>h <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> h<span class="token punctuation">.</span>waitStatus <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>
-        <span class="token function">unparkSuccessor</span><span class="token punctuation">(</span>h<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre></div>
-</li>
-<li>
-<p>enq（尾部入队）</p>
-<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">addWaiter</span><span class="token punctuation">(</span><span class="token class-name">Node</span> mode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token class-name">Node</span> node <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">// Try the fast path of enq; backup to full enq on failure</span>
-<span class="token class-name">Node</span> pred <span class="token operator">=</span> tail<span class="token punctuation">;</span>
-<span class="token comment">// cas入尾队列，如不行则在调用enq入队</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>pred <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    node<span class="token punctuation">.</span>prev <span class="token operator">=</span> pred<span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetTail</span><span class="token punctuation">(</span>pred<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        pred<span class="token punctuation">.</span>next <span class="token operator">=</span> node<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> node<span class="token punctuation">;</span>
+<ul>
+<li>unlock 核心</li>
+</ul>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java">  <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">release</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">tryRelease</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">Node</span> h <span class="token operator">=</span> head<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>h <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> h<span class="token punctuation">.</span>waitStatus <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token function">unparkSuccessor</span><span class="token punctuation">(</span>h<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token function">enq</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> node<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre></div>
-</li>
-<li>其他实现</li>
+<ul>
+<li>enq（尾部入队）</li>
+</ul>
+<div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">addWaiter</span><span class="token punctuation">(</span><span class="token class-name">Node</span> mode<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token class-name">Node</span> node <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> mode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Try the fast path of enq; backup to full enq on failure</span>
+    <span class="token class-name">Node</span> pred <span class="token operator">=</span> tail<span class="token punctuation">;</span>
+    <span class="token comment">// cas入尾队列，如不行则在调用enq入队</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>pred <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        node<span class="token punctuation">.</span>prev <span class="token operator">=</span> pred<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetTail</span><span class="token punctuation">(</span>pred<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            pred<span class="token punctuation">.</span>next <span class="token operator">=</span> node<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> node<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">enq</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> node<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre></div>
+<ul>
 <li>
-<p><code class="language-text">CountDownLatch</code>。计数使用，一旦降为0，无法重置。</p>
+<p>其他实现</p>
 <ol>
+<li>
+<p><code class="language-text">CountDownLatch</code>。计数使用，一旦降为 0，无法重置。</p>
+<ul>
 <li>
 <p>场景。</p>
-<ul>
-<li>作为一个开关或入口【初始值设为1】</li>
+<ol>
+<li>作为一个开关或入口【初始值设为 1】</li>
 <li>作为一个完成信号。</li>
-<li>将问题分成N个部分，当所有子任务完成后才能通过等待</li>
-</ul>
+<li>将问题分成 N 个部分，当所有子任务完成后才能通过等待</li>
+</ol>
 </li>
 <li>内存一致性影响。在计数达到零之前，一个线程调用<code class="language-text">countDown</code>方法之前，一定有一个线程成功调用了<code class="language-text">await</code>方法</li>
 <li>
 <p>方法</p>
-<ul>
-<li><code class="language-text">await()</code>。等当前线程等待，直到锁存器递减计数到0为止，状态state>0时阻塞，线程需要等待。</li>
-<li><code class="language-text">countDown()</code>。减少锁存器的计数，如果计数达到0，则释放所有等待线程，state==0时，资源可用。</li>
-<li>
-<p>由AQS来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（<strong>Propagate</strong>）状态，以实现共享结点的连续唤醒</p>
+<ol>
+<li><code class="language-text">await()</code>。等当前线程等待，直到锁存器递减计数到 0 为止，状态 state>0 时阻塞，线程需要等待。</li>
+<li><code class="language-text">countDown()</code>。减少锁存器的计数，如果计数达到 0，则释放所有等待线程，state==0 时，资源可用。</li>
+<li>由 AQS 来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（<strong>Propagate</strong>）状态，以实现共享结点的连续唤醒</li>
+</ol>
 <div class="gatsby-highlight" data-language="java"><pre class="language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Sync</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractQueuedSynchronizer</span> <span class="token punctuation">{</span>
 <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">4982264981922014374L</span><span class="token punctuation">;</span>
 
 <span class="token class-name">Sync</span><span class="token punctuation">(</span><span class="token keyword">int</span> count<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-     <span class="token function">setState</span><span class="token punctuation">(</span>count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">setState</span><span class="token punctuation">(</span>count<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">int</span> <span class="token function">getCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-     <span class="token keyword">return</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">protected</span> <span class="token keyword">int</span> <span class="token function">tryAcquireShared</span><span class="token punctuation">(</span><span class="token keyword">int</span> acquires<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-     <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">1</span> <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 
 <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">tryReleaseShared</span><span class="token punctuation">(</span><span class="token keyword">int</span> releases<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-     <span class="token comment">// Decrement count; signal when transition to zero</span>
-     <span class="token comment">// 执行自旋锁并CAS</span>
-     <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
-           <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-        <span class="token keyword">int</span> nextc <span class="token operator">=</span> c<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
-        
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetState</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> nextc<span class="token punctuation">)</span><span class="token punctuation">)</span>
-           <span class="token keyword">return</span> nextc <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
-     <span class="token punctuation">}</span>
+        <span class="token comment">// Decrement count; signal when transition to zero</span>
+        <span class="token comment">// 执行自旋锁并CAS</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> nextc <span class="token operator">=</span> c<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetState</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> nextc<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> nextc <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre></div>
 </li>
-</ul>
-</li>
 <li>
 <p>资料</p>
-<ul>
-<li><a href="https://segmentfault.com/a/1190000015807573" target="_blank" rel="nofollow noopener noreferrer">CountDownLatch源码分析</a></li>
-</ul>
-</li>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000015807573" target="_blank" rel="nofollow noopener noreferrer">CountDownLatch 源码分析</a></li>
 </ol>
+</li>
+</ul>
 </li>
 <li>
 <p><code class="language-text">CyclicBarrier</code>。与<code class="language-text">CountDownLatch</code>类似，区别是支持数值重置，允许一组线程全部相互等待以到达一个公共的屏障点。</p>
-<ol>
+<ul>
 <li>
 <p>场景。</p>
-<ul>
+<ol>
 <li>涉及固定大小的线程方的程序中使用。</li>
 <li>若其中一个线程出现异常，则所有线程都会以<code class="language-text">BrokenBarrierException</code>异常退出【all-or-none breakage model】</li>
-</ul>
+</ol>
 </li>
 <li>内存一致性影响。一个线程调用<code class="language-text">await</code>方法之前，一定有一个线程成功调用了<code class="language-text">await</code>方法</li>
 <li>
-<p>方法【一个栅栏对应一个generation对象，对象包含一个broken值来标识】</p>
-<ul>
-<li><code class="language-text">await</code>。直到所有各方都在此栅栏上调用了await，核心逻辑在<code class="language-text">doawait</code>方法里</li>
-<li><code class="language-text">reset</code>。先break，在重新创建新的generation对象</li>
+<p>方法【一个栅栏对应一个 generation 对象，对象包含一个 broken 值来标识】</p>
+<ol>
+<li><code class="language-text">await</code>。直到所有各方都在此栅栏上调用了 await，核心逻辑在<code class="language-text">doawait</code>方法里</li>
+<li><code class="language-text">reset</code>。先 break，在重新创建新的 generation 对象</li>
 <li>使用<code class="language-text">ReentrantLock</code>和<code class="language-text">Condition</code>来实现</li>
-</ul>
-</li>
-<li>
-<p>资料</p>
-<ul>
-<li><a href="https://segmentfault.com/a/1190000015888316?utm_source=sf-related" target="_blank" rel="nofollow noopener noreferrer">CyclicBarrier源码分析</a></li>
-</ul>
-</li>
 </ol>
 </li>
 <li>
-<p><code class="language-text">semaphore</code>。维护一组许可证，通过<code class="language-text">acquire</code>和<code class="language-text">release</code>方法来对许可证进行获取和释放，在未获取到许可时，线程将一直等待。支持公平与非公平，在非公平状态下不保证获得许可的顺序；公平策略支持FIFO来选择许可。默认为<strong>非公平策略</strong>设置</p>
+<p>资料</p>
 <ol>
+<li><a href="https://segmentfault.com/a/1190000015888316?utm_source=sf-related" target="_blank" rel="nofollow noopener noreferrer">CyclicBarrier 源码分析</a></li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><code class="language-text">semaphore</code>。维护一组许可证，通过<code class="language-text">acquire</code>和<code class="language-text">release</code>方法来对许可证进行获取和释放，在未获取到许可时，线程将一直等待。支持公平与非公平，在非公平状态下不保证获得许可的顺序；公平策略支持 FIFO 来选择许可。默认为<strong>非公平策略</strong>设置</p>
+<ul>
 <li>
 <p>场景。用于限制线程的数量</p>
-<ul>
+<ol>
 <li>公平策略适用于控制资源访问</li>
 <li>非公平策略适用于与其他类型的同步控制，提高吞吐量</li>
-</ul>
+</ol>
 </li>
 <li>二进制信号量。指初始化为<strong>1</strong>的信号量，具有与<strong>Lock</strong>类似的功能，但这个信号量<strong>并不从属于</strong>某个线程</li>
 <li>内存一致性影响。调用一个线程的<code class="language-text">release</code>之前，一定有其他线程的<strong>acquire</strong>已经成功触发</li>
 <li>
-<p>方法【AQS的共享模式】</p>
-<ul>
-<li><code class="language-text">aquire</code>。从信号量汇总获取许可证，如果没有或线程未被其他线程interrupted则阻塞，许可证&#x3C;0时资源不可用</li>
-<li><code class="language-text">acquireUninterruptibly</code>。与<code class="language-text">aquire</code>不同的是不支持线程的interrupted，即如果被其他线程interrupted，仍将继续阻塞；只能依赖其他线程的release操作</li>
+<p>方法【AQS 的共享模式】</p>
+<ol>
+<li><code class="language-text">aquire</code>。从信号量汇总获取许可证，如果没有或线程未被其他线程 interrupted 则阻塞，许可证&#x3C;0 时资源不可用</li>
+<li><code class="language-text">acquireUninterruptibly</code>。与<code class="language-text">aquire</code>不同的是不支持线程的 interrupted，即如果被其他线程 interrupted，仍将继续阻塞；只能依赖其他线程的 release 操作</li>
 <li><code class="language-text">tryAcquire</code>。即使信号量被设置为公平，该方法仍可立即获得许可证，若要遵守公平，则需要使用<code class="language-text">tryAcquire(0,TimeUnit.SECONDS)</code></li>
 <li><code class="language-text">release</code>。释放许可证。</li>
 <li><code class="language-text">availablePermits</code>。获取可用的许可数量，这个值会实时变化</li>
-<li><code class="language-text">drainPermits</code>。获取可用的许可数量，并将可用值置为0</li>
-</ul>
+<li><code class="language-text">drainPermits</code>。获取可用的许可数量，并将可用值置为 0</li>
+</ol>
 </li>
 <li>
 <p>资料</p>
-<ul>
-<li>
-<p><a href="https://segmentfault.com/a/1190000015918459" target="_blank" rel="nofollow noopener noreferrer">Semaphore源码分析</a></p>
-<h3 id="七、abstractownablesynchronizer（16）"><a href="#%E4%B8%83%E3%80%81abstractownablesynchronizer%EF%BC%8816%EF%BC%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>七、AbstractOwnableSynchronizer（1.6）</h3>
+<ol>
+<li><a href="https://segmentfault.com/a/1190000015918459" target="_blank" rel="nofollow noopener noreferrer">Semaphore 源码分析</a></li>
+</ol>
 </li>
 </ul>
 </li>
 </ol>
 </li>
-</ol>
+</ul>
 </li>
 </ol>
+<h3 id="七、abstractownablesynchronizer（16）"><a href="#%E4%B8%83%E3%80%81abstractownablesynchronizer%EF%BC%8816%EF%BC%89" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>七、AbstractOwnableSynchronizer（1.6）</h3>
 <blockquote>
-<p>基础类，为AQS提供了独占锁等概念。包含定义拥有独占访问权限的锁</p>
+<p>基础类，为 AQS 提供了独占锁等概念。包含定义拥有独占访问权限的锁</p>
 </blockquote>
 <h3 id="八、locksupport"><a href="#%E5%85%AB%E3%80%81locksupport" aria-hidden class="anchor"><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>八、LockSupport</h3>
 <ol>
 <li>创建锁和其他同步类的基本线程阻塞原语</li>
-<li>重点关注<code class="language-text">park</code>方法和<code class="language-text">unpark</code>方法，不能累加许可（与Semaphore不同）</li>
+<li>重点关注<code class="language-text">park</code>方法和<code class="language-text">unpark</code>方法，不能累加许可（与 Semaphore 不同）</li>
 <li>
-<p>方法（都依赖unsafe包中对应的方法来进行控制）</p>
+<p>方法（都依赖 unsafe 包中对应的方法来进行控制）</p>
 <ul>
-<li><code class="language-text">park</code>。禁止当前线程被调度除非得到许可，使用unsafe.pack包来实现，响应中断但不抛出异常。一般要放在一个<strong>循环判断体</strong>里面</li>
+<li><code class="language-text">park</code>。禁止当前线程被调度除非得到许可，使用 unsafe.pack 包来实现，响应中断但不抛出异常。一般要放在一个<strong>循环判断体</strong>里面</li>
 <li><code class="language-text">unpark</code>。为给定的线程提供许可</li>
-<li><code class="language-text">getBroker</code>。返回提供给最近调用尚未解除阻塞的park方法的阻止程序对象，如果不阻止则返回null。 返回的值只是一个瞬间的快照 - 线程可能已经被阻止或阻止在不同的阻止对象上。</li>
+<li><code class="language-text">getBroker</code>。返回提供给最近调用尚未解除阻塞的 park 方法的阻止程序对象，如果不阻止则返回 null。 返回的值只是一个瞬间的快照 - 线程可能已经被阻止或阻止在不同的阻止对象上。</li>
 </ul>
 </li>
 </ol>
@@ -766,14 +729,14 @@
 <li>当获取多个锁时，它们必须以<strong>相反的顺序</strong>被释放，并且所有的锁都必须被释放在与它们相同的词汇范围内。</li>
 <li>策略。一个对象对一个以上的线程可见，则对该对象变量的所有读取或写入均通过同步方法完成。</li>
 <li>每个对象拥有一个计数器，当线程获取该对象锁后，计数器就会加一，释放锁后就会将计数器减一，如果获取锁失败，就要<strong>阻塞等待</strong>，直到另一个线程释放为止。</li>
-<li>利用java的指令集实现的锁，通过monitorenter和monitorexit jvm指令【监视器锁】来完成的，而监视器锁底层依赖于操作系统的Mutex Lock（互斥锁）来实现。</li>
+<li>利用 java 的指令集实现的锁，通过 monitorenter 和 monitorexit jvm 指令【监视器锁】来完成的，而监视器锁底层依赖于操作系统的 Mutex Lock（互斥锁）来实现。</li>
 <li>锁消除。利用逃逸技术删除不必要的加锁操作。【逃逸分析。一种确定指针动态范围的静态分析，它可以分析在程序的哪些地方可以访问到指针】</li>
 <li>
-<p>synchronized锁</p>
+<p>synchronized 锁</p>
 <ul>
 <li>偏向锁（乐观锁）。为了在只有一个线程执行同步块时提高性能，适用于无多线程的场景。特点。只有等到线程竞争出现才释放偏向锁，持有偏向锁的线程不会主动释放偏向锁。</li>
-<li>轻量级锁（乐观锁）。在线程近乎交替执行同步块时提高性能，即A和B两个线程交替执行。</li>
-<li>重量级锁（悲观锁）。如存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁，指向互斥量（mutex），底层通过操作系统的<strong>mutex lock</strong>实现。等待锁的线程会被阻塞，由于Linux下Java线程与操作系统内核态线程一一映射，所以涉及到<strong>用户态和内核态的切换</strong>、操作系统内核态中的线程的阻塞和恢复。</li>
+<li>轻量级锁（乐观锁）。在线程近乎交替执行同步块时提高性能，即 A 和 B 两个线程交替执行。</li>
+<li>重量级锁（悲观锁）。如存在同一时间访问同一锁的情况，就会导致轻量级锁膨胀为重量级锁，指向互斥量（mutex），底层通过操作系统的<strong>mutex lock</strong>实现。等待锁的线程会被阻塞，由于 Linux 下 Java 线程与操作系统内核态线程一一映射，所以涉及到<strong>用户态和内核态的切换</strong>、操作系统内核态中的线程的阻塞和恢复。</li>
 </ul>
 </li>
 <li>Mutex Lock</li>
@@ -821,7 +784,7 @@
     </p>
 <ol start="10">
 <li>
-<p>jvm指令</p>
+<p>jvm 指令</p>
 <blockquote>
 <p>等待监视器（<code class="language-text">Object.wait</code>）和通知其他线程（<code class="language-text">Object.notifyAll</code>/<code class="language-text">Object.notify</code>），增加<code class="language-text">ACC_SYNCHRONIZED</code>标识</p>
 </blockquote>
@@ -830,29 +793,25 @@
 <p>monitorenter。</p>
 <ol>
 <li>每个对象都与一个监视器关联，且只有在<strong>拥有者</strong>的情况下，监视器才被锁定</li>
-<li>
-<p>场景。</p>
-<ul>
-<li>如果与objectref关联的监视器的条目计数为零，则线程进入监视器，并将其条目计数设置为1。</li>
-<li>如果线程已经拥有与objectref关联的监视器，则它将重新进入监视器，从而增加其条目计数。</li>
-<li>如果另一个线程已经拥有与objectref相关联的监视器，则该线程将阻塞直到监视器的条目计数为零，然后再次尝试获取所有权。</li>
-</ul>
-</li>
+<li>场景。</li>
+<li>如果与 objectref 关联的监视器的条目计数为零，则线程进入监视器，并将其条目计数设置为 1。</li>
+<li>如果线程已经拥有与 objectref 关联的监视器，则它将重新进入监视器，从而增加其条目计数。</li>
+<li>如果另一个线程已经拥有与 objectref 相关联的监视器，则该线程将阻塞直到监视器的条目计数为零，然后再次尝试获取所有权。</li>
 </ol>
 </li>
 <li>
 <p>monitorexit</p>
 <ol>
-<li>必须是引用类型，线程必须是引用实例相关监视器的所有者。用来减少与objectref相关联的监视器的数目，如数目为0，线程则退出监视器。就是我们常说的释放锁</li>
-<li>synchronized方法的同步退出由虚拟机返回的指令处理；异常退出则由虚拟机通过异常机制处理</li>
+<li>必须是引用类型，线程必须是引用实例相关监视器的所有者。用来减少与 objectref 相关联的监视器的数目，如数目为 0，线程则退出监视器。就是我们常说的释放锁</li>
+<li>synchronized 方法的同步退出由虚拟机返回的指令处理；异常退出则由虚拟机通过异常机制处理</li>
 </ol>
 </li>
 <li>
 <p>资料</p>
 <ul>
-<li><a href="https://zhuanlan.zhihu.com/p/29866981" target="_blank" rel="nofollow noopener noreferrer">synchronized总结（推荐）</a></li>
-<li><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html" target="_blank" rel="nofollow noopener noreferrer">oracle jdk8对于synchronized的描述</a></li>
-<li><a href="https://www.cnblogs.com/sqy123/p/9811574.html" target="_blank" rel="nofollow noopener noreferrer">synchronized源码</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/29866981" target="_blank" rel="nofollow noopener noreferrer">synchronized 总结（推荐）</a></li>
+<li><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-3.html" target="_blank" rel="nofollow noopener noreferrer">oracle jdk8 对于 synchronized 的描述</a></li>
+<li><a href="https://www.cnblogs.com/sqy123/p/9811574.html" target="_blank" rel="nofollow noopener noreferrer">synchronized 源码</a></li>
 <li><a href="https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf" target="_blank" rel="nofollow noopener noreferrer">jvm8</a></li>
 </ul>
 </li>
@@ -865,14 +824,14 @@
 <li><del><a href="https://segmentfault.com/a/1190000018948010" target="_blank" rel="nofollow noopener noreferrer">JUC 同步队列</a></del></li>
 <li><a href="https://segmentfault.com/blog/ressmix_multithread?page=1" target="_blank" rel="nofollow noopener noreferrer">JUC 同步队列</a></li>
 <li><a href="https://blog.csdn.net/qq_34337272/article/details/81252853" target="_blank" rel="nofollow noopener noreferrer">面试</a></li>
-<li><del><a href="https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&#x26;utm_medium=article" target="_blank" rel="nofollow noopener noreferrer">CLH队列</a></del></li>
-<li><a href="http://ifeve.com/java_lock_see2/" target="_blank" rel="nofollow noopener noreferrer">Java锁的种类以及辨析</a></li>
-<li><a href="http://ifeve.com/juc-aqs-reentrantlock/" target="_blank" rel="nofollow noopener noreferrer">ReentrantLock源码分析</a></li>
+<li><del><a href="https://www.infoq.cn/article/BVPvyVxjKM8ZSTSpTi0L?utm_source=rss&#x26;utm_medium=article" target="_blank" rel="nofollow noopener noreferrer">CLH 队列</a></del></li>
+<li><a href="http://ifeve.com/java_lock_see2/" target="_blank" rel="nofollow noopener noreferrer">Java 锁的种类以及辨析</a></li>
+<li><a href="http://ifeve.com/juc-aqs-reentrantlock/" target="_blank" rel="nofollow noopener noreferrer">ReentrantLock 源码分析</a></li>
 <li><del><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Thread.State.html" target="_blank" rel="nofollow noopener noreferrer">线程状态</a></del></li>
-<li><a href="http://ifeve.com/java%e4%ba%92%e6%96%a5%e9%94%81synchronizedlock%ef%bc%9a%e8%a1%8c%e4%b8%ba%e5%88%86%e6%9e%90%e5%8f%8a%e6%ba%90%e7%a0%81/" target="_blank" rel="nofollow noopener noreferrer">JAVA互斥锁(synchronized&#x26;Lock)：行为分析及源码</a></li>
-<li><a href="https://www.cnblogs.com/wangwudi/p/12302668.html" target="_blank" rel="nofollow noopener noreferrer">synchronized简介</a></li>
-<li><a href="https://blog.csdn.net/Seky_fei/article/details/106111832?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&#x26;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control" target="_blank" rel="nofollow noopener noreferrer">深入图解AQS实现原理和源码分析</a></li>
-</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/epoll/">← <!-- -->epoll 介绍</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
+<li><a href="http://ifeve.com/java%e4%ba%92%e6%96%a5%e9%94%81synchronizedlock%ef%bc%9a%e8%a1%8c%e4%b8%ba%e5%88%86%e6%9e%90%e5%8f%8a%e6%ba%90%e7%a0%81/" target="_blank" rel="nofollow noopener noreferrer">JAVA 互斥锁(synchronized&#x26;Lock)：行为分析及源码</a></li>
+<li><a href="https://www.cnblogs.com/wangwudi/p/12302668.html" target="_blank" rel="nofollow noopener noreferrer">synchronized 简介</a></li>
+<li><a href="https://blog.csdn.net/Seky_fei/article/details/106111832?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control&#x26;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.control" target="_blank" rel="nofollow noopener noreferrer">深入图解 AQS 实现原理和源码分析</a></li>
+</ol></div></article></main><aside><h3 style="font-family:Montserrat, sans-serif;margin-top:0.4375rem"><a style="box-shadow:none;text-decoration:none;color:var(--orange)" href="/">F&amp;Y-BLOG</a></h3><div style="display:flex;margin-bottom:3.5rem"><img src="/static/profile-pic-d74f15ac652d51b388dfaa9d564f8c9b.jpg" alt="KimiFdw" style="margin-right:0.875rem;margin-bottom:0;width:3.5rem;height:3.5rem;border-radius:50%"/><p style="max-width:310px;line-height:3.5rem"><a href="#">kimifdw</a> <!-- -->的个人博客.</p></div><nav><ul style="display:flex;flex-wrap:wrap;justify-content:space-between;list-style:none;padding:0"><li><a rel="prev" style="margin-right:20px" href="/java-concurrent-atomic/">← <!-- -->java concurrent atomic</a></li><li></li></ul></nav></aside></div></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script>
   
   
   if(true) {
