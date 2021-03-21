@@ -1,6 +1,6 @@
 ---
 title: java concurrent locks
-date: "2021-03-17"
+date: "2021-03-21"
 spoiler: locks
 ---
 
@@ -173,48 +173,48 @@ spoiler: locks
    - tryReleaseShared。共享释放锁
    - isHeldExclusively。是否为排他状态
 8. _核心_
-   1. CLH 队列【JSR-166】，FIFO 的等待队列。
-      ![image](./CLH.png)
-      1. 一个**FIFO 的隐式双向队列**，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了
-      2. 从 tail 入队【原子操作】，head 出队【原子操作】
-      3. `prev`链用于处理取消
-      4. `next`链来实现阻止机制，每个节点的线程 ID 保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。
-      5. 在构造节点时，设置头和尾指针。
-      6. 问题点。
-         - 如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知，从尾部进行插入
-         - 排队是否公平？公平锁，后申请获取锁的排在队列末尾
-         - 如何唤醒？CLH 通过每个线程**自旋**。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。
-      7. 锁的释放和锁定
-         ![image](./clh-operate.png)
-      8. 锁的实现（尾部插入实现）
-         ![image](./CLH-java.png)
-      9. AQS 的优化点【基于 CLH 队列】
-         - 将自旋锁改为基于**LockSupport**的线程阻塞操作
-         - 拓展 CLH 队列
-           1. 扩展每个节点的状态，`volatile int waitStatus`。
-              - CANCELLED[1]。后驱节点被中断或超时，需要移出队列。在同步队列中等待超时或被中断，需要从队列中取消等待，在该状态将不会变化
-              - SIGNAL[-1]。后驱节点被阻塞了，正常等待。后继节点地线程处于等待状态，当前节点释放获取取消同步状态，后继节点地线程即开始运行
-              - CONDITION[-2]。Condition 专用
-              - PROPAGATE[-3]。传播，适用于共享模式，下一次共享式同步状态获取将会无条件地被传播下去
-              - IINITAL[0]。初始值
-           2. 显式的维护前驱节点和后继节点。锁的释放会去主动唤醒下一个线程
-           3. 辅助 GC。释放锁时显示设置为 null
-   2. 同步状态的定义
-      - `getState`。同步返回当前的值
-      - `setState`。同步修改当前值
-      - `compareAndSetHead`/`compareAndSetState`/`compareAndSetTail`/`compareAndSetWaitStatus`/`compareAndSetNext`。使用 unsafe 类来实现原子操作
-   3. 线程的阻塞/唤醒【利用**LockSupport**的 park 和 unpark 来实现】
-   4. 一次 lock 的调用过程
-      - 调用**tryAcquire 方法**尝试获取锁，获取成功的话修改 state 并直接返回 true，获取失败的话把当前线程加到等待队列**addWaiter**中
-      - 加到等待队列之后先检查前置节点状态是否是 signal，如果是的话直接阻塞当前线程等待唤醒，如果不是的话判断是否是 cancel 状态，是 cancel 状态就往前遍历并把 cancel 状态的节点从队列中删除。如果状态是 0 或者 propagate 的话将其修改成 signal
-      - 阻塞被唤醒之后如果是队首并且尝试获取锁成功就返回 true，否则就继续执行前一步的代码进入阻塞
-   5. 一次 unlock 的调用过程
-      - 修改状态位
-      - 唤醒排队的节点
-      - 结合 lock 方法，被唤醒的节点会自动替换当前节点成为 head
+   - CLH 队列【JSR-166】，FIFO 的等待队列。
+     ![image](./CLH.png)
+     1. 一个**FIFO 的隐式双向队列**，队列中每个节点等待前驱节点释放共享状态（锁）被唤醒就可以了
+     2. 从 tail 入队【原子操作】，head 出队【原子操作】
+     3. `prev`链用于处理取消
+     4. `next`链来实现阻止机制，每个节点的线程 ID 保留在主机的节点上，则前任通过遍历下一个链接来确定自己是哪个线程。
+     5. 在构造节点时，设置头和尾指针。
+     6. 问题点。
+        - 如何排队？使用反向链表的形式进行排队，后继节点主动询问，而不是前继节点主动通知，从尾部进行插入
+        - 排队是否公平？公平锁，后申请获取锁的排在队列末尾
+        - 如何唤醒？CLH 通过每个线程**自旋**。每个等待线程通过不断自旋前继节点状态判断是否能获取到锁。
+     7. 锁的释放和锁定
+        ![image](./clh-operate.png)
+     8. 锁的实现（尾部插入实现）
+        ![image](./CLH-java.png)
+     9. AQS 的优化点【基于 CLH 队列】
+        - 将自旋锁改为基于**LockSupport**的线程阻塞操作
+        - 拓展 CLH 队列
+          1. 扩展每个节点的状态，`volatile int waitStatus`。
+             - CANCELLED[1]。后驱节点被中断或超时，需要移出队列。在同步队列中等待超时或被中断，需要从队列中取消等待，在该状态将不会变化
+             - SIGNAL[-1]。后驱节点被阻塞了，正常等待。后继节点地线程处于等待状态，当前节点释放获取取消同步状态，后继节点地线程即开始运行
+             - CONDITION[-2]。Condition 专用
+             - PROPAGATE[-3]。传播，适用于共享模式，下一次共享式同步状态获取将会无条件地被传播下去
+             - IINITAL[0]。初始值
+          2. 显式的维护前驱节点和后继节点。锁的释放会去主动唤醒下一个线程
+          3. 辅助 GC。释放锁时显示设置为 null
+   - 同步状态的定义
+     1. `getState`。同步返回当前的值
+     2. `setState`。同步修改当前值
+     3. `compareAndSetHead`/`compareAndSetState`/`compareAndSetTail`/`compareAndSetWaitStatus`/`compareAndSetNext`。使用 unsafe 类来实现原子操作
+   - 线程的阻塞/唤醒【利用**LockSupport**的 park 和 unpark 来实现】
+   - 一次 lock 的调用过程
+     1. 调用**tryAcquire 方法**尝试获取锁，获取成功的话修改 state 并直接返回 true，获取失败的话把当前线程加到等待队列**addWaiter**中
+     2. 加到等待队列之后先检查前置节点状态是否是 signal，如果是的话直接阻塞当前线程等待唤醒，如果不是的话判断是否是 cancel 状态，是 cancel 状态就往前遍历并把 cancel 状态的节点从队列中删除。如果状态是 0 或者 propagate 的话将其修改成 signal
+     3. 阻塞被唤醒之后如果是队首并且尝试获取锁成功就返回 true，否则就继续执行前一步的代码进入阻塞
+   - 一次 unlock 的调用过程
+     1. 修改状态位
+     2. 唤醒排队的节点
+     3. 结合 lock 方法，被唤醒的节点会自动替换当前节点成为 head
 9. 源码分析
 
-   1. lock 核心
+   - lock 核心
 
    ```java
       public final void acquire(int arg) {
@@ -224,7 +224,7 @@ spoiler: locks
     }
    ```
 
-   2. unlock 核心
+   - unlock 核心
 
    ```java
       public final boolean release(int arg) {
@@ -238,7 +238,7 @@ spoiler: locks
     }
    ```
 
-   3. enq（尾部入队）
+   - enq（尾部入队）
 
    ```java
    private Node addWaiter(Node mode) {
@@ -258,82 +258,84 @@ spoiler: locks
     }
    ```
 
-   10. 其他实现
+   - 其他实现
 
-   - `CountDownLatch`。计数使用，一旦降为 0，无法重置。
+        1. `CountDownLatch`。计数使用，一旦降为 0，无法重置。
 
-     1. 场景。
-        - 作为一个开关或入口【初始值设为 1】
-        - 作为一个完成信号。
-        - 将问题分成 N 个部分，当所有子任务完成后才能通过等待
-     2. 内存一致性影响。在计数达到零之前，一个线程调用`countDown`方法之前，一定有一个线程成功调用了`await`方法
-     3. 方法
+            - 场景。
+                1. 作为一个开关或入口【初始值设为 1】
+                2. 作为一个完成信号。
+                3. 将问题分成 N 个部分，当所有子任务完成后才能通过等待
+            - 内存一致性影响。在计数达到零之前，一个线程调用`countDown`方法之前，一定有一个线程成功调用了`await`方法
+            - 方法
 
-        - `await()`。等当前线程等待，直到锁存器递减计数到 0 为止，状态 state>0 时阻塞，线程需要等待。
-        - `countDown()`。减少锁存器的计数，如果计数达到 0，则释放所有等待线程，state==0 时，资源可用。
-        - 由 AQS 来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（**Propagate**）状态，以实现共享结点的连续唤醒
+                1. `await()`。等当前线程等待，直到锁存器递减计数到 0 为止，状态 state>0 时阻塞，线程需要等待。
+                2. `countDown()`。减少锁存器的计数，如果计数达到 0，则释放所有等待线程，state==0 时，资源可用。
+                3. 由 AQS 来进行计数，采用共享锁模式。一旦被唤醒，会向队列后部传播（**Propagate**）状态，以实现共享结点的连续唤醒
 
-        ```java
-        private static final class Sync extends AbstractQueuedSynchronizer {
-           private static final long serialVersionUID = 4982264981922014374L;
+                ```java
+                private static final class Sync extends AbstractQueuedSynchronizer {
+                private static final long serialVersionUID = 4982264981922014374L;
 
-           Sync(int count) {
-                 setState(count);
-           }
+                Sync(int count) {
+                        setState(count);
+                }
 
-           int getCount() {
-                 return getState();
-           }
+                int getCount() {
+                        return getState();
+                }
 
-           protected int tryAcquireShared(int acquires) {
-                 return (getState() == 0) ? 1 : -1;
-           }
+                protected int tryAcquireShared(int acquires) {
+                        return (getState() == 0) ? 1 : -1;
+                }
 
-           protected boolean tryReleaseShared(int releases) {
-                 // Decrement count; signal when transition to zero
-                 // 执行自旋锁并CAS
-                 for (;;) {
-                    int c = getState();
-                    if (c == 0)
-                       return false;
-                    int nextc = c-1;
+                protected boolean tryReleaseShared(int releases) {
+                        // Decrement count; signal when transition to zero
+                        // 执行自旋锁并CAS
+                        for (;;) {
+                            int c = getState();
+                            if (c == 0)
+                            return false;
+                            int nextc = c-1;
 
-                    if (compareAndSetState(c, nextc))
-                       return nextc == 0;
-                 }
-           }
-        }
-        ```
+                            if (compareAndSetState(c, nextc))
+                            return nextc == 0;
+                        }
+                }
+                }
+                ```
 
-     4. 资料
-        - [CountDownLatch 源码分析](https://segmentfault.com/a/1190000015807573)
+            - 资料
+                1. [CountDownLatch 源码分析](https://segmentfault.com/a/1190000015807573)
 
-   - `CyclicBarrier`。与`CountDownLatch`类似，区别是支持数值重置，允许一组线程全部相互等待以到达一个公共的屏障点。
-     1. 场景。
-        - 涉及固定大小的线程方的程序中使用。
-        - 若其中一个线程出现异常，则所有线程都会以`BrokenBarrierException`异常退出【all-or-none breakage model】
-     2. 内存一致性影响。一个线程调用`await`方法之前，一定有一个线程成功调用了`await`方法
-     3. 方法【一个栅栏对应一个 generation 对象，对象包含一个 broken 值来标识】
-        - `await`。直到所有各方都在此栅栏上调用了 await，核心逻辑在`doawait`方法里
-        - `reset`。先 break，在重新创建新的 generation 对象
-        - 使用`ReentrantLock`和`Condition`来实现
-     4. 资料
-        - [CyclicBarrier 源码分析](https://segmentfault.com/a/1190000015888316?utm_source=sf-related)
-   - `semaphore`。维护一组许可证，通过`acquire`和`release`方法来对许可证进行获取和释放，在未获取到许可时，线程将一直等待。支持公平与非公平，在非公平状态下不保证获得许可的顺序；公平策略支持 FIFO 来选择许可。默认为**非公平策略**设置
-     1. 场景。用于限制线程的数量
-        - 公平策略适用于控制资源访问
-        - 非公平策略适用于与其他类型的同步控制，提高吞吐量
-     2. 二进制信号量。指初始化为**1**的信号量，具有与**Lock**类似的功能，但这个信号量**并不从属于**某个线程
-     3. 内存一致性影响。调用一个线程的`release`之前，一定有其他线程的**acquire**已经成功触发
-     4. 方法【AQS 的共享模式】
-        - `aquire`。从信号量汇总获取许可证，如果没有或线程未被其他线程 interrupted 则阻塞，许可证<0 时资源不可用
-        - `acquireUninterruptibly`。与`aquire`不同的是不支持线程的 interrupted，即如果被其他线程 interrupted，仍将继续阻塞；只能依赖其他线程的 release 操作
-        - `tryAcquire`。即使信号量被设置为公平，该方法仍可立即获得许可证，若要遵守公平，则需要使用`tryAcquire(0,TimeUnit.SECONDS)`
-        - `release`。释放许可证。
-        - `availablePermits`。获取可用的许可数量，这个值会实时变化
-        - `drainPermits`。获取可用的许可数量，并将可用值置为 0
-     5. 资料
-        - [Semaphore 源码分析](https://segmentfault.com/a/1190000015918459)
+        2. `CyclicBarrier`。与`CountDownLatch`类似，区别是支持数值重置，允许一组线程全部相互等待以到达一个公共的屏障点。
+
+            - 场景。
+                1. 涉及固定大小的线程方的程序中使用。
+                2. 若其中一个线程出现异常，则所有线程都会以`BrokenBarrierException`异常退出【all-or-none breakage model】
+            - 内存一致性影响。一个线程调用`await`方法之前，一定有一个线程成功调用了`await`方法
+            - 方法【一个栅栏对应一个 generation 对象，对象包含一个 broken 值来标识】
+                1. `await`。直到所有各方都在此栅栏上调用了 await，核心逻辑在`doawait`方法里
+                2. `reset`。先 break，在重新创建新的 generation 对象
+                3. 使用`ReentrantLock`和`Condition`来实现
+            - 资料
+                1. [CyclicBarrier 源码分析](https://segmentfault.com/a/1190000015888316?utm_source=sf-related)
+
+        3. `semaphore`。维护一组许可证，通过`acquire`和`release`方法来对许可证进行获取和释放，在未获取到许可时，线程将一直等待。支持公平与非公平，在非公平状态下不保证获得许可的顺序；公平策略支持 FIFO 来选择许可。默认为**非公平策略**设置
+            - 场景。用于限制线程的数量
+                1. 公平策略适用于控制资源访问
+                2. 非公平策略适用于与其他类型的同步控制，提高吞吐量
+            - 二进制信号量。指初始化为**1**的信号量，具有与**Lock**类似的功能，但这个信号量**并不从属于**某个线程
+            - 内存一致性影响。调用一个线程的`release`之前，一定有其他线程的**acquire**已经成功触发
+            - 方法【AQS 的共享模式】
+                1. `aquire`。从信号量汇总获取许可证，如果没有或线程未被其他线程 interrupted 则阻塞，许可证<0 时资源不可用
+                2. `acquireUninterruptibly`。与`aquire`不同的是不支持线程的 interrupted，即如果被其他线程 interrupted，仍将继续阻塞；只能依赖其他线程的 release 操作
+                3. `tryAcquire`。即使信号量被设置为公平，该方法仍可立即获得许可证，若要遵守公平，则需要使用`tryAcquire(0,TimeUnit.SECONDS)`
+                4. `release`。释放许可证。
+                5. `availablePermits`。获取可用的许可数量，这个值会实时变化
+                6. `drainPermits`。获取可用的许可数量，并将可用值置为 0
+            - 资料
+                1. [Semaphore 源码分析](https://segmentfault.com/a/1190000015918459)
 
 ### 七、AbstractOwnableSynchronizer（1.6）
 
