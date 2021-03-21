@@ -99,7 +99,7 @@ spoiler: redis
    - 具体实现。
      1. `sdsMakeRoomFor`方法实现扩容。
      2. `sdscatlen`方法实现扩容策略。
-5. 与C语言字符串的区别
+5. 与 C 语言字符串的区别
    - 获取字符串长度：O(1)
    - 杜绝缓冲区溢出
    - 减少修改字符串时带来的内存重分配次数
@@ -113,13 +113,13 @@ spoiler: redis
 
 ### dict
 
-1. 一个用于维护key和value映射关系的数据结构【基于哈希表的算法】，为解决算法中的查找问题。
-2. 特点。采用**增量式重哈希**的方法，避免一次性对所有key进行重哈希，在查找、插入、删除时都会触发重哈希
+1. 一个用于维护 key 和 value 映射关系的数据结构【基于哈希表的算法】，为解决算法中的查找问题。
+2. 特点。采用**增量式重哈希**的方法，避免一次性对所有 key 进行重哈希，在查找、插入、删除时都会触发重哈希
 3. 数据结构。定义两个哈希表用于重哈希
-![image](./dict-structure.png)
+   ![image](./dict-structure.png)
 
 4. 资料
-   - [dict原理](http://zhangtielei.com/posts/blog-redis-dict.html)
+   - [dict 原理](http://zhangtielei.com/posts/blog-redis-dict.html)
 
 ### ziplist
 
