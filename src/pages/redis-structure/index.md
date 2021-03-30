@@ -1,7 +1,7 @@
 ---
 title: redis数据集
 date: "2021-03-12"
-spoiler: redis
+spoiler: redis structure
 ---
 
 # 数据类型
