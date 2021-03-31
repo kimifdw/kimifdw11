@@ -62,7 +62,7 @@ spoiler: redis structure
 
 ### SET（集合）
 
-1. 唯一、未排序的字符串元素的集合
+1. 唯一、未排序的字符串元素的集合。结构底层也为 dict
 
 ### ZSET（排序集合）
 
@@ -117,8 +117,10 @@ spoiler: redis structure
 2. 特点。采用**增量式重哈希**的方法，避免一次性对所有 key 进行重哈希，在查找、插入、删除时都会触发重哈希
 3. 数据结构。定义两个哈希表用于重哈希
    ![image](./dict-structure.png)
+4. 扩容条件。当 hash 表中元素的个数等于第一维数组的长度时，触发扩容，扩容大小为原数组大小的 2 倍
+5. 缩容条件。元素个数低于数组长度的 10%
 
-4. 资料
+6. 资料
    - [dict 原理](http://zhangtielei.com/posts/blog-redis-dict.html)
 
 ### ziplist
@@ -142,7 +144,9 @@ spoiler: redis structure
 
    - `zlend`。结束标识，固定值（255）
 
-3. 资料
+3. 使用`quicklist`替代 ziplist 和 linkedlist。quicklist 将 linkedlist 按段切分，每一段使用 ziplist 让存储紧凑，多个 ziplist 之间使用双向指针串联起来
+
+4. 资料
    - [Redis 内部数据结构详解(4)——ziplist](http://zhangtielei.com/posts/blog-redis-ziplist.html)
    - [redis ziplist 源码分析](https://segmentfault.com/a/1190000017328042)
    - [redis 源码分析](https://segmentfault.com/a/1190000016901154)
